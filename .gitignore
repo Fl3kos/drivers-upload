@@ -1,0 +1,10 @@
+#json files to register
+usersCouchbase-*.json
+usersAndPasswords-*.txt
+names-*.txt
+insertSQLIteQuery-*.sql
+insertQuery-*.sql
+dnis.txt
+names.txt
+phoneNumbers.txt
+shopcode.txt
