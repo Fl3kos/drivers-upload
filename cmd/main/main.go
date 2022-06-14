@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"crypto/sha256"
+	convert "drivers-create/methods/converts"
 	dniM "drivers-create/methods/dni"
 	"encoding/csv"
 	"encoding/hex"
@@ -43,7 +44,7 @@ func main() {
 	if _continue {
 		fmt.Println("allDnis: ", allDnis)
 		m = len(allDnis)
-		allUsers = convertAllDnisToUsers()
+		allUsers = convert.ConvertAllDnisToUsers(allDnis)
 		fmt.Println("allUsers: ", allUsers)
 
 		// convertir las contraseñas si no existen
@@ -95,31 +96,6 @@ func main() {
 }
 
 //readFiles
-
-func comprobeAllDnis() bool {
-	_continue := true
-
-	for _, dni := range allDnis {
-		fmt.Println("Coprobando dni:", dni)
-		var letter = dni[8:9]
-		if !isNumber(dni[:1]) {
-			fmt.Println(dni)
-			break
-		}
-		correctLetter := calculateTheLetterOfDni(dni)
-		if letter == correctLetter {
-			fmt.Println("DNI correcto")
-			fmt.Println(dni, correctLetter)
-			_continue = true
-		} else {
-			fmt.Println("DNI incorrecto")
-			fmt.Println(dni, correctLetter)
-			_continue = false
-		}
-	}
-
-	return _continue
-}
 
 func calculateTheLetterOfDni(dni string) string {
 	var letters = []string{"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"}

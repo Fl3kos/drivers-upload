@@ -1,6 +1,7 @@
 package dni
 
 import (
+	mt "drivers-create/methods"
 	"fmt"
 	"strconv"
 )
@@ -11,7 +12,7 @@ func ComprobeAllDnis(allDnis []string) bool {
 	for _, dni := range allDnis {
 		fmt.Println("Coprobando dni:", dni)
 		var letter = dni[8:9]
-		if !isNumber(dni[:1]) {
+		if !mt.IsNumber(dni[:1]) {
 			fmt.Println(dni)
 			break
 		}
@@ -36,12 +37,4 @@ func calculateTheLetterOfDni(dni string) string {
 	var dniNumberInt, _ = strconv.Atoi(dniNumber)
 	dniLetter := letters[dniNumberInt%23]
 	return dniLetter
-}
-
-func isNumber(c string) bool {
-	_, err := strconv.Atoi(c)
-	if err == nil {
-		return true
-	}
-	return false
 }
