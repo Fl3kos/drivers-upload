@@ -91,7 +91,7 @@ func CreationFileRoute(route, extension string) string {
 }
 
 func ReadFileRoute(route, extension string) string {
-	fileName := fmt.Sprint("./files/", route, ".", extension)
+	fileName := fmt.Sprint("./filesToRead/", route, ".", extension)
 
 	return fileName
 }
