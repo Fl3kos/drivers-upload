@@ -10,7 +10,7 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 
 	json := "[\n"
 
-	m := len(allNames)
+	m := len(allPasswords)
 
 	collection := "\"authentication\""
 	userType := "\"userType\": \"ECOMMERCE_USER\""
