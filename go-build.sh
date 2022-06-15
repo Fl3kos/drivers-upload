@@ -52,6 +52,8 @@ build_project(){
     go build
     cd ../sql
     go build
+    cd ../csv
+    go build
     cd ..
     go build
     cd ../cmd/main
