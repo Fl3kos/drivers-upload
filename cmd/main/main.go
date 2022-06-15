@@ -49,7 +49,6 @@ func main() {
 
 		// creacion de las queries
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
-		sqlT := sql.GenerateSql(allUsers)
 		namesT := convert.TransformAllNames(allNames)
 		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
 		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode)
@@ -59,7 +58,6 @@ func main() {
 
 		// creacion de los files
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
-		files.GenerateFile(sqlT, files.CreationFileRoute("insertQuery", "sql"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
 		files.GenerateFile(convert.UsersAndPasswords(allNames, allUsers, allPasswords), files.CreationFileRoute("usersAndPasswords", "txt"))
 		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
