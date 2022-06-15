@@ -62,11 +62,14 @@ func main() {
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
 		files.GenerateFile(convert.UsersAndPasswords(allNames, allUsers, allPasswords), files.CreationFileRoute("usersAndPasswords", "txt"))
 		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
+
 		drivers := []csv.Driver{}
+
 		for i, _ := range allUsers {
 			driver := csv.Driver{allNames[i], allUsers[i], allPasswords[i]}
 			drivers = append(drivers, driver)
 		}
+
 		csv.ExportCsvFile(drivers)
 		//WriteCsv()
 	}
