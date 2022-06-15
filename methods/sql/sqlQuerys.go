@@ -2,7 +2,8 @@ package sql
 
 //this method generate sql query
 //the length of array is the value of x
-func GenerateSql(allUsers []string, m int) string {
+func GenerateSql(allUsers []string) string {
+	m := len(allUsers)
 	query := "INSERT INTO shipping.DRIVER_GEOLOCATION (DRIVER_ID, LATITUDE, LONGITUDE) \nVALUES "
 
 	for i := 0; i < m; i++ {
@@ -20,7 +21,8 @@ func GenerateSql(allUsers []string, m int) string {
 	return query
 }
 
-func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []string, m int) string {
+func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []string) string {
+	m := len(allUsers)
 	query := "INSERT INTO drivers (DNI, UserName, Name, PhoneNumber) \nVALUES "
 
 	for i := 0; i < m; i++ {
@@ -38,7 +40,8 @@ func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []
 	return query
 }
 
-func GenerateSqlLiteInsertRelationTable(allDnis []string, shopCode string, m int) string {
+func GenerateSqlLiteInsertRelationTable(allDnis []string, shopCode string) string {
+	m := len(allDnis)
 	query := "INSERT INTO DriversShop (DNI, ShopCode) \nVALUES "
 
 	for i := 0; i < m; i++ {

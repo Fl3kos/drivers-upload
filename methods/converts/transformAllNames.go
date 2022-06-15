@@ -18,20 +18,22 @@ func TransformAllNames(allNames []string) string {
 	return allNamesT
 }
 
-func UsersAndPasswords(allNames, allUsers, allPasswords []string, m int) string {
+func UsersAndPasswords(allNames, allUsers, allPasswords []string) string {
 	var usersAndPasswords = "NAME\n"
-	for i := 0; i < m; i++ {
-		usersAndPasswords = usersAndPasswords + allNames[i] + "\n"
+
+	for _, name := range allNames {
+		usersAndPasswords = usersAndPasswords + name + "\n"
 	}
 
 	usersAndPasswords = usersAndPasswords + "\nUSERS\n"
-	for i := 0; i < m; i++ {
-		usersAndPasswords = usersAndPasswords + allUsers[i] + "\n"
+
+	for _, user := range allUsers {
+		usersAndPasswords = usersAndPasswords + user + "\n"
 	}
 
 	usersAndPasswords = usersAndPasswords + "\nPASSWORDS\n"
-	for i := 0; i < m; i++ {
-		usersAndPasswords = usersAndPasswords + allPasswords[i] + "\n"
+	for _, password := range allPasswords {
+		usersAndPasswords = usersAndPasswords + password + "\n"
 	}
 
 	return usersAndPasswords

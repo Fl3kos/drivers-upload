@@ -6,9 +6,11 @@ import (
 	"strings"
 )
 
-func GenerateJson(allNames, allPasswords, allUsers []string, m int) string {
+func GenerateJson(allNames, allPasswords, allUsers []string) string {
 
 	json := "[\n"
+
+	m := len(allNames)
 
 	collection := "\"authentication\""
 	userType := "\"userType\": \"ECOMMERCE_USER\""

@@ -9,19 +9,11 @@ import (
 	"strings"
 )
 
-//var allDnis []string
-var allUsers []string
-var allPasswords []string
-var allNames []string
-var allPhones []string
-var shopCode string
-
-var m int
-
 func main() {
 	//readfiles method
 
 	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
+	dnis = strings.ToUpper(dnis)
 
 	substring := dnis[:len(dnis)-1]
 	allDnis := strings.Split(substring, "\n")
@@ -36,20 +28,19 @@ func main() {
 
 	// convertir los dni en usuarios
 	if _continue {
-		m = len(allDnis)
-		allUsers = convert.ConvertAllDnisToUsers(allDnis)
+		allUsers := convert.ConvertAllDnisToUsers(allDnis)
 
 		// convertir las contraseñas si no existen
-		allPasswords = convert.ConvertAllUsersToPasswords(allUsers)
+		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
 
 		//fmt.Println("pon los nombres separdos por comas (,)")
 		names := files.ReadFile(files.ReadFileRoute("names", "txt"))
-		allNames = strings.Split(names, "\n")
+		allNames := strings.Split(names, "\n")
 
 		phonesNumber := files.ReadFile(files.ReadFileRoute("phoneNumbers", "txt"))
-		allPhones = strings.Split(phonesNumber, "\n")
+		allPhones := strings.Split(phonesNumber, "\n")
 
-		shopCode = strings.Split(files.ReadFile(files.ReadFileRoute("shopCode", "txt")), "\n")[0]
+		shopCode := strings.Split(files.ReadFile(files.ReadFileRoute("shopCode", "txt")), "\n")[0]
 
 		//make trim to all users
 		for i, name := range allNames {
@@ -57,11 +48,11 @@ func main() {
 		}
 
 		// creacion de las queries
-		jsonT := json.GenerateJson(allNames, allPasswords, allUsers, m)
-		sqlT := sql.GenerateSql(allUsers, m)
+		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
+		sqlT := sql.GenerateSql(allUsers)
 		namesT := convert.TransformAllNames(allNames)
-		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones, m)
-		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode, m)
+		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
+		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode)
 		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 		//passwords := strings.Join(allPasswords, ",")
@@ -70,14 +61,10 @@ func main() {
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
 		files.GenerateFile(sqlT, files.CreationFileRoute("insertQuery", "sql"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
-		files.GenerateFile(convert.UsersAndPasswords(allNames, allUsers, allPasswords, m), files.CreationFileRoute("usersAndPasswords", "txt"))
+		files.GenerateFile(convert.UsersAndPasswords(allNames, allUsers, allPasswords), files.CreationFileRoute("usersAndPasswords", "txt"))
 		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
 		//WriteCsv()
-		// end
 	}
 
 	// futuramente hacer un menú
 }
-
-//this method generate json text
-//the length of arrays is the value of x
