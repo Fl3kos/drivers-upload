@@ -13,7 +13,6 @@ import (
 
 func main() {
 	logs.InitLogger()
-	logs.Errorf("Hola %v", "Oscar")
 	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
 	dnis = strings.ToUpper(dnis)
 
