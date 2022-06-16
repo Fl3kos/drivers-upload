@@ -1,7 +1,6 @@
 package converts
 
 import (
-	"fmt"
 	"strings"
 )
 
@@ -14,7 +13,6 @@ func TransformAllNames(allNames []string) string {
 		allNamesT = allNamesT + nameF + "\n"
 	}
 
-	fmt.Println("allNamesT:", allNamesT)
 	return allNamesT
 }
 

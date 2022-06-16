@@ -4,9 +4,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"strings"
+
+	logs "drivers-create/methods/log"
 )
 
 func GenerateJson(allNames, allPasswords, allUsers []string) string {
+	logs.DebugLog.Println("Generating Json")
 
 	json := "[\n"
 
@@ -40,13 +43,18 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 	}
 
 	json = json + "\n]"
+
 	return json
 }
 
 //encode the password
 func encodePassword(password string) string {
+	logs.DebugLog.Println("Password is encripting")
 	encrypted := sha256.Sum256([]byte(password))
 	ps := hex.EncodeToString(encrypted[:])
+
+	logs.DebugLog.Println("Password was encripted succesfull")
+
 	return ps
 }
 

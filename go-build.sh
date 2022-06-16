@@ -2,6 +2,7 @@
 
 filesFolder=files
 filesToReadFolder=filesToRead
+logsFolder=logs
 param=$1
 
 create_folders(){
@@ -11,9 +12,9 @@ create_folders(){
         echo “La capeta ya existe.”
     else
         mkdir $filesFolder
-    if [ $? -eq 0 +
+    if [ $? -eq 0 ]
     then
-        echo “se ha creaco con éxito”
+        echo “se ha creaco con éxito $filesFolder”
     else
         echo “Ups! Algo ha fallado al crear ”
     fi
@@ -25,9 +26,23 @@ create_folders(){
         echo “La capeta ya existe.”
     else
         mkdir $filesToReadFolder
-    if [ $? -eq 0 +
+    if [ $? -eq 0 ]
     then
-        echo “se ha creaco con éxito”
+        echo “se ha creaco con éxito $filesToReadFolder”
+    else
+        echo “Ups! Algo ha fallado al crear ”
+    fi
+    fi
+
+        #create filesToRead folder
+    if [ -d $logsFolder ]
+    then
+        echo “La capeta ya existe.”
+    else
+        mkdir $logsFolder
+    if [ $? -eq 0 ]
+    then
+        echo “se ha creaco con éxito $logsFolder”
     else
         echo “Ups! Algo ha fallado al crear ”
     fi
@@ -53,6 +68,8 @@ build_project(){
     cd ../sql
     go build
     cd ../csv
+    go build
+    cd ../log
     go build
     cd ..
     go build

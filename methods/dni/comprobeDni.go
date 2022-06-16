@@ -2,28 +2,27 @@ package dni
 
 import (
 	mt "drivers-create/methods"
-	"fmt"
+	logs "drivers-create/methods/log"
 	"strconv"
 )
 
 func ComprobeAllDnis(allDnis []string) bool {
-	_continue := true
+	logs.DebugLog.Println("Comprobe Dnis")
+	var _continue bool
 
 	for _, dni := range allDnis {
-		fmt.Println("Coprobando dni:", dni)
+		logs.DebugLog.Println("Comprobing DNI:", dni)
 		var letter = dni[8:9]
 		if !mt.IsNumber(dni[:1]) {
-			fmt.Println(dni)
+			logs.WarningLog.Printf("DNI %v is a NIE", dni)
 			break
 		}
 		correctLetter := calculateTheLetterOfDni(dni)
 		if letter == correctLetter {
-			fmt.Println("DNI correcto")
-			fmt.Println(dni, correctLetter)
+			logs.DebugLog.Printf("DNI %v is correct", dni)
 			_continue = true
 		} else {
-			fmt.Println("DNI incorrecto")
-			fmt.Println(dni, correctLetter)
+			logs.ErrorLog.Printf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
 			_continue = false
 		}
 	}
@@ -32,6 +31,7 @@ func ComprobeAllDnis(allDnis []string) bool {
 }
 
 func calculateTheLetterOfDni(dni string) string {
+	logs.DebugLog.Println("Calculating the letter")
 	var letters = []string{"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"}
 	var dniNumber = dni[:8]
 	var dniNumberInt, _ = strconv.Atoi(dniNumber)

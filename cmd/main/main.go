@@ -6,13 +6,14 @@ import (
 	dniM "drivers-create/methods/dni"
 	files "drivers-create/methods/file"
 	json "drivers-create/methods/json"
+	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
 	"strings"
 )
 
 func main() {
-	//readfiles method
-
+	logs.InitLogger()
+	logs.Errorf("Hola %v", "Oscar")
 	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
 	dnis = strings.ToUpper(dnis)
 
@@ -25,16 +26,12 @@ func main() {
 	}
 
 	_continue := dniM.ComprobeAllDnis(allDnis)
-	//_continue := comprobeAllDnis()
 
-	// convertir los dni en usuarios
 	if _continue {
 		allUsers := convert.ConvertAllDnisToUsers(allDnis)
 
-		// convertir las contraseñas si no existen
 		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
 
-		//fmt.Println("pon los nombres separdos por comas (,)")
 		names := files.ReadFile(files.ReadFileRoute("names", "txt"))
 		allNames := strings.Split(names, "\n")
 
@@ -71,8 +68,5 @@ func main() {
 		}
 
 		csv.ExportCsvFile(drivers)
-		//WriteCsv()
 	}
-
-	// futuramente hacer un menú
 }
