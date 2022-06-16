@@ -8,11 +8,47 @@ import (
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
+	"fmt"
 	"strings"
 )
 
 func main() {
 	logs.InitLogger()
+
+	allDnis := getAllDnis()
+
+	dnisIncorrect, err := dniM.ComprobeAllDnis(allDnis)
+
+	if err == nil {
+		allUsers := convert.ConvertAllDnisToUsers(allDnis)
+		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
+		allNames := getAllNames()
+		allPhones := getAllPhones()
+		drivers := getDrivers(allUsers, allNames, allPasswords)
+		shopCode := strings.Split(files.ReadFile(files.ReadFileRoute("shopCode", "txt")), "\n")[0]
+
+		// creacion de las queries
+		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
+		namesT := convert.TransformAllNames(allNames)
+		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
+		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode)
+		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
+
+		// creacion de los files
+		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
+		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
+		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
+		csv.ExportCsvFile(drivers)
+	} else {
+		logs.ErrorLog.Printf("Error validating dnis, incorrect DNIs: %v. Error %v", dnisIncorrect, err)
+		fmt.Println("Error without validate dnis, check the logs")
+	}
+
+	fmt.Println("Finish")
+}
+
+//metodo que devuelva todos los dnis
+func getAllDnis() []string {
 	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
 	dnis = strings.ToUpper(dnis)
 
@@ -24,48 +60,35 @@ func main() {
 		allDnis[i] = strings.TrimSpace(dni)
 	}
 
-	_continue := dniM.ComprobeAllDnis(allDnis)
+	return allDnis
+}
 
-	if _continue {
-		allUsers := convert.ConvertAllDnisToUsers(allDnis)
+func getAllNames() []string {
+	names := files.ReadFile(files.ReadFileRoute("names", "txt"))
+	allNames := strings.Split(names, "\n")
 
-		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
-
-		names := files.ReadFile(files.ReadFileRoute("names", "txt"))
-		allNames := strings.Split(names, "\n")
-
-		phonesNumber := files.ReadFile(files.ReadFileRoute("phoneNumbers", "txt"))
-		allPhones := strings.Split(phonesNumber, "\n")
-
-		shopCode := strings.Split(files.ReadFile(files.ReadFileRoute("shopCode", "txt")), "\n")[0]
-
-		//make trim to all users
-		for i, name := range allNames {
-			allNames[i] = strings.TrimSpace(name)
-		}
-
-		// creacion de las queries
-		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
-		namesT := convert.TransformAllNames(allNames)
-		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
-		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode)
-		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
-
-		//passwords := strings.Join(allPasswords, ",")
-
-		// creacion de los files
-		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
-		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
-		files.GenerateFile(convert.UsersAndPasswords(allNames, allUsers, allPasswords), files.CreationFileRoute("usersAndPasswords", "txt"))
-		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
-
-		drivers := []csv.Driver{}
-
-		for i, _ := range allUsers {
-			driver := csv.Driver{allNames[i], allUsers[i], allPasswords[i]}
-			drivers = append(drivers, driver)
-		}
-
-		csv.ExportCsvFile(drivers)
+	//make trim to all users
+	for i, name := range allNames {
+		allNames[i] = strings.TrimSpace(name)
 	}
+
+	return allNames
+}
+
+func getAllPhones() []string {
+	phonesNumber := files.ReadFile(files.ReadFileRoute("phoneNumbers", "txt"))
+	allPhones := strings.Split(phonesNumber, "\n")
+
+	return allPhones
+}
+
+func getDrivers(allUsers, allNames, allPasswords []string) []csv.Driver {
+	drivers := []csv.Driver{}
+
+	for i, _ := range allUsers {
+		driver := csv.Driver{allNames[i], allUsers[i], allPasswords[i]}
+		drivers = append(drivers, driver)
+	}
+
+	return drivers
 }
