@@ -83,6 +83,10 @@ run_project(){
     go run ./cmd/main/main.go
 }
 
+clear_project(){
+    rm ./files/*
+}
+
 case $param in
     "i")
         create_folders
@@ -95,7 +99,15 @@ case $param in
     "r")
         run_project
         ;;
+    "c")
+        clear_project
+        ;;
     "h")
         echo "Help:"
+        echo "i: Inicialice the project, when download the project is the fist choice to use"
+        echo "b: build the project after execute"
+        echo "r: run the project to create the files"
+        echo "c: to clear files folder"
+        echo "h: help"
             ;;
 esac
