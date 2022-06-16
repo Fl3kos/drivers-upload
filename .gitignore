@@ -10,3 +10,4 @@ phoneNumbers.txt
 shopCode.txt
 userAndPassword-*.csv
 .vscode/*
+log-*.txt

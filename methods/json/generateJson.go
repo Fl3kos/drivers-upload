@@ -2,10 +2,11 @@ package json
 
 import (
 	"crypto/sha256"
-	"encoding/hex"
-	"strings"
-
+	"drivers-create/consts"
 	logs "drivers-create/methods/log"
+	"encoding/hex"
+	"fmt"
+	"strings"
 )
 
 func GenerateJson(allNames, allPasswords, allUsers []string) string {
@@ -13,29 +14,13 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 
 	json := "[\n"
 
-	m := len(allPasswords)
+	for i, _ := range allPasswords {
+		firstname, lastname := getFirstNameAndLastName(allNames[i])
+		encodedPassword := encodePassword(allPasswords[i])
 
-	collection := "\"authentication\""
-	userType := "\"userType\": \"ECOMMERCE_USER\""
-	for i := 0; i < m; i++ {
-		name := strings.Split(allNames[i], " ")
-		firstname := "\"" + name[0] + "\""
-		lastname := "\""
+		value := generateJson(allUsers[i], encodedPassword, firstname, lastname)
 
-		for j := 1; j < len(name); j++ {
-			lastname = lastname + name[j] + " "
-		}
-
-		lastname = strings.TrimSpace(lastname)
-		lastname = lastname + "\""
-
-		ps := encodePassword(allPasswords[i])
-
-		user, pass := formatUserAndPassword(allUsers[i], ps)
-
-		value := "\t{\n\t\t\"username\" : " + user + " ,\n\t\t\"password\" : " + pass + " ,\n\t\t\"firstname\" : " + firstname + " ,\n\t\t\"lastname\" : " + lastname + " ,\n\t\t\"collection\" : " + collection + ",\n\t\t" + userType + "\n\t}"
-
-		if i != m-1 {
+		if i != len(allPasswords)-1 {
 			value = value + ",\n"
 		}
 
@@ -47,20 +32,46 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 	return json
 }
 
-//encode the password
+func generateJson(username, password, firstname, lastname string) string {
+	logs.DebugLog.Println("Generating JSON to", username)
+
+	json :=
+		`{
+		"username" : "%v",
+		"password" : "%v",
+		"firstname" : "%v",
+		"lastname" : "%v",
+		"collection" : "%v",
+		"userType": "%v"
+	}`
+
+	json = fmt.Sprintf(json, username, password, firstname, lastname, consts.Collection_Json, consts.UserType_Json)
+
+	logs.DebugLog.Println("JSON generated")
+
+	return json
+}
+
+func getFirstNameAndLastName(completeName string) (string, string) {
+	name := strings.Split(completeName, " ")
+	firstname := name[0]
+
+	lastname := ""
+	for j := 1; j < len(name); j++ {
+		lastname = lastname + name[j] + " "
+	}
+	lastname = strings.TrimSpace(lastname)
+
+	return firstname, lastname
+}
+
 func encodePassword(password string) string {
 	logs.DebugLog.Println("Password is encripting")
+
 	encrypted := sha256.Sum256([]byte(password))
-	ps := hex.EncodeToString(encrypted[:])
+	encodedPassword := hex.EncodeToString(encrypted[:])
 
 	logs.DebugLog.Println("Password was encripted succesfull")
 
-	return ps
-}
-
-//this method format the user and password for the json text
-func formatUserAndPassword(user, password string) (userF string, passF string) {
-	userF = "\"" + user + "\""
-	passF = "\"" + password + "\""
-	return
+	return encodedPassword
 }
