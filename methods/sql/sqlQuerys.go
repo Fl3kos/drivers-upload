@@ -1,38 +1,19 @@
 package sql
 
-//this method generate sql query
-//the length of array is the value of x
-func GenerateSql(allUsers []string) string {
-	m := len(allUsers)
-	query := "INSERT INTO shipping.DRIVER_GEOLOCATION (DRIVER_ID, LATITUDE, LONGITUDE) \nVALUES "
-
-	for i := 0; i < m; i++ {
-		value := "('" + allUsers[i] + "', 0.0, 0.0)"
-
-		if i != m-1 {
-			value = value + ",\n"
-		}
-
-		query = query + value
-	}
-
-	query = query + ";"
-
-	return query
-}
+import "fmt"
 
 func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []string) string {
-	m := len(allUsers)
-	query := "INSERT INTO drivers (DNI, UserName, Name, PhoneNumber) \nVALUES "
+	query := "INSERT INTO drivers (DNI, UserName, Name, PhoneNumber)"
+	value := `VALUES ( "%v", "%v", "%v", "%v")`
 
-	for i := 0; i < m; i++ {
-		value := "('" + allDnis[i] + "', " + "'" + allUsers[i] + "', '" + allNames[i] + "', '" + allPhones[i] + "')"
+	for i, _ := range allDnis {
+		valueF := fmt.Sprintf(value, allDnis[i], allUsers[i], allNames[i], allPhones[i])
 
-		if i != m-1 {
-			value = value + ",\n"
+		if i != len(allUsers)-1 {
+			valueF = valueF + ",\n"
 		}
 
-		query = query + value
+		query = query + valueF
 	}
 
 	query = query + ";"
@@ -41,17 +22,18 @@ func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []
 }
 
 func GenerateSqlLiteInsertRelationTable(allDnis []string, shopCode string) string {
-	m := len(allDnis)
-	query := "INSERT INTO DriversShop (DNI, ShopCode) \nVALUES "
 
-	for i := 0; i < m; i++ {
-		value := "('" + allDnis[i] + "', '" + shopCode + "')"
+	query := "INSERT INTO DriversShop (DNI, ShopCode)"
+	value := `VALUES ( "%v", "%v")`
 
-		if i != m-1 {
-			value = value + ",\n"
+	for i, dni := range allDnis {
+		valueF := fmt.Sprintf(value, dni, shopCode)
+
+		if i != len(allDnis)-1 {
+			valueF = valueF + ",\n"
 		}
 
-		query = query + value
+		query = query + valueF
 	}
 
 	query = query + ";"
