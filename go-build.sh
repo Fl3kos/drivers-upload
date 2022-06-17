@@ -54,6 +54,7 @@ create_files(){
     touch ./filesToRead/names.txt
     touch ./filesToRead/phoneNumbers.txt
     touch ./filesToRead/shopCode.txt
+    touch ./filesToRead/shops.txt
 }
 
 build_project(){
@@ -76,11 +77,18 @@ build_project(){
     cd ../cmd/main
     go build
     rm main
+    cd ../create-shops
+    go build
+    rm create-shops
     cd ../..
 }
 
 run_project(){
     go run ./cmd/main/main.go
+}
+
+run_insert_query(){
+    go run ./cmd/create-shops/main.go
 }
 
 clear_project(){
@@ -102,12 +110,16 @@ case $param in
     "c")
         clear_project
         ;;
+    "q")
+        run_insert_query
+        ;;
     "h")
         echo "Help:"
         echo "i: Inicialice the project, when download the project is the fist choice to use"
         echo "b: build the project after execute"
         echo "r: run the project to create the files"
         echo "c: to clear files folder"
+        echo "q: run the project to create insert sql tables"
         echo "h: help"
             ;;
 esac

@@ -4,13 +4,13 @@ import "fmt"
 
 func GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones []string) string {
 	query := "INSERT INTO drivers (DNI, UserName, Name, PhoneNumber)"
-	value := `VALUES ( '%v', '%v', '%v', '%v')`
+	value := "\nVALUES ( '%v', '%v', '%v', '%v')"
 
 	for i, _ := range allDnis {
 		valueF := fmt.Sprintf(value, allDnis[i], allUsers[i], allNames[i], allPhones[i])
 
 		if i != len(allUsers)-1 {
-			valueF = valueF + ",\n"
+			valueF = valueF + ","
 		}
 
 		query = query + valueF
@@ -31,6 +31,25 @@ func GenerateSqlLiteInsertRelationTable(allDnis []string, shopCode string) strin
 
 		if i != len(allDnis)-1 {
 			valueF = valueF + ",\n"
+		}
+
+		query = query + valueF
+	}
+
+	query = query + ";"
+
+	return query
+}
+
+func GenerateSqlLiteInsertShopTable(shopCodes, shopNames []string) string {
+	query := "INSERT INTO Shop (ShopCode, ShopName)"
+	value := "\nVALUES ('%v', '%v')"
+
+	for i, _ := range shopCodes {
+		valueF := fmt.Sprintf(value, shopCodes[i], shopNames[i])
+		fmt.Println(valueF)
+		if i != len(shopCodes)-1 {
+			valueF = valueF + ","
 		}
 
 		query = query + valueF

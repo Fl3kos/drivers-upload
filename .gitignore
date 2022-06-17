@@ -11,3 +11,5 @@ shopCode.txt
 userAndPassword-*.csv
 .vscode/*
 log-*.txt
+shops.txt
+insertSqlTable-*.sql
