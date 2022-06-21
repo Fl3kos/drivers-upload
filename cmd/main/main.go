@@ -25,7 +25,11 @@ func main() {
 		allNames := getAllNames()
 		allPhones := getAllPhones()
 		drivers := getDrivers(allUsers, allNames, allPasswords)
-		shopCode := strings.Split(files.ReadFile(files.ReadFileRoute("shopCode", "txt")), "\n")[0]
+		shops := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
+		shops = shops[:len(shops)-1]
+
+		shopCodes, shopNames := getShopCodesAndShopNames(shops)
+		shopCode := shopCodes[0]
 
 		// creacion de las queries
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
@@ -38,7 +42,7 @@ func main() {
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
 		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
-		csv.ExportCsvFile(drivers)
+		csv.ExportCsvFile(drivers, shopNames[0])
 	} else {
 		logs.ErrorLog.Printf("Error validating dnis, incorrect DNIs: %v. Error %v", dnisIncorrect, err)
 		fmt.Println("Error without validate dnis, check the logs")
@@ -91,4 +95,21 @@ func getDrivers(allUsers, allNames, allPasswords []string) []csv.Driver {
 	}
 
 	return drivers
+}
+
+func getShopCodesAndShopNames(shops []string) ([]string, []string) {
+	var shopCodes []string
+	var shopNames []string
+
+	for i, _ := range shops {
+		shop := strings.Split(shops[i], "-")
+
+		shopCode := shop[0]
+		shopName := shop[1]
+
+		shopCodes = append(shopCodes, shopCode)
+		shopNames = append(shopNames, shopName)
+	}
+
+	return shopCodes, shopNames
 }

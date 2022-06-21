@@ -67,15 +67,14 @@ func ReadFile(fileName string) string {
 }
 
 func CreationFileRoute(route, extension string) string {
-	fileName := fmt.Sprint("./files/", route, "-", common.GetDate(), ".", extension)
-
+	fileName := fmt.Sprintf("./files/%v-%v.%v", route, common.GetDate(), extension)
 	logs.DebugLog.Printf("Read creation file %v", fileName)
 
 	return fileName
 }
 
 func ReadFileRoute(route, extension string) string {
-	fileName := fmt.Sprint("./filesToRead/", route, ".", extension)
+	fileName := fmt.Sprintf("./filesToRead/%v.%v", route, extension)
 
 	logs.DebugLog.Printf("Read route file %v", fileName)
 

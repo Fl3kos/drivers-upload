@@ -4,6 +4,7 @@ import (
 	files "drivers-create/methods/file"
 	logs "drivers-create/methods/log"
 	"encoding/csv"
+	"fmt"
 	"os"
 )
 
@@ -13,10 +14,11 @@ type Driver struct {
 	Pass string
 }
 
-func ExportCsvFile(drivers []Driver) {
+func ExportCsvFile(drivers []Driver, shopName string) {
 	logs.DebugLog.Println("Exporting Csv file with names, users and passwords")
 
-	file, err := os.Create(files.CreationFileRoute("userAndPassword", "csv"))
+	fileName := fmt.Sprintf("userAndPassword-%v", shopName)
+	file, err := os.Create(files.CreationFileRoute(fileName, "csv"))
 
 	defer file.Close()
 
