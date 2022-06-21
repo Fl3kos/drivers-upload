@@ -96,24 +96,24 @@ clear_project(){
 }
 
 case $param in
-    "i")
+    "i" | "init" | "-i")
         create_folders
         create_files
             ;;
-    "b")
+    "b" | "build" | "-b")
         build_project
         echo "Project compiled"
         ;;
-    "r")
+    "r" | "run" | "-r")
         run_project
         ;;
-    "c")
+    "c" | "clear" | "-c")
         clear_project
         ;;
-    "q")
+    "q" | "query" | "-q")
         run_insert_query
         ;;
-    "h")
+    "h" | "??" | "help" | "-q" | "--help")
         echo "Help:"
         echo "i: Inicialice the project, when download the project is the fist choice to use"
         echo "b: build the project after execute"
