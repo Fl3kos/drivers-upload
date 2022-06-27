@@ -93,6 +93,7 @@ run_insert_query(){
 
 clear_project(){
     rm ./files/*
+    rm ./logs/*
 }
 
 clear_all_project(){
@@ -119,6 +120,9 @@ case $param in
         ;;
     "c" | "clear" | "-c")
         clear_project
+        ;;
+    "ca" | "clear-project" | "--clear-project")
+        clear_all_project
         ;;
     "q" | "query" | "-q")
         run_insert_query
