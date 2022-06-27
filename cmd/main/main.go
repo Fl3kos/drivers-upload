@@ -18,31 +18,35 @@ func main() {
 	allDnis := getAllDnis()
 
 	dnisIncorrect, err := dniM.ComprobeAllDnis(allDnis)
-
+	fmt.Println("alldanis:", allDnis)
 	if err == nil {
 		allUsers := convert.ConvertAllDnisToUsers(allDnis)
+		fmt.Println(allUsers)
 		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
+		fmt.Println(allPasswords)
+
 		allNames := getAllNames()
 		allPhones := getAllPhones()
-		drivers := getDrivers(allUsers, allNames, allPasswords)
+
 		shops := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
 		shops = shops[:len(shops)-1]
 
 		shopCodes, shopNames := getShopCodesAndShopNames(shops)
-		shopCode := shopCodes[0]
+
+		exportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
 		// creacion de las queries
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
 		namesT := convert.TransformAllNames(allNames)
 		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
-		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCode)
+		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
 		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 		// creacion de los files
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
 		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
-		csv.ExportCsvFile(drivers, shopNames[0])
+
 	} else {
 		logs.ErrorLog.Printf("Error validating dnis, incorrect DNIs: %v. Error %v", dnisIncorrect, err)
 		fmt.Println("Error without validate dnis, check the logs")
@@ -60,8 +64,11 @@ func getAllDnis() []string {
 	allDnis := strings.Split(substring, "\n")
 
 	//make trim to all dnis
-	for i, dni := range allDnis {
-		allDnis[i] = strings.TrimSpace(dni)
+	for _, dni := range allDnis {
+		if dni != "" {
+			dni = strings.TrimSpace(dni)
+		}
+
 	}
 
 	return allDnis
@@ -73,7 +80,10 @@ func getAllNames() []string {
 
 	//make trim to all users
 	for i, name := range allNames {
-		allNames[i] = strings.TrimSpace(name)
+		if name != "" {
+			allNames[i] = strings.TrimSpace(name)
+		}
+
 	}
 
 	return allNames
@@ -86,17 +96,6 @@ func getAllPhones() []string {
 	return allPhones
 }
 
-func getDrivers(allUsers, allNames, allPasswords []string) []csv.Driver {
-	drivers := []csv.Driver{}
-
-	for i, _ := range allUsers {
-		driver := csv.Driver{allNames[i], allUsers[i], allPasswords[i]}
-		drivers = append(drivers, driver)
-	}
-
-	return drivers
-}
-
 func getShopCodesAndShopNames(shops []string) ([]string, []string) {
 	var shopCodes []string
 	var shopNames []string
@@ -107,9 +106,39 @@ func getShopCodesAndShopNames(shops []string) ([]string, []string) {
 		shopCode := shop[0]
 		shopName := shop[1]
 
+		shopCode = strings.TrimSpace(shopCode)
+		shopName = strings.TrimSpace(shopName)
+
 		shopCodes = append(shopCodes, shopCode)
 		shopNames = append(shopNames, shopName)
 	}
 
 	return shopCodes, shopNames
+}
+
+func exportDriversToCsv(allUsers, allNames, allPasswords, shopsNames []string) {
+	nextShop := 0
+
+	for i := 0; i < len(shopsNames); i++ {
+		drivers := []csv.Driver{}
+		for j := nextShop; j < len(allNames); j++ {
+			if allNames[j] == "" {
+				nextShop = j + 1
+				j = len(allNames)
+				break
+			}
+			driver := getDriver(allNames[j], allUsers[j], allPasswords[j])
+			drivers = append(drivers, driver)
+		}
+		csv.ExportCsvFile(drivers, shopsNames[i])
+	}
+
+}
+
+func getDriver(name, user, password string) csv.Driver {
+	driver := csv.Driver{}
+
+	driver = csv.Driver{name, user, password}
+
+	return driver
 }

@@ -95,6 +95,16 @@ clear_project(){
     rm ./files/*
 }
 
+clear_all_project(){
+    rm ./files/*
+    rm ./logs/*
+    rm ./filesToRead/*
+
+    rmdir ./files
+    rmdir ./filesToRead
+    rmdir ./logs
+}
+
 case $param in
     "i" | "init" | "-i")
         create_folders
