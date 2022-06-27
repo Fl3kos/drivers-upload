@@ -18,12 +18,9 @@ func main() {
 	allDnis := getAllDnis()
 
 	dnisIncorrect, err := dniM.ComprobeAllDnis(allDnis)
-	fmt.Println("alldanis:", allDnis)
 	if err == nil {
 		allUsers := convert.ConvertAllDnisToUsers(allDnis)
-		fmt.Println(allUsers)
 		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
-		fmt.Println(allPasswords)
 
 		allNames := getAllNames()
 		allPhones := getAllPhones()

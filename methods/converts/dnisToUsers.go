@@ -2,13 +2,12 @@ package converts
 
 import (
 	mt "drivers-create/methods"
-	"fmt"
 	"strings"
 )
 
 func ConvertAllDnisToUsers(allDnis []string) []string {
 	var allUsers = []string{}
-	fmt.Println(len(allDnis))
+
 	for _, dni := range allDnis {
 		user := ""
 		if dni != "" {
