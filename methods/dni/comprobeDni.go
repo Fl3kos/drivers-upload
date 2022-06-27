@@ -14,21 +14,25 @@ func ComprobeAllDnis(allDnis []string) ([]string, error) {
 	//var _continue bool
 
 	for _, dni := range allDnis {
-		logs.DebugLog.Println("Comprobing DNI:", dni)
-		var letter = dni[8:9]
-		if !mt.IsNumber(dni[:1]) {
-			logs.WarningLog.Printf("DNI %v is a NIE", dni)
-			break
-		}
-		correctLetter := calculateTheLetterOfDni(dni)
-		if letter == correctLetter {
-			logs.DebugLog.Printf("DNI %v is correct", dni)
-			//_continue = true
-		} else {
-			logs.ErrorLog.Printf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
-			err = errors.New("Has one or more DNIs incorrect")
-			incorrectDnis = append(incorrectDnis, dni)
-			//_continue = false
+		if dni != "" {
+			if !mt.IsNumber(dni[:1]) {
+				logs.WarningLog.Printf("DNI %v is a NIE", dni)
+			} else {
+				logs.DebugLog.Println("Comprobing DNI:", dni)
+
+				var letter = dni[8:9]
+
+				correctLetter := calculateTheLetterOfDni(dni)
+				if letter == correctLetter {
+					logs.DebugLog.Printf("DNI %v is correct", dni)
+					//_continue = true
+				} else {
+					logs.ErrorLog.Printf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
+					err = errors.New("Has one or more DNIs incorrect")
+					incorrectDnis = append(incorrectDnis, dni)
+					//_continue = false
+				}
+			}
 		}
 	}
 

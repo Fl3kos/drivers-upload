@@ -15,16 +15,18 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 	json := "[\n"
 
 	for i, _ := range allPasswords {
-		firstname, lastname := getFirstNameAndLastName(allNames[i])
-		encodedPassword := encodePassword(allPasswords[i])
+		if allNames[i] != "" {
+			firstname, lastname := getFirstNameAndLastName(allNames[i])
+			encodedPassword := encodePassword(allPasswords[i])
 
-		value := generateJson(allUsers[i], encodedPassword, firstname, lastname)
+			value := generateJson(allUsers[i], encodedPassword, firstname, lastname)
 
-		if i != len(allPasswords)-1 {
-			value = value + ",\n"
+			if i != len(allPasswords)-1 {
+				value = value + ",\n"
+			}
+
+			json = json + value
 		}
-
-		json = json + value
 	}
 
 	json = json + "\n]"
