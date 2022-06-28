@@ -1,6 +1,7 @@
 package main
 
 import (
+	"drivers-create/consts"
 	convert "drivers-create/methods/converts"
 	csv "drivers-create/methods/csv"
 	dniM "drivers-create/methods/dni"
@@ -39,6 +40,18 @@ func main() {
 		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
 		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
+		//insert in sqlite
+		err := sql.InsertSqlite(sqlLiteInserts, consts.SqliteDatabase)
+		if err != nil {
+			fmt.Println("Error inserting drivers in database. Check the logs")
+			logs.ErrorLog.Printf("Error insert driver in database. Error: %v", err)
+		}
+
+		err = sql.InsertSqlite(relationsInsert, consts.SqliteDatabase)
+		if err != nil {
+			fmt.Println("Error inserting relation in database. Check the logs")
+			logs.ErrorLog.Printf("Error insert relation in database. Error: %v", err)
+		}
 		// creacion de los files
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
