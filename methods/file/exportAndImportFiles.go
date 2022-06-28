@@ -80,3 +80,9 @@ func ReadFileRoute(route, extension string) string {
 
 	return fileName
 }
+
+func ReadSqliteFile(fileName string) string {
+	file := fmt.Sprintf("%v.db", fileName)
+	logs.DebugLog.Printf("Read creation file %v", file)
+	return file
+}
