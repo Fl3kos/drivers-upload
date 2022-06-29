@@ -44,14 +44,9 @@ func main() {
 		err := sql.InsertSqlite(sqlLiteInserts, consts.SqliteDatabase)
 		if err != nil {
 			fmt.Println("Error inserting drivers in database. Check the logs")
-			logs.ErrorLog.Printf("Error insert driver in database. Error: %v", err)
+			logs.ErrorLog.Printf("Error insert in database. Error: %v", err)
 		}
 
-		err = sql.InsertSqlite(relationsInsert, consts.SqliteDatabase)
-		if err != nil {
-			fmt.Println("Error inserting relation in database. Check the logs")
-			logs.ErrorLog.Printf("Error insert relation in database. Error: %v", err)
-		}
 		// creacion de los files
 		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
 		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
