@@ -53,7 +53,6 @@ create_files(){
     touch ./filesToRead/dnis.txt
     touch ./filesToRead/names.txt
     touch ./filesToRead/phoneNumbers.txt
-    touch ./filesToRead/shopCode.txt
     touch ./filesToRead/shops.txt
 }
 

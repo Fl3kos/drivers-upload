@@ -14,7 +14,34 @@ type Driver struct {
 	Pass string
 }
 
-func ExportCsvFile(drivers []Driver, shopName string) {
+func ExportDriversToCsv(allUsers, allNames, allPasswords, shopsNames []string) {
+	nextShop := 0
+
+	for i := 0; i < len(shopsNames); i++ {
+		drivers := []Driver{}
+		for j := nextShop; j < len(allNames); j++ {
+			if allNames[j] == "" {
+				nextShop = j + 1
+				j = len(allNames)
+				break
+			}
+			driver := getDriver(allNames[j], allUsers[j], allPasswords[j])
+			drivers = append(drivers, driver)
+		}
+		exportCsvFile(drivers, shopsNames[i])
+	}
+
+}
+
+func getDriver(name, user, password string) Driver {
+	driver := Driver{}
+
+	driver = Driver{name, user, password}
+
+	return driver
+}
+
+func exportCsvFile(drivers []Driver, shopName string) {
 	logs.DebugLog.Println("Exporting Csv file with names, users and passwords")
 
 	fileName := fmt.Sprintf("userAndPassword-%v", shopName)

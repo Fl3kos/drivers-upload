@@ -31,7 +31,7 @@ func main() {
 
 		shopCodes, shopNames := getShopCodesAndShopNames(shops)
 
-		exportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
+		csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
 		// creacion de las queries
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
@@ -119,31 +119,4 @@ func getShopCodesAndShopNames(shops []string) ([]string, []string) {
 	}
 
 	return shopCodes, shopNames
-}
-
-func exportDriversToCsv(allUsers, allNames, allPasswords, shopsNames []string) {
-	nextShop := 0
-
-	for i := 0; i < len(shopsNames); i++ {
-		drivers := []csv.Driver{}
-		for j := nextShop; j < len(allNames); j++ {
-			if allNames[j] == "" {
-				nextShop = j + 1
-				j = len(allNames)
-				break
-			}
-			driver := getDriver(allNames[j], allUsers[j], allPasswords[j])
-			drivers = append(drivers, driver)
-		}
-		csv.ExportCsvFile(drivers, shopsNames[i])
-	}
-
-}
-
-func getDriver(name, user, password string) csv.Driver {
-	driver := csv.Driver{}
-
-	driver = csv.Driver{name, user, password}
-
-	return driver
 }
