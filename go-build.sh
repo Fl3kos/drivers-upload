@@ -57,19 +57,19 @@ create_files(){
 }
 
 build_project(){
-    cd ./methods/dni
+    cd ./methods/converts
     go build
-    cd ../converts
+    cd ../csv
+    go build
+    cd ../dni
     go build
     cd ../file
     go build
     cd ../json
     go build
-    cd ../sql
-    go build
-    cd ../csv
-    go build
     cd ../log
+    go build
+    cd ../sql
     go build
     cd ..
     go build
@@ -80,6 +80,7 @@ build_project(){
     go build
     rm create-shops
     cd ../..
+
 }
 
 run_project(){
