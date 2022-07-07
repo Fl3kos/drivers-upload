@@ -14,3 +14,4 @@ log-*.txt
 shops.txt
 insertSqlTable-*.sql
 *.db
+.idea
