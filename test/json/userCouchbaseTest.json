@@ -1,0 +1,18 @@
+[
+	{
+		"username" : "B0000011",
+		"password" : "43e7eb198b36e40f93e7ae524848b5886a7414516640b8798669d1841772ef7c",
+		"firstname" : "Usuario",
+		"lastname" : "Uno",
+		"collection" : "authentication",
+		"userType": "ECOMMERCE_USER"
+	},
+	{
+		"username" : "K0000021",
+		"password" : "24e23f2bad142d7be972bc04d67bdc6bb939dfa8ada4830b8370d9714d5f4b6c",
+		"firstname" : "Usuario",
+		"lastname" : "Dos",
+		"collection" : "authentication",
+		"userType": "ECOMMERCE_USER"
+	}
+]

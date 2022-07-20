@@ -38,7 +38,7 @@ func generateJson(username, password, firstname, lastname string) string {
 	logs.DebugLog.Println("Generating JSON to", username)
 
 	json :=
-		`{
+		`	{
 		"username" : "%v",
 		"password" : "%v",
 		"firstname" : "%v",

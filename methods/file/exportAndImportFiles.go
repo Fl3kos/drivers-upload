@@ -2,6 +2,7 @@ package file
 
 import (
 	"bufio"
+	"drivers-create/consts"
 	"fmt"
 	"os"
 
@@ -67,14 +68,14 @@ func ReadFile(fileName string) string {
 }
 
 func CreationFileRoute(route, extension string) string {
-	fileName := fmt.Sprintf("./files/%v-%v.%v", route, common.GetDate(), extension)
+	fileName := fmt.Sprintf("%v/%v-%v.%v", consts.FilesRoute, route, common.GetDate(), extension)
 	logs.DebugLog.Printf("Read creation file %v", fileName)
 
 	return fileName
 }
 
 func ReadFileRoute(route, extension string) string {
-	fileName := fmt.Sprintf("./filesToRead/%v.%v", route, extension)
+	fileName := fmt.Sprintf("%v/%v.%v", consts.ReadFileRoute, route, extension)
 
 	logs.DebugLog.Printf("Read route file %v", fileName)
 
@@ -83,6 +84,12 @@ func ReadFileRoute(route, extension string) string {
 
 func ReadSqliteFile(fileName string) string {
 	file := fmt.Sprintf("%v.db", fileName)
+	logs.DebugLog.Printf("Read creation file %v", file)
+	return file
+}
+
+func ReadTestFile(fileName string) string {
+	file := fmt.Sprintf("%v/%v", consts.TestFileRoute, fileName)
 	logs.DebugLog.Printf("Read creation file %v", file)
 	return file
 }
