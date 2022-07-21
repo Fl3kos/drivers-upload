@@ -112,6 +112,8 @@ run_test() {
     go test -timeout 30s -run ^TestGenerateSqlLiteInsertDriversTable$ drivers-create/methods/sql
     go test -timeout 30s -run ^TestGenerateSqlLiteInsertRelation$ drivers-create/methods/sql
     go test -timeout 30s -run ^TestGenerateSqlLiteInsertShop$ drivers-create/methods/sql
+    go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/converts
+    go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/converts
 }
 
 case $param in
