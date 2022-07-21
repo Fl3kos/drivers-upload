@@ -106,6 +106,14 @@ clear_all_project(){
     rmdir ./logs
 }
 
+run_test() {
+    go test -timeout 30s -run ^TestComprobeDniAndNie$ drivers-create/methods/dni
+    go test -timeout 30s -run ^TestGenerateJson$ drivers-create/methods/json
+    go test -timeout 30s -run ^TestGenerateSqlLiteInsertDriversTable$ drivers-create/methods/sql
+    go test -timeout 30s -run ^TestGenerateSqlLiteInsertRelation$ drivers-create/methods/sql
+    go test -timeout 30s -run ^TestGenerateSqlLiteInsertShop$ drivers-create/methods/sql
+}
+
 case $param in
     "i" | "init" | "-i")
         create_folders
@@ -126,6 +134,9 @@ case $param in
         ;;
     "q" | "query" | "-q")
         run_insert_query
+        ;;
+    "t" | "test" | "-t")
+        run_test
         ;;
     "h" | "??" | "help" | "-q" | "--help")
         echo "Help:"
