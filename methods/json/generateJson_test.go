@@ -1,6 +1,7 @@
 package json_test
 
 import (
+	"drivers-create/consts"
 	"drivers-create/methods/file"
 	"drivers-create/methods/json"
 	"drivers-create/methods/log"
@@ -17,7 +18,7 @@ func TestGenerateJson(t *testing.T) {
 
 	result := json.GenerateJson(userNames, userPasswords, userUsers)
 
-	expectResult := file.ReadFile("../../test/json/userCouchbaseTest.json")
+	expectResult := file.ReadFile(consts.UserCouchbaseRoute)
 	expectResult = strings.TrimSuffix(expectResult, "\n")
 
 	if result == expectResult {
