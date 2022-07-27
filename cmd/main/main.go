@@ -114,6 +114,8 @@ func getShopCodesAndShopNames(shops []string) ([]string, []string) {
 		shopCode = strings.TrimSpace(shopCode)
 		shopName = strings.TrimSpace(shopName)
 
+		//change white space to -
+		shopName = strings.ReplaceAll(shopName, " ", "_")
 		shopCodes = append(shopCodes, shopCode)
 		shopNames = append(shopNames, shopName)
 	}
