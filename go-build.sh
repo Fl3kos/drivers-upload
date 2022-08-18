@@ -14,7 +14,7 @@ create_folders(){
         mkdir $filesFolder
     if [ $? -eq 0 ]
     then
-        echo “se ha creaco con éxito $filesFolder”
+        echo “se ha creado con éxito $filesFolder”
     else
         echo “Ups! Algo ha fallado al crear ”
     fi
@@ -28,7 +28,7 @@ create_folders(){
         mkdir $filesToReadFolder
     if [ $? -eq 0 ]
     then
-        echo “se ha creaco con éxito $filesToReadFolder”
+        echo “se ha creado con éxito $filesToReadFolder”
     else
         echo “Ups! Algo ha fallado al crear ”
     fi
@@ -42,7 +42,7 @@ create_folders(){
         mkdir $logsFolder
     if [ $? -eq 0 ]
     then
-        echo “se ha creaco con éxito $logsFolder”
+        echo “se ha creado con éxito $logsFolder”
     else
         echo “Ups! Algo ha fallado al crear ”
     fi
@@ -124,6 +124,10 @@ case $param in
     "b" | "build" | "-b")
         build_project
         echo "Project compiled"
+        echo "/ __| | | |/ __/ __/ _ \/ __/ __|"
+        echo "\__ \ |_| | (_| (_|  __/\__ \__ \\"
+        echo "|___/\__,_|\___\___\___||___/___/"
+                                   
         ;;
     "r" | "run" | "-r")
         run_project
@@ -134,6 +138,9 @@ case $param in
     "ca" | "clear-project" | "--clear-project")
         clear_all_project
         ;;
+    "cc" | "clear-cache" | "--clear-cache")
+        go clean -testcache
+        ;; 
     "q" | "query" | "-q")
         run_insert_query
         ;;
@@ -146,7 +153,10 @@ case $param in
         echo "b: build the project after execute"
         echo "r: run the project to create the files"
         echo "c: to clear files folder"
+        echo "ca: to clear all project"
+        echo "cc: to clear the cache"
         echo "q: run the project to create insert sql tables"
+        echo "t: run the test"
         echo "h: help"
             ;;
 esac
