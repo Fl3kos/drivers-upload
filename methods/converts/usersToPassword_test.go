@@ -1,12 +1,25 @@
 package converts
 
-import "testing"
+import (
+	"testing"
+
+	. "github.com/onsi/ginkgo/v2"
+	. "github.com/onsi/gomega"
+)
 
 func TestUsersToPasswords(t *testing.T) {
-	users := []string{"B00000011", "K00000021", "XR0000001", "YS0000001"}
-	expected := []string{"B0000001b", "K0000002k", "XR000000x", "YS000000y"}
-	actual := ConvertAllUsersToPasswords(users)
-	if len(actual) != len(expected) {
-		t.Errorf("Expected: %v, got: %v", expected, actual)
-	}
+	RegisterFailHandler(Fail)
+	RunSpecs(t, "Convert Users to Password")
 }
+
+var _ = Describe("Convert Users to Password", func() {
+	Context("Users to Password", func() {
+		It("User To Password", func() {
+			users := []string{"B0000011", "K0000021", "XR000001", "YS000001"}
+			expected := []string{"B000001b", "K000002k", "XR00000r", "YS00000s"}
+			actual := ConvertAllUsersToPasswords(users)
+
+			Expect(actual).To(BeEquivalentTo(expected))
+		})
+	})
+})

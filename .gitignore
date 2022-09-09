@@ -17,3 +17,5 @@ shops.txt
 insertSqlTable-*.sql
 *.db
 .idea
+methods/*/coverage
+methods/*/ginkgo.report

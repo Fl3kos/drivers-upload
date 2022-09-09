@@ -109,11 +109,11 @@ clear_all_project(){
 run_test() {
     go test -timeout 30s -run ^TestComprobeDniAndNie$ drivers-create/methods/dni
     go test -timeout 30s -run ^TestGenerateJson$ drivers-create/methods/json
-    go test -timeout 30s -run ^TestGenerateSqlLiteInsertDriversTable$ drivers-create/methods/sql
-    go test -timeout 30s -run ^TestGenerateSqlLiteInsertRelation$ drivers-create/methods/sql
-    go test -timeout 30s -run ^TestGenerateSqlLiteInsertShop$ drivers-create/methods/sql
+    go test -timeout 30s -run ^TestSql$ drivers-create/methods/sql
     go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/converts
     go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/converts
+
+    rmdir methods/*/coverage
 }
 
 case $param in
@@ -145,6 +145,7 @@ case $param in
         run_insert_query
         ;;
     "t" | "test" | "-t")
+        go clean -testcache
         run_test
         ;;
     "h" | "??" | "help" | "-q" | "--help")
