@@ -15,14 +15,76 @@ func TestComprobeDniAndNie(t *testing.T) {
 
 var _ = Describe("AllDnis are Correct", func() {
 	Context("AllDnis are Correct", func() {
-		It("All correct", func() {
+		It("Happy Path Only One Shop DNI", func() {
 			log.InitTestLogger()
-			documents := []string{"00000011B", "00000021K", "X0000001R", "Y0000001S"}
+			documents := []string{"00000011B", "00000021K"}
 
 			_, err := ComprobeAllDnis(documents)
 
-			//Expect(err).ToNot(nil)
 			Expect(err).To(BeNil())
+		})
+
+		It("Happy Path Only One Shop NIE", func() {
+			log.InitTestLogger()
+			documents := []string{"X0000001R", "Y0000001S"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).To(BeNil())
+		})
+
+		It("Happy Path Various Shop DNI", func() {
+			log.InitTestLogger()
+			documents := []string{"00000011B", "", "00000021K"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).To(BeNil())
+		})
+
+		It("Happy Path Various Shop NIE", func() {
+			log.InitTestLogger()
+			documents := []string{"X0000001R", "", "Y0000001S"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).To(BeNil())
+		})
+
+		It("Error Path Only One Shop DNI", func() {
+			log.InitTestLogger()
+			documents := []string{"00000011A", "00000021K"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).ToNot(BeNil())
+		})
+
+		It("Error Path Only One Shop NIE", func() {
+			log.InitTestLogger()
+			documents := []string{"X0000001I", "Y0000001S"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).ToNot(BeNil())
+		})
+
+		It("Error Path Various Shop DNI", func() {
+			log.InitTestLogger()
+			documents := []string{"00000011A", "", "00000021K"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).ToNot(BeNil())
+		})
+
+		It("Error Path Various Shop NIE", func() {
+			log.InitTestLogger()
+			documents := []string{"X0000001R", "", "Y0000001O"}
+
+			_, err := ComprobeAllDnis(documents)
+
+			Expect(err).ToNot(BeNil())
 		})
 	})
 })
