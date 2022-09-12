@@ -5,10 +5,13 @@ import (
 	convert "drivers-create/methods/converts"
 	csv "drivers-create/methods/csv"
 	dniM "drivers-create/methods/dni"
+	"drivers-create/methods/dniToUser"
 	files "drivers-create/methods/file"
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
+	sqlite "drivers-create/methods/sqlite"
+	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
 )
@@ -20,8 +23,8 @@ func main() {
 
 	dnisIncorrect, err := dniM.ComprobeAllDnis(allDnis)
 	if err == nil {
-		allUsers := convert.ConvertAllDnisToUsers(allDnis)
-		allPasswords := convert.ConvertAllUsersToPasswords(allUsers)
+		allUsers := dniToUser.ConvertAllDnisToUsers(allDnis)
+		allPasswords := userToPassword.ConvertAllUsersToPasswords(allUsers)
 
 		allNames := getAllNames()
 		allPhones := getAllPhones()
@@ -33,7 +36,7 @@ func main() {
 
 		csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
-		// creacion de las queries
+		// queries creation
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
 		namesT := convert.TransformAllNames(allNames)
 		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
@@ -41,16 +44,30 @@ func main() {
 		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 		//insert in sqlite
-		err := sql.InsertSqlite(sqlLiteInserts, consts.SqliteDatabase)
+		err := sqlite.InsertSqlite(sqlLiteInserts, consts.SqliteDatabase)
 		if err != nil {
 			fmt.Println("Error inserting drivers in database. Check the logs")
 			logs.ErrorLog.Printf("Error insert in database. Error: %v", err)
 		}
 
-		// creacion de los files
-		files.GenerateFile(jsonT, files.CreationFileRoute("usersCouchbase", "json"))
-		files.GenerateFile(namesT, files.CreationFileRoute("names", "txt"))
-		files.GenerateFile(sqlLiteInserts, files.CreationFileRoute("insertSQLIteQuery", "sql"))
+		// files created
+		err = files.GenerateFile(jsonT, files.CreationFileRouteJson("usersCouchbase", "json"))
+		if err != nil {
+			logs.ErrorLog.Printf("Error generating file: %v", err)
+			fmt.Println("Error generating files, check the logs /logs/lo")
+		}
+
+		err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))
+		if err != nil {
+			logs.ErrorLog.Printf("Error generating file: %v", err)
+			fmt.Println("Error generating files, check the logs /logs/lo")
+		}
+
+		err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
+		if err != nil {
+			logs.ErrorLog.Printf("Error generating file: %v", err)
+			fmt.Println("Error generating files, check the logs /logs/lo")
+		}
 
 	} else {
 		logs.ErrorLog.Printf("Error validating dnis, incorrect DNIs: %v. Error %v", dnisIncorrect, err)
@@ -60,7 +77,6 @@ func main() {
 	fmt.Println("Finish")
 }
 
-//metodo que devuelva todos los dnis
 func getAllDnis() []string {
 	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
 	dnis = strings.ToUpper(dnis)

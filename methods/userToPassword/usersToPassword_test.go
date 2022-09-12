@@ -1,4 +1,4 @@
-package converts
+package userToPassword
 
 import (
 	"testing"

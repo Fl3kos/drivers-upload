@@ -2,52 +2,42 @@
 
 filesFolder=files
 filesToReadFolder=filesToRead
+filesSql=files/sql
+filesSqlShop=files/sqlShops
+filesJson=files/userCouchbase
+filesCsv=files/usersAndPasswords
+filesNames=files/names
 logsFolder=logs
 param=$1
 
 create_folders(){
     #create files folder
-    if [ -d $filesFolder ]
-    then
-        echo “La capeta ya existe.”
-    else
-        mkdir $filesFolder
-    if [ $? -eq 0 ]
-    then
-        echo “se ha creado con éxito $filesFolder”
-    else
-        echo “Ups! Algo ha fallado al crear ”
-    fi
-    fi
+    create_folder $filesFolder
+    create_folder $filesToReadFolder
+    create_folder $logsFolder
 
-    #create filesToRead folder
-    if [ -d $filesToReadFolder ]
-    then
-        echo “La capeta ya existe.”
-    else
-        mkdir $filesToReadFolder
-    if [ $? -eq 0 ]
-    then
-        echo “se ha creado con éxito $filesToReadFolder”
-    else
-        echo “Ups! Algo ha fallado al crear ”
-    fi
-    fi
+    create_folder $filesSql
+    create_folder $filesCsv
+    create_folder $filesJson
+    create_folder $filesSqlShop
+    create_folder $filesNames
 
-        #create filesToRead folder
-    if [ -d $logsFolder ]
-    then
-        echo “La capeta ya existe.”
-    else
-        mkdir $logsFolder
-    if [ $? -eq 0 ]
-    then
-        echo “se ha creado con éxito $logsFolder”
-    else
-        echo “Ups! Algo ha fallado al crear ”
-    fi
-    fi
 }
+
+create_folder(){
+    if [ -d $1 ]
+    then
+        echo “La capeta ya existe.”
+    else
+        mkdir $1
+    if [ $? -eq 0 ]
+    then
+        echo “se ha creado con éxito $1
+    else
+        echo “Ups! Algo ha fallado al crear ”
+    fi
+    fi
+} 
 
 create_files(){
     touch ./filesToRead/dnis.txt
@@ -92,15 +82,17 @@ run_insert_query(){
 }
 
 clear_project(){
-    rm ./files/*
+    rm ./files/*/*
     rm ./logs/*
 }
 
 clear_all_project(){
     rm ./files/*
+    rm ./files/*/*
     rm ./logs/*
     rm ./filesToRead/*
 
+    rmdir ./files/*
     rmdir ./files
     rmdir ./filesToRead
     rmdir ./logs
@@ -110,8 +102,8 @@ run_test() {
     go test -timeout 30s -run ^TestComprobeDniAndNie$ drivers-create/methods/dni
     go test -timeout 30s -run ^TestGenerateJson$ drivers-create/methods/json
     go test -timeout 30s -run ^TestSql$ drivers-create/methods/sql
-    go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/converts
-    go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/converts
+    go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/userToPassword
+    go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/dniToUser
 
     rmdir methods/*/coverage
 }

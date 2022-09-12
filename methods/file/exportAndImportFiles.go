@@ -11,14 +11,14 @@ import (
 )
 
 //generate a sql file, import the sql text
-func GenerateFile(text string, fileName string) {
+func GenerateFile(text string, fileName string) error {
 	logs.DebugLog.Printf("Generating %v file", fileName)
 
 	f, err := os.Create(fileName)
 
 	if err != nil {
 		logs.ErrorLog.Printf("Was an error creating %v file. Error: %v", fileName, err)
-		return
+		return err
 
 	}
 
@@ -27,7 +27,7 @@ func GenerateFile(text string, fileName string) {
 	if err != nil {
 		logs.ErrorLog.Printf("Error writing %v file. Error: %v", fileName, err)
 		f.Close()
-		return
+		return err
 	}
 
 	logs.DebugLog.Printf("The file %v was write succesfull", fileName)
@@ -36,8 +36,10 @@ func GenerateFile(text string, fileName string) {
 
 	if err != nil {
 		logs.ErrorLog.Printf("Error closing file %v. Error %v", fileName, err)
-		return
+		return err
 	}
+
+	return err
 }
 
 //read text from a file
@@ -69,6 +71,37 @@ func ReadFile(fileName string) string {
 
 func CreationFileRoute(route, extension string) string {
 	fileName := fmt.Sprintf("%v/%v-%v.%v", consts.FilesRoute, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+
+func CreationFileRouteSql(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesSQL, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+func CreationFileRouteSqlShop(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesShopsSQL, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+func CreationFileRouteNames(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesNames, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+func CreationFileRouteCsv(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesCsv, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+func CreationFileRouteJson(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesJson, route, common.GetDate(), extension)
 	logs.DebugLog.Printf("Read creation file %v", fileName)
 
 	return fileName

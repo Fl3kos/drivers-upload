@@ -5,6 +5,7 @@ import (
 	files "drivers-create/methods/file"
 	"drivers-create/methods/log"
 	"drivers-create/methods/sql"
+	"drivers-create/methods/sqlite"
 	"fmt"
 	"strings"
 )
@@ -34,9 +35,13 @@ func main() {
 	}
 
 	sqlT := sql.GenerateSqlLiteInsertShopTable(allShopCodes, allShopNames)
-	files.GenerateFile(sqlT, files.CreationFileRoute("insertSqlTable", "sql"))
+	err := files.GenerateFile(sqlT, files.CreationFileRouteSqlShop("insertSqlTable", "sql"))
+	if err != nil {
+		log.ErrorLog.Printf("Error generating file: %v", err)
+		fmt.Println("Error generating files, check the logs /logs/lo")
+	}
 
-	err := sql.InsertSqlite(sqlT, consts.SqliteDatabase)
+	err = sqlite.InsertSqlite(sqlT, consts.SqliteDatabase)
 
 	if err != nil {
 		log.ErrorLog.Printf("Error with the insert shop table. Error: %v", err)
