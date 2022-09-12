@@ -1,4 +1,4 @@
-package converts
+package dniToUser
 
 import (
 	"testing"

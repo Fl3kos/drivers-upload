@@ -45,7 +45,7 @@ func exportCsvFile(drivers []Driver, shopName string) {
 	logs.DebugLog.Println("Exporting Csv file with names, users and passwords")
 
 	fileName := fmt.Sprintf("userAndPassword-%v", shopName)
-	file, err := os.Create(files.CreationFileRoute(fileName, "csv"))
+	file, err := os.Create(files.CreationFileRouteCsv(fileName, "csv"))
 
 	defer file.Close()
 
