@@ -26,7 +26,7 @@ var _ = Describe("AllDnis are Correct", func() {
 
 		It("Happy Path Only One Shop NIE", func() {
 			log.InitTestLogger()
-			documents := []string{"X0000001R", "Y0000001S"}
+			documents := []string{"X0000001R", "Y0000001S", "Z0000001Y"}
 
 			_, err := ComprobeAllDnis(documents)
 

@@ -104,8 +104,6 @@ run_test() {
     go test -timeout 30s -run ^TestSql$ drivers-create/methods/sql
     go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/userToPassword
     go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/dniToUser
-
-    rmdir methods/*/coverage
 }
 
 case $param in

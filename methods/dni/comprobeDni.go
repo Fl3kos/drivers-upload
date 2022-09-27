@@ -4,6 +4,8 @@ import (
 	logs "drivers-create/methods/log"
 	"errors"
 	"strconv"
+
+	common "drivers-create/methods"
 )
 
 func ComprobeAllDnis(allDnis []string) ([]string, error) {
@@ -11,18 +13,17 @@ func ComprobeAllDnis(allDnis []string) ([]string, error) {
 	var incorrectDnis []string
 	var err error = nil
 	var correctLetter string
-	//var _continue bool
 
 	for _, dni := range allDnis {
 		if dni != "" {
 			var letter = dni[8:9]
 
-			if dni[:1] == "X" || dni[:1] == "Y" {
+			if common.IsNumber(dni[:1]) {
 				logs.WarningLog.Println("Comprobing NIE:", dni)
-				correctLetter = calculateTheLetterOfNie(dni)
+				correctLetter = calculateTheLetterOfDni(dni)
 			} else {
 				logs.DebugLog.Println("Comprobing DNI:", dni)
-				correctLetter = calculateTheLetterOfDni(dni)
+				correctLetter = calculateTheLetterOfNie(dni)
 			}
 
 			if letter == correctLetter {
