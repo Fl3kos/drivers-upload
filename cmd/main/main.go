@@ -14,25 +14,29 @@ import (
 	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
+	"drivers-create/methods/getDnis"
+	"drivers-create/methods/getNames"
+	"drivers-create/methods/getPhones"
+	"drivers-create/methods/getShops"
 )
 
 func main() {
 	logs.InitLogger()
 
-	allDnis := getAllDnis()
+	allDnis := getDnis.GetAllDnis()
 
 	dnisIncorrect, err := dniM.ComprobeAllDnis(allDnis)
 	if err == nil {
 		allUsers := dniToUser.ConvertAllDnisToUsers(allDnis)
 		allPasswords := userToPassword.ConvertAllUsersToPasswords(allUsers)
 
-		allNames := getAllNames()
-		allPhones := getAllPhones()
+		allNames := getNames.GetAllNames()
+		allPhones := getPhones.GetAllPhones()
 
 		shops := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
 		shops = shops[:len(shops)-1]
 
-		shopCodes, shopNames := getShopCodesAndShopNames(shops)
+		shopCodes, shopNames := getShops.GetShopCodesAndShopNames(shops)
 
 		csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
@@ -75,66 +79,4 @@ func main() {
 	}
 
 	fmt.Println("Finish")
-}
-
-func getAllDnis() []string {
-	dnis := files.ReadFile(files.ReadFileRoute("dnis", "txt"))
-	dnis = strings.ToUpper(dnis)
-
-	substring := dnis[:len(dnis)-1]
-	allDnis := strings.Split(substring, "\n")
-
-	//make trim to all dnis
-	for _, dni := range allDnis {
-		if dni != "" {
-			dni = strings.TrimSpace(dni)
-		}
-
-	}
-
-	return allDnis
-}
-
-func getAllNames() []string {
-	names := files.ReadFile(files.ReadFileRoute("names", "txt"))
-	allNames := strings.Split(names, "\n")
-
-	//make trim to all users
-	for i, name := range allNames {
-		if name != "" {
-			allNames[i] = strings.TrimSpace(name)
-		}
-
-	}
-
-	return allNames
-}
-
-func getAllPhones() []string {
-	phonesNumber := files.ReadFile(files.ReadFileRoute("phoneNumbers", "txt"))
-	allPhones := strings.Split(phonesNumber, "\n")
-
-	return allPhones
-}
-
-func getShopCodesAndShopNames(shops []string) ([]string, []string) {
-	var shopCodes []string
-	var shopNames []string
-
-	for i, _ := range shops {
-		shop := strings.Split(shops[i], "-")
-
-		shopCode := shop[0]
-		shopName := shop[1]
-
-		shopCode = strings.TrimSpace(shopCode)
-		shopName = strings.TrimSpace(shopName)
-
-		//change white space to -
-		shopName = strings.ReplaceAll(shopName, " ", "_")
-		shopCodes = append(shopCodes, shopCode)
-		shopNames = append(shopNames, shopName)
-	}
-
-	return shopCodes, shopNames
 }
