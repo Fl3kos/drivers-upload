@@ -14,7 +14,7 @@ const (
 	FilesJson          string = "userCouchbase"
 	FilesAclJson       string = "usersAcl"
 	FilesAclSql        string = "aclSql"
-	LogsRoute          string = "./logs/logs.txt"
-	LogsTestRoute      string = "../../logs/logs_test.txt"
+	LogsRoute          string = "./logs/logs.log"
+	LogsTestRoute      string = "../../logs/logs_test.log"
 	GenericDriverEmail string = "driver@gmail.com"
 )

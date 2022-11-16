@@ -13,6 +13,8 @@ userAndPassword-*.csv
 log-*.txt
 logs.txt
 logs_test.txt
+logs.log
+logs_test.log
 shops.txt
 insertSqlTable-*.sql
 *.db
