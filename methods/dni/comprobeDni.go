@@ -9,7 +9,7 @@ import (
 )
 
 func ComprobeAllDnis(allDnis []string) ([]string, error) {
-	logs.DebugLog.Println("Comprobe Dnis")
+	logs.Debugln("Comprobe Dnis")
 	var incorrectDnis []string
 	var err error = nil
 	var correctLetter string
@@ -19,17 +19,17 @@ func ComprobeAllDnis(allDnis []string) ([]string, error) {
 			var letter = dni[8:9]
 
 			if common.IsNumber(dni[:1]) {
-				logs.WarningLog.Println("Comprobing NIE:", dni)
+				logs.Warningln("Comprobing NIE:", dni)
 				correctLetter = calculateTheLetterOfDni(dni)
 			} else {
-				logs.DebugLog.Println("Comprobing DNI:", dni)
+				logs.Debugln("Comprobing DNI:", dni)
 				correctLetter = calculateTheLetterOfNie(dni)
 			}
 
 			if letter == correctLetter {
-				logs.DebugLog.Printf("DNI %v is correct", dni)
+				logs.Debugf("DNI %v is correct", dni)
 			} else {
-				logs.ErrorLog.Printf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
+				logs.Errorf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
 				err = errors.New("Has one or more DNIs incorrect")
 				incorrectDnis = append(incorrectDnis, dni)
 			}
@@ -40,7 +40,7 @@ func ComprobeAllDnis(allDnis []string) ([]string, error) {
 }
 
 func calculateTheLetterOfDni(dni string) string {
-	logs.DebugLog.Println("Calculating the letter of DNI")
+	logs.Debugln("Calculating the letter of DNI")
 	var letters = []string{"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"}
 	var dniNumber = dni[:8]
 	var dniNumberInt, _ = strconv.Atoi(dniNumber)
@@ -49,7 +49,7 @@ func calculateTheLetterOfDni(dni string) string {
 }
 
 func calculateTheLetterOfNie(nie string) string {
-	logs.DebugLog.Println("Calculating the letter of NIE")
+	logs.Debugln("Calculating the letter of NIE")
 	var letters = []string{"T", "R", "W", "A", "G", "M", "Y", "F", "P", "D", "X", "B", "N", "J", "Z", "S", "Q", "V", "H", "L", "C", "K", "E"}
 	var nieNumber = nie[1:8]
 

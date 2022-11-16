@@ -19,7 +19,7 @@ func TestSql(t *testing.T) {
 var _ = Describe("Sql Test", func() {
 	Context("GenerateSqlLiteInsertDriversTable", func() {
 		It("GenerateSqlLiteInsertDriversTable", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateSqlLiteInsertDriversTable")
 			allNames := []string{"Usuario Uno", "Usuario Dos"}
 			allUsers := []string{"B0000011", "K0000021"}
 			allDnis := []string{"00000011B", "00000021K"}
@@ -35,7 +35,7 @@ var _ = Describe("Sql Test", func() {
 	})
 	Context("GenerateSqlLiteInsertRelation", func() {
 		It("GenerateSqlLiteInsertRelation", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateSqlLiteInsertRelation")
 			allDnis := []string{"00000011B", "00000021K", "", "00000011B", "00000021K"}
 			shopCodes := []string{"1", "2"}
 
@@ -49,7 +49,7 @@ var _ = Describe("Sql Test", func() {
 	})
 	Context("GenerateSqlLiteInsertShop", func() {
 		It("GenerateSqlLiteInsertShop", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateSqlLiteInsertShop")
 			shopCodes := []string{"1", "2"}
 			shopNames := []string{"Shop One", "Shop Two"}
 
@@ -64,7 +64,7 @@ var _ = Describe("Sql Test", func() {
 
 	Context("GenerateACLInsert", func() {
 		It("GenerateACLInsert", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateACLInsert")
 
 			users := []string{"B0000011", "K0000021"}
 

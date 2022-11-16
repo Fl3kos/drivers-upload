@@ -20,7 +20,7 @@ func TestGenerateJson(t *testing.T) {
 var _ = Describe("Generate Json", func() {
 	Context("GenerateCouchbaseJson", func() {
 		It("GenerateJson", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateCouchbaseJson")
 			var userNames = []string{"Usuario Uno", "Usuario Dos"}
 			var userPasswords = []string{"B000001b", "K000002k"}
 			var userUsers = []string{"B0000011", "K0000021"}
@@ -36,7 +36,7 @@ var _ = Describe("Generate Json", func() {
 
 	Context("GenerateAclJson", func() {
 		It("GenerateACLJson", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("GenerateACLJson")
 
 			var userNames = []string{"Usuario Uno", "Usuario Dos"}
 			var userPasswords = []string{"B000001b", "K000002k"}

@@ -1,6 +1,7 @@
 package userToPassword
 
 import (
+	"drivers-create/methods/log"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -15,6 +16,7 @@ func TestUsersToPasswords(t *testing.T) {
 var _ = Describe("Convert Users to Password", func() {
 	Context("Users to Password", func() {
 		It("User To Password", func() {
+			log.InitTestLogger("User to Password")
 			users := []string{"B0000011", "K0000021", "XR000001", "YS000001"}
 			expected := []string{"B000001b", "K000002k", "XR00000r", "YS00000s"}
 			actual := ConvertAllUsersToPasswords(users)

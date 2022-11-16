@@ -42,7 +42,7 @@ func getDriver(name, user, password string) Driver {
 }
 
 func exportCsvFile(drivers []Driver, shopName string) {
-	logs.DebugLog.Println("Exporting Csv file with names, users and passwords")
+	logs.Debugln("Exporting Csv file with names, users and passwords")
 
 	fileName := fmt.Sprintf("userAndPassword-%v", shopName)
 	file, err := os.Create(files.CreationFileRouteCsv(fileName, "csv"))
@@ -50,7 +50,7 @@ func exportCsvFile(drivers []Driver, shopName string) {
 	defer file.Close()
 
 	if err != nil {
-		logs.ErrorLog.Println("Failed to open file", err)
+		logs.Errorln("Failed to open file", err)
 	}
 
 	w := csv.NewWriter(file)
@@ -64,9 +64,9 @@ func exportCsvFile(drivers []Driver, shopName string) {
 	for _, record := range drivers {
 		row = []string{record.Name, record.User, record.Pass}
 		if err := w.Write(row); err != nil {
-			logs.ErrorLog.Println("error writing record to file", err)
+			logs.Errorln("error writing record to file", err)
 		} else {
-			logs.DebugLog.Println("Users and passwords file is writig")
+			logs.Debugln("Users and passwords file is writig")
 		}
 	}
 }

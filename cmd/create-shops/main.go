@@ -37,14 +37,14 @@ func main() {
 	sqlT := sql.GenerateSqlLiteInsertShopTable(allShopCodes, allShopNames)
 	err := files.GenerateFile(sqlT, files.CreationFileRouteSqlShop("insertSqlTable", "sql"))
 	if err != nil {
-		log.ErrorLog.Printf("Error generating file: %v", err)
+		log.Errorf("Error generating file: %v", err)
 		fmt.Println("Error generating files, check the logs /logs/lo")
 	}
 
 	err = sqlite.InsertSqlite(sqlT, consts.SqliteDatabase)
 
 	if err != nil {
-		log.ErrorLog.Printf("Error with the insert shop table. Error: %v", err)
+		log.Errorf("Error with the insert shop table. Error: %v", err)
 		fmt.Println("Was an error has ocurred, please check the logs to solve manualy")
 	}
 

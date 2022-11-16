@@ -70,9 +70,9 @@ func GenerateSqlLiteInsertShopTable(shopCodes, shopNames []string) string {
 	return query
 }
 
-func GenerateAclInsert(allUsers []string) string{
+func GenerateAclInsert(allUsers []string) string {
 	query := "INSERT INTO acl.ecommerce_user4application_role (application_role_code, ecommerce_user_code)\nVALUES "
-	value := "(SELECT role_code from acl.application_role where role_name = 'ROLE_APPTMS_DRIVER'),'%v')"
+	value := "((SELECT role_code from acl.application_role where role_name = 'ROLE_APPTMS_DRIVER'),'%v')"
 
 	for i, user := range allUsers {
 		if user != "" {
