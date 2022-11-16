@@ -7,14 +7,14 @@ import (
 	dniM "drivers-create/methods/dni"
 	"drivers-create/methods/dniToUser"
 	files "drivers-create/methods/file"
-	"drivers-create/methods/getDnis"
-	"drivers-create/methods/getNames"
-	"drivers-create/methods/getPhones"
-	"drivers-create/methods/getShops"
+	"drivers-create/methods/gets/getDnis"
+	"drivers-create/methods/gets/getNames"
+	"drivers-create/methods/gets/getPhones"
+	"drivers-create/methods/gets/getShops"
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
-	sqlite "drivers-create/methods/sqlite"
+	sqlite "drivers-create/methods/sql/sqlite"
 	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
@@ -62,34 +62,19 @@ func main() {
 
 		// files created
 		err = files.GenerateFile(jsonT, files.CreationFileRouteJson("usersCouchbase", "json"))
-		if err != nil {
-			logs.ErrorLog.Printf("Error generating file: %v", err)
-			fmt.Println("Error generating files, check the logs /logs/lo")
-		}
+		controlErrors(err)
 
 		err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
-		if err != nil {
-			logs.ErrorLog.Printf("Error generating file: %v", err)
-			fmt.Println("Error generating files, check the logs /logs/lo")
-		}
+		controlErrors(err)
 
 		err = files.GenerateFile(jsonAcl, files.CreationFileRouteAclJson("ACL", "json"))
-		if err != nil {
-			logs.ErrorLog.Printf("Error generating file: %v", err)
-			fmt.Println("Error generating files, check the logs /logs/lo")
-		}
+		controlErrors(err)
 
 		err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))
-		if err != nil {
-			logs.ErrorLog.Printf("Error generating file: %v", err)
-			fmt.Println("Error generating files, check the logs /logs/lo")
-		}
+		controlErrors(err)
 
 		err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
-		if err != nil {
-			logs.ErrorLog.Printf("Error generating file: %v", err)
-			fmt.Println("Error generating files, check the logs /logs/lo")
-		}
+		controlErrors(err)
 
 	} else {
 		logs.ErrorLog.Printf("Error validating dnis, incorrect DNIs: %v. Error %v", dnisIncorrect, err)
@@ -97,4 +82,11 @@ func main() {
 	}
 
 	fmt.Println("Finish")
+}
+
+func controlErrors(err error) {
+	if err != nil {
+		logs.ErrorLog.Printf("Error generating file: %v", err)
+		fmt.Println("Error generating files, check the logs /logs/lo")
+	}
 }
