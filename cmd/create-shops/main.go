@@ -5,7 +5,7 @@ import (
 	files "drivers-create/methods/file"
 	"drivers-create/methods/log"
 	"drivers-create/methods/sql"
-	"drivers-create/methods/sqlite"
+	"drivers-create/methods/sql/sqlite"
 	"fmt"
 	"strings"
 )
