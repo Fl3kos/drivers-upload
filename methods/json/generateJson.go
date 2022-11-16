@@ -10,7 +10,7 @@ import (
 )
 
 func GenerateJson(allNames, allPasswords, allUsers []string) string {
-	logs.DebugLog.Println("Generating Json")
+	logs.Debugln("Generating Json")
 
 	json := "[\n"
 
@@ -35,7 +35,7 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 }
 
 func generateJson(username, password, firstname, lastname string) string {
-	logs.DebugLog.Println("Generating JSON to", username)
+	logs.Debugln("Generating JSON to", username)
 
 	json :=
 		`	{
@@ -49,13 +49,13 @@ func generateJson(username, password, firstname, lastname string) string {
 
 	json = fmt.Sprintf(json, username, password, firstname, lastname, consts.Collection_Json, consts.UserType_Json)
 
-	logs.DebugLog.Println("JSON generated")
+	logs.Debugln("JSON generated")
 
 	return json
 }
 
 func GenerateAclJson(allNames, allPasswords, allUsers, allPhones []string) string {
-	logs.DebugLog.Println("Generating ACL Json")
+	logs.Debugln("Generating ACL Json")
 
 	json := "[\n"
 
@@ -80,7 +80,7 @@ func GenerateAclJson(allNames, allPasswords, allUsers, allPhones []string) strin
 }
 
 func generateAclJson(username, password, firstname, lastname, phone string) string {
-	logs.DebugLog.Println("Generating ACL JSON to", username)
+	logs.Debugln("Generating ACL JSON to", username)
 
 	json :=
 		`	{
@@ -92,9 +92,9 @@ func generateAclJson(username, password, firstname, lastname, phone string) stri
 		"username": "%v"
 	}`
 
-	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password,phone, username)
+	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password, phone, username)
 
-	logs.DebugLog.Println("ACL JSON generated")
+	logs.Debugln("ACL JSON generated")
 
 	return json
 }
@@ -113,12 +113,12 @@ func getFirstNameAndLastName(completeName string) (string, string) {
 }
 
 func encodePassword(password string) string {
-	logs.DebugLog.Println("Password is encripting")
+	logs.Debugln("Password is encripting")
 
 	encrypted := sha256.Sum256([]byte(password))
 	encodedPassword := hex.EncodeToString(encrypted[:])
 
-	logs.DebugLog.Println("Password was encripted succesfull")
+	logs.Debugln("Password was encripted succesfull")
 
 	return encodedPassword
 }

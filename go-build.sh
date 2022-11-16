@@ -78,10 +78,12 @@ build_project(){
 }
 
 run_project(){
+    rm ./logs/logs.log
     go run ./cmd/main/main.go
 }
 
 run_insert_query(){
+    rm ./logs/logs.log
     go run ./cmd/create-shops/main.go
 }
 
@@ -103,6 +105,7 @@ clear_all_project(){
 }
 
 run_test() {
+    rm ./logs/logs_test.log
     go test -timeout 30s -run ^TestComprobeDniAndNie$ drivers-create/methods/dni
     go test -timeout 30s -run ^TestGenerateJson$ drivers-create/methods/json
     go test -timeout 30s -run ^TestSql$ drivers-create/methods/sql

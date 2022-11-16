@@ -16,7 +16,7 @@ func TestComprobeDniAndNie(t *testing.T) {
 var _ = Describe("AllDnis are Correct", func() {
 	Context("AllDnis are Correct", func() {
 		It("Happy Path Only One Shop DNI", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("AllDnis are Correct")
 			documents := []string{"00000011B", "00000021K"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -25,7 +25,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Happy Path Only One Shop NIE", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Happy Path Only One Shop NIE")
 			documents := []string{"X0000001R", "Y0000001S", "Z0000001Y"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -34,7 +34,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Happy Path Various Shop DNI", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Happy Path Various Shop DNI")
 			documents := []string{"00000011B", "", "00000021K"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -43,7 +43,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Happy Path Various Shop NIE", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Happy Path Various Shop NIE")
 			documents := []string{"X0000001R", "", "Y0000001S"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -52,7 +52,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Error Path Only One Shop DNI", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Error Path Only One Shop DNI")
 			documents := []string{"00000011A", "00000021K"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -61,7 +61,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Error Path Only One Shop NIE", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Error Path Only One Shop NIE")
 			documents := []string{"X0000001I", "Y0000001S"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -70,7 +70,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Error Path Various Shop DNI", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Error Path Various Shop DNI")
 			documents := []string{"00000011A", "", "00000021K"}
 
 			_, err := ComprobeAllDnis(documents)
@@ -79,7 +79,7 @@ var _ = Describe("AllDnis are Correct", func() {
 		})
 
 		It("Error Path Various Shop NIE", func() {
-			log.InitTestLogger()
+			log.InitTestLogger("Error Path Various Shop NIE")
 			documents := []string{"X0000001R", "", "Y0000001O"}
 
 			_, err := ComprobeAllDnis(documents)

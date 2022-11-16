@@ -1,6 +1,7 @@
 package dniToUser
 
 import (
+	"drivers-create/methods/log"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -15,6 +16,8 @@ func TestConvertAllDnisToUsers(t *testing.T) {
 var _ = Describe("Convert Dnis to Users", func() {
 	Context("Convert Dnis toUsers", func() {
 		It("All Dnis To User", func() {
+			log.InitTestLogger("All Dnis To User")
+
 			dnis := []string{"00000011B", "00000021K", "X0000001R", "Y0000001S"}
 			expected := []string{"B0000011", "K0000021", "XR000001", "YS000001"}
 			actual := ConvertAllDnisToUsers(dnis)
