@@ -18,7 +18,7 @@ func TestGenerateJson(t *testing.T) {
 }
 
 var _ = Describe("Generate Json", func() {
-	Context("GenerateJson", func() {
+	Context("GenerateCouchbaseJson", func() {
 		It("GenerateJson", func() {
 			log.InitTestLogger()
 			var userNames = []string{"Usuario Uno", "Usuario Dos"}
@@ -28,6 +28,24 @@ var _ = Describe("Generate Json", func() {
 			result := json.GenerateJson(userNames, userPasswords, userUsers)
 
 			expectResult := file.ReadFile(consts.UserCouchbaseRoute)
+			expectResult = strings.TrimSuffix(expectResult, "\n")
+
+			Expect(result).To(BeEquivalentTo(expectResult))
+		})
+	})
+
+	Context("GenerateAclJson", func() {
+		It("GenerateACLJson", func() {
+			log.InitTestLogger()
+
+			var userNames = []string{"Usuario Uno", "Usuario Dos"}
+			var userPasswords = []string{"B000001b", "K000002k"}
+			var userUsers = []string{"B0000011", "K0000021"}
+			var phoneNumbers = []string{"666777888", "666888777"}
+
+			result := json.GenerateAclJson(userNames, userPasswords, userUsers, phoneNumbers)
+
+			expectResult := file.ReadFile(consts.AclCouchbaseRoute)
 			expectResult = strings.TrimSuffix(expectResult, "\n")
 
 			Expect(result).To(BeEquivalentTo(expectResult))

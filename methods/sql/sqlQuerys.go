@@ -69,3 +69,25 @@ func GenerateSqlLiteInsertShopTable(shopCodes, shopNames []string) string {
 
 	return query
 }
+
+func GenerateAclInsert(allUsers []string) string{
+	query := "INSERT INTO acl.ecommerce_user4application_role (application_role_code, ecommerce_user_code)\nVALUES "
+	value := "(SELECT role_code from acl.application_role where role_name = 'ROLE_APPTMS_DRIVER'),'%v')"
+
+	for i, user := range allUsers {
+		if user != "" {
+			valueF := fmt.Sprintf(value, user)
+
+			if i != len(allUsers)-1 {
+				valueF = valueF + ",\n"
+			}
+
+			query = query + valueF
+		}
+
+	}
+
+	query = query + ";"
+
+	return query
+}

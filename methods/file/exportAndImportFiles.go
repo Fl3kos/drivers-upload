@@ -10,7 +10,7 @@ import (
 	logs "drivers-create/methods/log"
 )
 
-//generate a sql file, import the sql text
+// generate a sql file, import the sql text
 func GenerateFile(text string, fileName string) error {
 	logs.DebugLog.Printf("Generating %v file", fileName)
 
@@ -42,7 +42,7 @@ func GenerateFile(text string, fileName string) error {
 	return err
 }
 
-//read text from a file
+// read text from a file
 func ReadFile(fileName string) string {
 	logs.DebugLog.Printf("Reading %v file", fileName)
 
@@ -88,6 +88,14 @@ func CreationFileRouteSqlShop(route, extension string) string {
 
 	return fileName
 }
+
+func CreationFileRouteAclSql(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesAclSql, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+
 func CreationFileRouteNames(route, extension string) string {
 	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesNames, route, common.GetDate(), extension)
 	logs.DebugLog.Printf("Read creation file %v", fileName)
@@ -102,6 +110,13 @@ func CreationFileRouteCsv(route, extension string) string {
 }
 func CreationFileRouteJson(route, extension string) string {
 	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesJson, route, common.GetDate(), extension)
+	logs.DebugLog.Printf("Read creation file %v", fileName)
+
+	return fileName
+}
+
+func CreationFileRouteAclJson(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesAclJson, route, common.GetDate(), extension)
 	logs.DebugLog.Printf("Read creation file %v", fileName)
 
 	return fileName

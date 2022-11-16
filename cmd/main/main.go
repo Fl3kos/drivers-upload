@@ -7,6 +7,10 @@ import (
 	dniM "drivers-create/methods/dni"
 	"drivers-create/methods/dniToUser"
 	files "drivers-create/methods/file"
+	"drivers-create/methods/getDnis"
+	"drivers-create/methods/getNames"
+	"drivers-create/methods/getPhones"
+	"drivers-create/methods/getShops"
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
@@ -14,10 +18,6 @@ import (
 	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
-	"drivers-create/methods/getDnis"
-	"drivers-create/methods/getNames"
-	"drivers-create/methods/getPhones"
-	"drivers-create/methods/getShops"
 )
 
 func main() {
@@ -40,11 +40,17 @@ func main() {
 
 		csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
-		// queries creation
+		// Create Json files
 		jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
+		jsonAcl := json.GenerateAclJson(allNames, allPasswords, allUsers, allPhones)
+
+		// Create Names file
 		namesT := convert.TransformAllNames(allNames)
+
+		// Create SQL files
 		driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
 		relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
+		sqlAcl := sql.GenerateAclInsert(allUsers)
 		sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 		//insert in sqlite
@@ -56,6 +62,18 @@ func main() {
 
 		// files created
 		err = files.GenerateFile(jsonT, files.CreationFileRouteJson("usersCouchbase", "json"))
+		if err != nil {
+			logs.ErrorLog.Printf("Error generating file: %v", err)
+			fmt.Println("Error generating files, check the logs /logs/lo")
+		}
+
+		err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
+		if err != nil {
+			logs.ErrorLog.Printf("Error generating file: %v", err)
+			fmt.Println("Error generating files, check the logs /logs/lo")
+		}
+
+		err = files.GenerateFile(jsonAcl, files.CreationFileRouteAclJson("ACL", "json"))
 		if err != nil {
 			logs.ErrorLog.Printf("Error generating file: %v", err)
 			fmt.Println("Error generating files, check the logs /logs/lo")

@@ -54,6 +54,51 @@ func generateJson(username, password, firstname, lastname string) string {
 	return json
 }
 
+func GenerateAclJson(allNames, allPasswords, allUsers, allPhones []string) string {
+	logs.DebugLog.Println("Generating ACL Json")
+
+	json := "[\n"
+
+	for i, _ := range allPasswords {
+		if allNames[i] != "" {
+			firstname, lastname := getFirstNameAndLastName(allNames[i])
+			encodedPassword := encodePassword(allPasswords[i])
+
+			value := generateAclJson(allUsers[i], encodedPassword, firstname, lastname, allPhones[i])
+
+			if i != len(allPasswords)-1 {
+				value = value + ",\n"
+			}
+
+			json = json + value
+		}
+	}
+
+	json = json + "\n]"
+
+	return json
+}
+
+func generateAclJson(username, password, firstname, lastname, phone string) string {
+	logs.DebugLog.Println("Generating ACL JSON to", username)
+
+	json :=
+		`	{
+		"email": "%v",
+		"firstname": "%v",
+		"lastname": "%v",
+		"password": "%v",
+		"phone": "%v",
+		"username": "%v"
+	}`
+
+	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password,phone, username)
+
+	logs.DebugLog.Println("ACL JSON generated")
+
+	return json
+}
+
 func getFirstNameAndLastName(completeName string) (string, string) {
 	name := strings.Split(completeName, " ")
 	firstname := name[0]

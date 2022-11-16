@@ -61,4 +61,19 @@ var _ = Describe("Sql Test", func() {
 			Expect(query).To(BeEquivalentTo(expected))
 		})
 	})
+
+	Context("GenerateACLInsert", func() {
+		It("GenerateACLInsert", func() {
+			log.InitTestLogger()
+
+			users := []string{"B0000011", "K0000021"}
+
+			query := GenerateAclInsert(users)
+
+			expectedResult := file.ReadFile(consts.AclSqlRoute)
+			expectedResult = strings.TrimSuffix(expectedResult, "\n")
+
+			Expect(query).To(BeEquivalentTo(expectedResult))
+		})
+	})
 })
