@@ -7,6 +7,8 @@ filesSqlShop=files/sqlShops
 filesJson=files/userCouchbase
 filesCsv=files/usersAndPasswords
 filesNames=files/names
+filesAclSql=files/aclSql
+filesUsersAcl=files/usersAcl
 logsFolder=logs
 param=$1
 
@@ -21,6 +23,8 @@ create_folders(){
     create_folder $filesJson
     create_folder $filesSqlShop
     create_folder $filesNames
+    create_folder $filesAclSql
+    create_folder $filesUsersAcl
 
 }
 

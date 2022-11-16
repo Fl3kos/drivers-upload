@@ -1,0 +1,18 @@
+[
+	{
+		"email": "driver@gmail.com",
+		"firstname": "Usuario",
+		"lastname": "Uno",
+		"password": "43e7eb198b36e40f93e7ae524848b5886a7414516640b8798669d1841772ef7c",
+		"phone": "666777888",
+		"username": "B0000011"
+	},
+	{
+		"email": "driver@gmail.com",
+		"firstname": "Usuario",
+		"lastname": "Dos",
+		"password": "24e23f2bad142d7be972bc04d67bdc6bb939dfa8ada4830b8370d9714d5f4b6c",
+		"phone": "666888777",
+		"username": "K0000021"
+	}
+]
