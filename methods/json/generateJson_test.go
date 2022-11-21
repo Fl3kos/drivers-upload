@@ -51,4 +51,22 @@ var _ = Describe("Generate Json", func() {
 			Expect(result).To(BeEquivalentTo(expectResult))
 		})
 	})
+
+	Context("GenerateAclNEJson", func() {
+		It("GenerateACLNEJson", func() {
+			log.InitTestLogger("GenerateACLJson")
+
+			var userNames = []string{"Usuario Uno", "Usuario Dos"}
+			var userPasswords = []string{"B000001b", "K000002k"}
+			var userUsers = []string{"B0000011", "K0000021"}
+			var phoneNumbers = []string{"666777888", "666888777"}
+
+			result := json.GenerateAclJsonDontEncript(userNames, userPasswords, userUsers, phoneNumbers)
+
+			expectResult := file.ReadFile(consts.AclNECouchbaseRoute)
+			expectResult = strings.TrimSuffix(expectResult, "\n")
+
+			Expect(result).To(BeEquivalentTo(expectResult))
+		})
+	})
 })
