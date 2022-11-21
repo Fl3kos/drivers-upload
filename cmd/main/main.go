@@ -47,6 +47,7 @@ func main() {
 	// Create Json files
 	jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
 	jsonAcl := json.GenerateAclJson(allNames, allPasswords, allUsers, allPhones)
+	jsonAclNotEncript := json.GenerateAclJsonDontEncript(allNames, allPasswords, allUsers, allPhones)
 
 	// Create Names file
 	namesT := convert.TransformAllNames(allNames)
@@ -72,6 +73,8 @@ func main() {
 	controlErrors(err)
 
 	err = files.GenerateFile(jsonAcl, files.CreationFileRouteAclJson("ACL", "json"))
+	controlErrors(err)
+	err = files.GenerateFile(jsonAclNotEncript, files.CreationFileRouteAclJson("ACL-NE", "json"))
 	controlErrors(err)
 
 	err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))

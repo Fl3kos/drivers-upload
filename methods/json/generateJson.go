@@ -79,6 +79,30 @@ func GenerateAclJson(allNames, allPasswords, allUsers, allPhones []string) strin
 	return json
 }
 
+func GenerateAclJsonDontEncript(allNames, allPasswords, allUsers, allPhones []string) string {
+	logs.Debugln("Generating ACL Json")
+
+	json := "[\n"
+
+	for i, _ := range allPasswords {
+		if allNames[i] != "" {
+			firstname, lastname := getFirstNameAndLastName(allNames[i])
+
+			value := generateAclJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i])
+
+			if i != len(allPasswords)-1 {
+				value = value + ",\n"
+			}
+
+			json = json + value
+		}
+	}
+
+	json = json + "\n]"
+
+	return json
+}
+
 func generateAclJson(username, password, firstname, lastname, phone string) string {
 	logs.Debugln("Generating ACL JSON to", username)
 
