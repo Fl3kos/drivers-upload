@@ -18,14 +18,16 @@ func TestGenerateJson(t *testing.T) {
 }
 
 var _ = Describe("Generate Json", func() {
-	Context("GenerateCouchbaseJson", func() {
+	Context("GenerateJson", func() {
 		It("GenerateJson", func() {
-			log.InitTestLogger("GenerateCouchbaseJson")
+			log.InitTestLogger("GenerateACLJson")
+
 			var userNames = []string{"Usuario Uno", "Usuario Dos"}
 			var userPasswords = []string{"B000001b", "K000002k"}
 			var userUsers = []string{"B0000011", "K0000021"}
+			var phoneNumbers = []string{"666777888", "666888777"}
 
-			result := json.GenerateJson(userNames, userPasswords, userUsers)
+			result := json.GenerateJson(userNames, userPasswords, userUsers, phoneNumbers)
 
 			expectResult := file.ReadFile(consts.UserCouchbaseRoute)
 			expectResult = strings.TrimSuffix(expectResult, "\n")
@@ -34,8 +36,8 @@ var _ = Describe("Generate Json", func() {
 		})
 	})
 
-	Context("GenerateAclJson", func() {
-		It("GenerateACLJson", func() {
+	Context("GenerateEndpointJson", func() {
+		It("GenerateEndpointJson", func() {
 			log.InitTestLogger("GenerateACLJson")
 
 			var userNames = []string{"Usuario Uno", "Usuario Dos"}
@@ -43,28 +45,11 @@ var _ = Describe("Generate Json", func() {
 			var userUsers = []string{"B0000011", "K0000021"}
 			var phoneNumbers = []string{"666777888", "666888777"}
 
-			result := json.GenerateAclJson(userNames, userPasswords, userUsers, phoneNumbers)
-
-			expectResult := file.ReadFile(consts.AclCouchbaseRoute)
+			result := json.GenerateEndpointJson(userNames, userPasswords, userUsers, phoneNumbers)
+			expectResult := file.ReadFile(consts.AclEPCouchbaseRoute)
 			expectResult = strings.TrimSuffix(expectResult, "\n")
-
-			Expect(result).To(BeEquivalentTo(expectResult))
-		})
-	})
-
-	Context("GenerateAclNEJson", func() {
-		It("GenerateACLNEJson", func() {
-			log.InitTestLogger("GenerateACLJson")
-
-			var userNames = []string{"Usuario Uno", "Usuario Dos"}
-			var userPasswords = []string{"B000001b", "K000002k"}
-			var userUsers = []string{"B0000011", "K0000021"}
-			var phoneNumbers = []string{"666777888", "666888777"}
-
-			result := json.GenerateAclJsonDontEncript(userNames, userPasswords, userUsers, phoneNumbers)
-
-			expectResult := file.ReadFile(consts.AclNECouchbaseRoute)
-			expectResult = strings.TrimSuffix(expectResult, "\n")
+			log.Debugln("RESULT:\n" + result)
+			log.Debugln("EXPECTED:\n" + expectResult)
 
 			Expect(result).To(BeEquivalentTo(expectResult))
 		})

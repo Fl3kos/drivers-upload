@@ -1,5 +1,5 @@
 #json files to register
-usersCouchbase-*.json
+usersCouchbase*.json
 usersAndPasswords-*.txt
 names-*.txt
 insertSQLIteQuery-*.sql
