@@ -12,7 +12,7 @@ const (
 	FilesNames         string = "names"
 	FilesCsv           string = "usersAndPasswords"
 	FilesJson          string = "userCouchbase"
-	FilesAclJson       string = "usersAcl"
+	FilesAclJson       string = "usersEndPoint"
 	FilesAclSql        string = "aclSql"
 	LogsRoute          string = "./logs/logs.log"
 	LogsTestRoute      string = "../../logs/logs_test.log"
