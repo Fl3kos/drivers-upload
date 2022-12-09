@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-func GenerateJson(allNames, allPasswords, allUsers []string) string {
-	logs.Debugln("Generating Json")
+func GenerateJson(allNames, allPasswords, allUsers, allPhones []string) string {
+	logs.Debugln("Generating ACL Json")
 
 	json := "[\n"
 
@@ -19,7 +19,7 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 			firstname, lastname := getFirstNameAndLastName(allNames[i])
 			encodedPassword := encodePassword(allPasswords[i])
 
-			value := generateJson(allUsers[i], encodedPassword, firstname, lastname)
+			value := generateJson(allUsers[i], encodedPassword, firstname, lastname, allPhones[i])
 
 			if i != len(allPasswords)-1 {
 				value = value + ",\n"
@@ -34,76 +34,51 @@ func GenerateJson(allNames, allPasswords, allUsers []string) string {
 	return json
 }
 
-func generateJson(username, password, firstname, lastname string) string {
-	logs.Debugln("Generating JSON to", username)
+func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones []string) string {
+	logs.Debugln("Generating ACL Json")
+
+	json := "{\n\t\"user\": [\n"
+
+	for i, _ := range allPasswords {
+		if allNames[i] != "" {
+			firstname, lastname := getFirstNameAndLastName(allNames[i])
+
+			value := generateEndpointJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i])
+
+			if i != len(allPasswords)-1 {
+				value = value + ",\n"
+			}
+
+			json = json + value
+		}
+	}
+
+	json = json + "\n\t]\n}"
+
+	return json
+}
+
+func generateEndpointJson(username, password, firstname, lastname, phone string) string {
+	logs.Debugln("Generating ACL JSON to", username)
 
 	json :=
-		`	{
-		"username" : "%v",
-		"password" : "%v",
-		"firstname" : "%v",
-		"lastname" : "%v",
-		"collection" : "%v",
-		"userType": "%v"
-	}`
+		`		{
+			"email": "%v",
+			"firstname": "%v",
+			"lastname": "%v",
+			"password": "%v",
+			"phone": "%v",
+			"username": "%v"
+		}`
 
-	json = fmt.Sprintf(json, username, password, firstname, lastname, consts.Collection_Json, consts.UserType_Json)
+	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password, phone, username)
 
-	logs.Debugln("JSON generated")
-
-	return json
-}
-
-func GenerateAclJson(allNames, allPasswords, allUsers, allPhones []string) string {
-	logs.Debugln("Generating ACL Json")
-
-	json := "[\n"
-
-	for i, _ := range allPasswords {
-		if allNames[i] != "" {
-			firstname, lastname := getFirstNameAndLastName(allNames[i])
-			encodedPassword := encodePassword(allPasswords[i])
-
-			value := generateAclJson(allUsers[i], encodedPassword, firstname, lastname, allPhones[i])
-
-			if i != len(allPasswords)-1 {
-				value = value + ",\n"
-			}
-
-			json = json + value
-		}
-	}
-
-	json = json + "\n]"
+	logs.Debugln("ACL JSON generated")
 
 	return json
 }
 
-func GenerateAclJsonDontEncript(allNames, allPasswords, allUsers, allPhones []string) string {
-	logs.Debugln("Generating ACL Json")
-
-	json := "[\n"
-
-	for i, _ := range allPasswords {
-		if allNames[i] != "" {
-			firstname, lastname := getFirstNameAndLastName(allNames[i])
-
-			value := generateAclJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i])
-
-			if i != len(allPasswords)-1 {
-				value = value + ",\n"
-			}
-
-			json = json + value
-		}
-	}
-
-	json = json + "\n]"
-
-	return json
-}
-
-func generateAclJson(username, password, firstname, lastname, phone string) string {
+func generateJson(username, password, firstname, lastname, phone string) string {
 	logs.Debugln("Generating ACL JSON to", username)
 
 	json :=

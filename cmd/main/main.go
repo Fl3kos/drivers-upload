@@ -45,9 +45,8 @@ func main() {
 	csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
 	// Create Json files
-	jsonT := json.GenerateJson(allNames, allPasswords, allUsers)
-	jsonAcl := json.GenerateAclJson(allNames, allPasswords, allUsers, allPhones)
-	jsonAclNotEncript := json.GenerateAclJsonDontEncript(allNames, allPasswords, allUsers, allPhones)
+	jsonAcl := json.GenerateJson(allNames, allPasswords, allUsers, allPhones)
+	jsonEndPoint := json.GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones)
 
 	// Create Names file
 	namesT := convert.TransformAllNames(allNames)
@@ -66,15 +65,12 @@ func main() {
 	}
 
 	// files created
-	err = files.GenerateFile(jsonT, files.CreationFileRouteJson("usersCouchbase", "json"))
-	controlErrors(err)
-
 	err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
 	controlErrors(err)
 
-	err = files.GenerateFile(jsonAcl, files.CreationFileRouteAclJson("ACL", "json"))
+	err = files.GenerateFile(jsonAcl, files.CreationFileRouteJson("usersCouchbase", "json"))
 	controlErrors(err)
-	err = files.GenerateFile(jsonAclNotEncript, files.CreationFileRouteAclJson("ACL-NE", "json"))
+	err = files.GenerateFile(jsonEndPoint, files.CreationFileRouteAclJson("ACL-EP", "json"))
 	controlErrors(err)
 
 	err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))

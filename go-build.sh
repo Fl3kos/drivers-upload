@@ -8,7 +8,7 @@ filesJson=files/userCouchbase
 filesCsv=files/usersAndPasswords
 filesNames=files/names
 filesAclSql=files/aclSql
-filesUsersAcl=files/usersAcl
+filesUsersAcl=files/usersEndPoint
 logsFolder=logs
 param=$1
 
@@ -145,6 +145,12 @@ case $param in
         go clean -testcache
         run_test
         ;;
+    "p" | "pull" | "-p")
+        git pull
+        clear_all_project
+        create_folders
+        create_files
+        ;;
     "h" | "??" | "help" | "-q" | "--help")
         echo "Help:"
         echo "i: Inicialice the project, when download the project is the fist choice to use"
@@ -155,6 +161,7 @@ case $param in
         echo "cc: to clear the cache"
         echo "q: run the project to create insert sql tables"
         echo "t: run the test"
+        echo "p: pull repo, delete and create new folders"
         echo "h: help"
             ;;
 esac
