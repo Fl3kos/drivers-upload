@@ -86,9 +86,11 @@ func generateJson(username, password, firstname, lastname, phone string) string 
 		"email": "%v",
 		"firstname": "%v",
 		"lastname": "%v",
+		"collection": "authentication",
 		"password": "%v",
 		"phone": "%v",
-		"username": "%v"
+		"username": "%v",
+		"userType": "ECOMMERCE_USER"
 	}`
 
 	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password, phone, username)
