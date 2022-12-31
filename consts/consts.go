@@ -17,4 +17,5 @@ const (
 	LogsRoute          string = "./logs/logs.log"
 	LogsTestRoute      string = "../../logs/logs_test.log"
 	GenericDriverEmail string = "driver@gmail.com"
+	AuthEndpointUrl    string = "https://internal.pro.es.ecom.dgrp.io/api/v1/auth/user"
 )
