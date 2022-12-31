@@ -11,6 +11,7 @@ import (
 	"drivers-create/methods/gets/getNames"
 	"drivers-create/methods/gets/getPhones"
 	"drivers-create/methods/gets/getShops"
+	"drivers-create/methods/http"
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
@@ -78,6 +79,9 @@ func main() {
 
 	err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
 	controlErrors(err)
+
+	http.AuthEndpointCall(jsonEndPoint)
+
 	fmt.Println("Finish")
 }
 
