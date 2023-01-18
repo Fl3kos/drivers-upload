@@ -2,30 +2,35 @@ package json
 
 import (
 	"crypto/sha256"
-	"drivers-create/consts"
 	logs "drivers-create/methods/log"
 	"encoding/hex"
 	"fmt"
 	"strings"
 )
 
-func GenerateJson(allNames, allPasswords, allUsers, allPhones []string) string {
+func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
 	logs.Debugln("Generating ACL Json")
 
 	json := "[\n"
+	s := 0
+	shop := allShops[s]
 
 	for i, _ := range allPasswords {
 		if allNames[i] != "" {
 			firstname, lastname := getFirstNameAndLastName(allNames[i])
 			encodedPassword := encodePassword(allPasswords[i])
+			email := fmt.Sprintf("t%ves@stores.diagroup.com", shop)
 
-			value := generateJson(allUsers[i], encodedPassword, firstname, lastname, allPhones[i])
+			value := generateJson(allUsers[i], encodedPassword, firstname, lastname, allPhones[i], email)
 
 			if i != len(allPasswords)-1 {
 				value = value + ",\n"
 			}
 
 			json = json + value
+		} else {
+			s = s + 1
+			shop = allShops[s]
 		}
 	}
 
@@ -34,22 +39,27 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones []string) string {
 	return json
 }
 
-func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones []string) string {
+func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
 	logs.Debugln("Generating ACL Json")
 
 	json := "{\n\t\"user\": [\n"
+	s := 0
+	shop := allShops[s]
 
 	for i, _ := range allPasswords {
 		if allNames[i] != "" {
 			firstname, lastname := getFirstNameAndLastName(allNames[i])
-
-			value := generateEndpointJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i])
+			email := fmt.Sprintf("t%ves@stores.diagroup.com", shop)
+			value := generateEndpointJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i], email)
 
 			if i != len(allPasswords)-1 {
 				value = value + ",\n"
 			}
 
 			json = json + value
+		} else {
+			s = s + 1
+			shop = allShops[s]
 		}
 	}
 
@@ -58,7 +68,7 @@ func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones []string) 
 	return json
 }
 
-func generateEndpointJson(username, password, firstname, lastname, phone string) string {
+func generateEndpointJson(username, password, firstname, lastname, phone, email string) string {
 	logs.Debugln("Generating ACL JSON to", username)
 
 	json :=
@@ -71,14 +81,14 @@ func generateEndpointJson(username, password, firstname, lastname, phone string)
 			"username": "%v"
 		}`
 
-	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password, phone, username)
+	json = fmt.Sprintf(json, email, firstname, lastname, password, phone, username)
 
 	logs.Debugln("ACL JSON generated")
 
 	return json
 }
 
-func generateJson(username, password, firstname, lastname, phone string) string {
+func generateJson(username, password, firstname, lastname, phone, email string) string {
 	logs.Debugln("Generating ACL JSON to", username)
 
 	json :=
@@ -93,7 +103,7 @@ func generateJson(username, password, firstname, lastname, phone string) string 
 		"userType": "ECOMMERCE_USER"
 	}`
 
-	json = fmt.Sprintf(json, consts.GenericDriverEmail, firstname, lastname, password, phone, username)
+	json = fmt.Sprintf(json, email, firstname, lastname, password, phone, username)
 
 	logs.Debugln("ACL JSON generated")
 

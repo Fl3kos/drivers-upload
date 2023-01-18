@@ -46,8 +46,8 @@ func main() {
 	csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
 	// Create Json files
-	jsonAcl := json.GenerateJson(allNames, allPasswords, allUsers, allPhones)
-	jsonEndPoint := json.GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones)
+	jsonAcl := json.GenerateJson(allNames, allPasswords, allUsers, allPhones, shopCodes)
+	jsonEndPoint := json.GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, shopCodes)
 
 	// Create Names file
 	namesT := convert.TransformAllNames(allNames)
