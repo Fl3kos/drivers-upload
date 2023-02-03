@@ -3,7 +3,9 @@ package json
 import (
 	"crypto/sha256"
 	logs "drivers-create/methods/log"
+	"drivers-create/structs/users"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"strings"
 )
@@ -37,6 +39,31 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string
 	json = json + "\n]"
 
 	return json
+}
+
+func GenerateUsersJson(pkr, crd, adm []users.User) string {
+	finalJson := "{\n\t\"users\" : ["
+	pkrJson := generateUsersJson(pkr)
+	crdJson := generateUsersJson(crd)
+	admJson := generateUsersJson(adm)
+
+	finalJson = finalJson + pkrJson + crdJson + admJson
+
+	finalJson = finalJson[:len(finalJson)-1]
+	finalJson = finalJson + "\n\t]\n}"
+	return finalJson
+}
+
+func generateUsersJson(users []users.User) string {
+	finalJson := ""
+
+	for _, user := range users {
+		jsonByte, _ := json.Marshal(user)
+		jsonTxt := string(jsonByte)
+		finalJson = finalJson + "\n\t\t" + jsonTxt + ","
+	}
+
+	return finalJson
 }
 
 func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
