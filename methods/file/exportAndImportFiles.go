@@ -122,6 +122,13 @@ func CreationFileRouteAclJson(route, extension string) string {
 	return fileName
 }
 
+func CreationFileUserList() string {
+	filePath := fmt.Sprintf("%v/%v/%v-%v.json", consts.FilesRoute, consts.FilesUserListJson, consts.UserListFileName, common.GetDate())
+	logs.Debugf("Read creation file %v", filePath)
+
+	return filePath
+}
+
 func ReadFileRoute(route, extension string) string {
 	fileName := fmt.Sprintf("%v/%v.%v", consts.ReadFileRoute, route, extension)
 
@@ -139,5 +146,11 @@ func ReadSqliteFile(fileName string) string {
 func ReadTestFile(fileName string) string {
 	file := fmt.Sprintf("%v/%v", consts.TestFileRoute, fileName)
 	logs.Debugf("Read creation file %v", file)
+	return file
+}
+
+func ReadUserListFile() string {
+	file := fmt.Sprintf("%v/%v.json", consts.ReadFileRoute, consts.UserListFileName)
+	logs.Debugf("Read UserList file %v", file)
 	return file
 }

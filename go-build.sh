@@ -10,6 +10,7 @@ filesNames=files/names
 filesAclSql=files/aclSql
 filesUsersAcl=files/usersEndPoint
 logsFolder=logs
+filesUserList=files/userList
 param=$1
 
 create_folders(){
@@ -25,6 +26,7 @@ create_folders(){
     create_folder $filesNames
     create_folder $filesAclSql
     create_folder $filesUsersAcl
+    create_folder $filesUserList
 
 }
 
@@ -48,6 +50,15 @@ create_files(){
     touch ./filesToRead/names.txt
     touch ./filesToRead/phoneNumbers.txt
     touch ./filesToRead/shops.txt
+}
+
+create_user_list_file(){
+    touch ./filesToRead/userList.json
+    echo "{
+        \"PKR\": 10,
+        \"CRD\": 5,
+        \"ADM\": 1
+}" >> ./filesToRead/userList.json
 }
 
 build_project(){
@@ -87,6 +98,11 @@ run_insert_query(){
     go run ./cmd/create-shops/main.go
 }
 
+run_users_list(){
+    rm ./logs/logs.log
+    go run ./cmd/users-shop/main.go
+}
+
 clear_project(){
     rm ./files/*/*
     rm ./logs/*
@@ -117,6 +133,7 @@ case $param in
     "i" | "init" | "-i")
         create_folders
         create_files
+        create_user_list_file
             ;;
     "b" | "build" | "-b")
         build_project
@@ -141,6 +158,9 @@ case $param in
     "q" | "query" | "-q")
         run_insert_query
         ;;
+    "u" | "users-list" | "-u")
+        run_users_list
+        ;;
     "t" | "test" | "-t")
         go clean -testcache
         run_test
@@ -160,6 +180,7 @@ case $param in
         echo "ca: to clear all project"
         echo "cc: to clear the cache"
         echo "q: run the project to create insert sql tables"
+        echo "u: run the users list main to create users to insert in wms warehouse"
         echo "t: run the test"
         echo "p: pull repo, delete and create new folders"
         echo "h: help"
