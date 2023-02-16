@@ -70,13 +70,13 @@ func GenerateSqlLiteInsertShopTable(shopCodes, shopNames []string) string {
 	return query
 }
 
-func GenerateAclInsert(allUsers []string) string {
+func GenerateAclInsert(allUsers []string, role string) string {
 	query := "INSERT INTO acl.ecommerce_user4application_role (application_role_code, ecommerce_user_code)\nVALUES "
-	value := "((SELECT role_code from acl.application_role where role_name = 'ROLE_APPTMS_DRIVER'),'%v')"
+	value := "((SELECT role_code from acl.application_role where role_name = '%v'),'%v')"
 
 	for i, user := range allUsers {
 		if user != "" {
-			valueF := fmt.Sprintf(value, user)
+			valueF := fmt.Sprintf(value, role, user)
 
 			if i != len(allUsers)-1 {
 				valueF = valueF + ",\n"
@@ -88,6 +88,22 @@ func GenerateAclInsert(allUsers []string) string {
 	}
 
 	query = query + ";"
+
+	return query
+}
+
+func GenerateAclRoleInsert(usernames []string, shopcode, environoment string) string {
+	//INSERT INTO `scope-users`.scope_ecommerce_user (ecommerce_user_code, application_code, segmentation) VALUES('ADM10028001','ECOMUI','[{"type": "AND", "content": [{"values": ["10028"], "dimension": "storeCode"}]}]');
+	query := "INSERT INTO `scope-users`.scope_ecommerce_user (ecommerce_user_code, application_code, segmentation) \nVALUES "
+	value := "('%v','%v','[{\"type\": \"AND\",\"content\": [{\"values\": [\"%v\"], \"dimension\": \"storeCode\"}]}]')"
+	for i, user := range usernames {
+		valueF := fmt.Sprintf(value, user, environoment, shopcode)
+
+		if i != len(usernames)-1 {
+			valueF = valueF + ",\n"
+		}
+		query = query + valueF
+	}
 
 	return query
 }

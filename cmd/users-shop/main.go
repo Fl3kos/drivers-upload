@@ -7,6 +7,7 @@ import (
 	"drivers-create/methods/json"
 	"drivers-create/methods/log"
 	numtoletter "drivers-create/methods/numToLetter"
+	"drivers-create/methods/sql"
 	"drivers-create/structs/users"
 	"strconv"
 
@@ -30,15 +31,60 @@ func main() {
 	adm := generateUsers(list.Adm, string(users.ADM), shop, phone)
 
 	finalJson := json.GenerateUsersJson(pkr, crd, adm)
-	fmt.Println(finalJson)
+	sqlPkr := generateSql(pkr, shop, string(users.PKR))
+	sqlCrd := generateSql(pkr, shop, string(users.PKR))
+	sqlAdm := generateSql(pkr, shop, string(users.PKR))
+	finalSql := sqlPkr + sqlCrd + sqlAdm
+
 	err := files.GenerateFile(finalJson, files.CreationFileUserList())
 
 	if err != nil {
 		log.Errorf("Error generating file: %v", err)
-		fmt.Println("Error generating files, check the logs /logs/lo")
+		fmt.Println("Error generating files, check the logs /logs/logs.log")
+	}
+
+	err = files.GenerateFile(finalSql, files.CreationFileRouteAclSql("ACL", "sql"))
+
+	if err != nil {
+		log.Errorf("Error generating file: %v", err)
+		fmt.Println("Error generating files, check the logs /logs/logs.log")
 	}
 
 	fmt.Println("Finish")
+}
+
+func generateSql(users []users.User, shopCode, role string) string {
+	var usernames []string
+	for _, user := range users {
+		usernames = append(usernames, user.Username)
+	}
+	finalSql := ""
+	role1 := ""
+	role2 := ""
+	environoment1 := "WMSPIC"
+	environoment2 := "ECOMUI"
+	switch role {
+	case "PKR":
+		role1 = "ROLE_WMSPIC_PICKER"
+		role2 = "ROLE_ECOMUI_WMS_PICKER"
+		break
+	case "CRD":
+		role1 = "ROLE_WMSPIC_COORDINATOR"
+		role2 = "ROLE_ECOMUI_WMS_COORDINATOR"
+		break
+	case "ADM":
+		role1 = "ROLE_WMSPIC_ADMIN"
+		role2 = "ROLE_ECOMUI_WMS_ADMIN"
+		break
+	default:
+		log.Errorln("User dont identify")
+	}
+	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role1)
+	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role2)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment1)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment2)
+
+	return finalSql
 }
 
 func generateUsers(cuantity int, userType, shopNumber, phoneNumber string) []users.User {
@@ -49,7 +95,6 @@ func generateUsers(cuantity int, userType, shopNumber, phoneNumber string) []use
 
 		number := strconv.Itoa(i)
 
-		//PKR-00937-002
 		for j := len(number); j < 3; j++ {
 			number = "0" + number
 		}

@@ -68,7 +68,7 @@ var _ = Describe("Sql Test", func() {
 
 			users := []string{"B0000011", "K0000021"}
 
-			query := GenerateAclInsert(users)
+			query := GenerateAclInsert(users, "ROLE_APPTMS_DRIVER")
 
 			expectedResult := file.ReadFile(consts.AclSqlRoute)
 			expectedResult = strings.TrimSuffix(expectedResult, "\n")

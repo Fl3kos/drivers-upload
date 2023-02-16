@@ -42,7 +42,6 @@ func IntLetra(n int) (s string, err error) {
 		sb.WriteString(" mil")
 	} else if millares > 1 {
 		aux, err = IntLetra(millares)
-		sb.WriteRune(' ')
 		sb.WriteString(aux)
 		sb.WriteString(" mil")
 	}
@@ -53,11 +52,9 @@ func IntLetra(n int) (s string, err error) {
 			sb.WriteString(" ciento")
 		}
 	} else if centenas > 0 {
-		sb.WriteRune(' ')
 		sb.WriteString(cs[centenas])
 	}
 	if decenas == 1 {
-		sb.WriteRune(' ')
 		sb.WriteString(des[n%10])
 		unidades = 0
 	} else if decenas == 2 && unidades > 0 {
@@ -65,14 +62,12 @@ func IntLetra(n int) (s string, err error) {
 		sb.WriteString(us[unidades])
 		unidades = 0
 	} else if decenas > 1 {
-		sb.WriteRune(' ')
 		sb.WriteString(ds[decenas])
 		if unidades > 0 {
 			sb.WriteString(" y")
 		}
 	}
 	if unidades > 0 {
-		sb.WriteRune(' ')
 		sb.WriteString(us[unidades])
 	} else if n == 0 {
 		sb.WriteString(us[0])
