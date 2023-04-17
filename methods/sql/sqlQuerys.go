@@ -105,5 +105,7 @@ func GenerateAclRoleInsert(usernames []string, shopcode, environoment string) st
 		query = query + valueF
 	}
 
+	query = query + ";"
+
 	return query
 }
