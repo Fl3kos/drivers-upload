@@ -9,6 +9,8 @@ import (
 	numtoletter "drivers-create/methods/numToLetter"
 	"drivers-create/methods/sql"
 	"drivers-create/structs/users"
+
+	"drivers-create/methods/http"
 	"strconv"
 
 	"fmt"
@@ -32,8 +34,8 @@ func main() {
 
 	finalJson := json.GenerateUsersJson(pkr, crd, adm)
 	sqlPkr := generateSql(pkr, shop, string(users.PKR))
-	sqlCrd := generateSql(pkr, shop, string(users.PKR))
-	sqlAdm := generateSql(pkr, shop, string(users.PKR))
+	sqlCrd := generateSql(crd, shop, string(users.CRD))
+	sqlAdm := generateSql(adm, shop, string(users.ADM))
 	finalSql := sqlPkr + sqlCrd + sqlAdm
 
 	err := files.GenerateFile(finalJson, files.CreationFileUserList())
@@ -49,6 +51,8 @@ func main() {
 		log.Errorf("Error generating file: %v", err)
 		fmt.Println("Error generating files, check the logs /logs/logs.log")
 	}
+
+	http.AuthEndpointCall(finalJson)
 
 	fmt.Println("Finish")
 }
@@ -79,7 +83,7 @@ func generateSql(users []users.User, shopCode, role string) string {
 	default:
 		log.Errorln("User dont identify")
 	}
-	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role1)
+	finalSql = finalSql + "\n\n" + sql.GenerateAclInsert(usernames, role1)
 	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role2)
 	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment1)
 	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment2)
