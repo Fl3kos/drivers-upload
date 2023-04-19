@@ -4,13 +4,13 @@ import (
 	files "drivers-create/methods/file"
 	"drivers-create/methods/gets/getPhones"
 	"drivers-create/methods/gets/getShops"
+	"drivers-create/methods/http"
 	"drivers-create/methods/json"
 	"drivers-create/methods/log"
 	numtoletter "drivers-create/methods/numToLetter"
 	"drivers-create/methods/sql"
 	"drivers-create/structs/users"
 
-	"drivers-create/methods/http"
 	"strconv"
 
 	"fmt"
@@ -102,6 +102,11 @@ func generateUsers(cuantity int, userType, shopNumber, phoneNumber string) []use
 		for j := len(number); j < 3; j++ {
 			number = "0" + number
 		}
+
+		for i := len(shopNumber); i < 5; i++ {
+			shopNumber = "0" + shopNumber
+		}
+
 		userAndPassword := fmt.Sprintf("%v%v%v", userType, shopNumber, number)
 
 		user.Username = userAndPassword
