@@ -55,7 +55,7 @@ func main() {
 	// Create SQL files
 	driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
 	relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
-	sqlAcl := sql.GenerateAclInsert(allUsers)
+	sqlAcl := sql.GenerateAclInsert(allUsers, "ROLE_APPTMS_DRIVER")
 	sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 	//insert in sqlite

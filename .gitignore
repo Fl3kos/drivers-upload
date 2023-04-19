@@ -22,3 +22,6 @@ insertSqlTable-*.sql
 methods/*/coverage
 methods/*/ginkgo.report
 ACL*
+usersShop*
+userList.json
+userList-*
