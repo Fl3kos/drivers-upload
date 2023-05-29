@@ -42,7 +42,7 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string
 }
 
 func GenerateUsersJson(pkr, crd, adm []users.User) string {
-	finalJson := "{\n\t\"users\" : ["
+	finalJson := "{\n\t\"user\" : ["
 	pkrJson := generateUsersJson(pkr)
 	crdJson := generateUsersJson(crd)
 	admJson := generateUsersJson(adm)
