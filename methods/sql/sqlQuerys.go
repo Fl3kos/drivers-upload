@@ -109,3 +109,16 @@ func GenerateAclRoleInsert(usernames []string, shopcode, environoment string) st
 
 	return query
 }
+
+func GenerateExpeditionLayoutSql(warehouseCode, typeE, locationZone, area, position, templateArea, templatePosition, shippingSecuence, priority, closer_sorter, active, locationTemplate, location string) string {
+	query := "INSERT INTO wms.location_expedition ( warehouse_code,type,location_zone,area,position,template_area,template_position,shipping_sequence,priority,closer_sorter,active,location_template,location) VALUES ('%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::integer,'%v'::integer,'%v'::character varying,'%v'::boolean,'%v'::character varying,'%v'::character varying) ON CONFLICT ON CONSTRAINT location_expedition_pkey DO UPDATE SET warehouse_code = EXCLUDED.warehouse_code,type = EXCLUDED.type,location_zone = EXCLUDED.location_zone,area = EXCLUDED.area,position = EXCLUDED.position,template_area = EXCLUDED.template_area,template_position = EXCLUDED.template_position,shipping_sequence = EXCLUDED.shipping_sequence,priority = EXCLUDED.priority,closer_sorter = EXCLUDED.closer_sorter,active = EXCLUDED.active,location_template = EXCLUDED.location_template,location = EXCLUDED.location;"
+	fQuery := fmt.Sprintf(query, warehouseCode, typeE, locationZone, area, position, templateArea, templatePosition, shippingSecuence, priority, closer_sorter, active, locationTemplate, location)
+
+	return fQuery
+}
+
+func GeneratePickingLayoutSql() string {
+	query := ""
+
+	return query
+}

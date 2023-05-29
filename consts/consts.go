@@ -15,6 +15,8 @@ const (
 	FilesAclJson       string = "usersEndPoint"
 	FilesUserListJson  string = "userList"
 	FilesAclSql        string = "aclSql"
+	FilesExpedition    string = "expeditionSql"
+	FilesPicking       string = "pickingSql"
 	LogsRoute          string = "./logs/logs.log"
 	LogsTestRoute      string = "../../logs/logs_test.log"
 	GenericDriverEmail string = "driver@gmail.com"

@@ -25,3 +25,6 @@ ACL*
 usersShop*
 userList.json
 userList-*
+expedition.xlsx
+picking.xlsx
+expedition*.sql

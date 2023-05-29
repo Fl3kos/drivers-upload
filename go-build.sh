@@ -2,6 +2,7 @@
 
 filesFolder=files
 filesToReadFolder=filesToRead
+filesToReadLayouts=filesToRead/layouts
 filesSql=files/sql
 filesSqlShop=files/sqlShops
 filesJson=files/userCouchbase
@@ -11,12 +12,14 @@ filesAclSql=files/aclSql
 filesUsersAcl=files/usersEndPoint
 logsFolder=logs
 filesUserList=files/userList
+filesExpedition=files/expeditionSql
 param=$1
 
 create_folders(){
     #create files folder
     create_folder $filesFolder
     create_folder $filesToReadFolder
+    create_folder %filesToReadLayouts
     create_folder $logsFolder
 
     create_folder $filesSql
@@ -27,6 +30,7 @@ create_folders(){
     create_folder $filesAclSql
     create_folder $filesUsersAcl
     create_folder $filesUserList
+    create_folder $filesExpedition
 
 }
 
@@ -98,6 +102,11 @@ run_insert_query(){
     go run ./cmd/create-shops/main.go
 }
 
+run_layouts(){
+    rm ./logs/logs.log
+    go run ./cmd/layouts/main.go
+}
+
 run_users_list(){
     rm ./logs/logs.log
     go run ./cmd/users-shop/main.go
@@ -161,6 +170,9 @@ case $param in
     "u" | "users-list" | "-u")
         run_users_list
         ;;
+    "l" | "layouts" | "-l")
+        run_layouts
+        ;;
     "t" | "test" | "-t")
         go clean -testcache
         run_test
@@ -181,6 +193,7 @@ case $param in
         echo "cc: to clear the cache"
         echo "q: run the project to create insert sql tables"
         echo "u: run the users list main to create users to insert in wms warehouse"
+        echo "l: run the layouts constructor sql file"
         echo "t: run the test"
         echo "p: pull repo, delete and create new folders"
         echo "h: help"
