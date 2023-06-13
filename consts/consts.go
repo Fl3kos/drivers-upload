@@ -17,6 +17,7 @@ const (
 	FilesAclSql        string = "aclSql"
 	FilesExpedition    string = "expeditionSql"
 	FilesPicking       string = "pickingSql"
+	FilesSorterMap     string = "sorterMap"
 	LogsRoute          string = "./logs/logs.log"
 	LogsTestRoute      string = "../../logs/logs_test.log"
 	GenericDriverEmail string = "driver@gmail.com"

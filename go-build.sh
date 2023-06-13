@@ -13,6 +13,7 @@ filesUsersAcl=files/usersEndPoint
 logsFolder=logs
 filesUserList=files/userList
 filesExpedition=files/expeditionSql
+filesSorterMap=files/sorterMap
 param=$1
 
 create_folders(){
@@ -31,6 +32,7 @@ create_folders(){
     create_folder $filesUsersAcl
     create_folder $filesUserList
     create_folder $filesExpedition
+    create_folder $filesSorterMap
 
 }
 

@@ -8,6 +8,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"strings"
+
+	"github.com/tealeg/xlsx"
 )
 
 func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
@@ -93,6 +95,59 @@ func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops 
 	json = json + "\n\t]\n}"
 
 	return json
+}
+
+func GenerateSorterMap(locationAndSorter []*xlsx.Row, warehouseCode string) string {
+	var sorter []string
+	var locations []string
+
+	for i, ubication := range locationAndSorter {
+		if i > 0 {
+			if ubication.Cells[9].String() == "" {
+				return ""
+			}
+
+			ubi := strings.Split(ubication.Cells[9].String(), ".")[1]
+
+			if ubi[:1] == "0" {
+				fmt.Println(ubi[:1])
+				ubi = ubi[1:2]
+			}
+
+			sorter = append(sorter, ubi)
+			locations = append(locations, ubication.Cells[11].String())
+		}
+	}
+
+	sorterMap := generateSorterMap(sorter, locations, warehouseCode)
+	return sorterMap
+}
+
+func generateSorterMap(sorter, location []string, warehouse string) string {
+	var sorterMap string
+
+	sorterMap =
+		`{
+		"store_code" : "%v",
+		"yard_chute_map": {
+			%v
+		}
+	}`
+	values := ""
+	value := "\"%v\":\"%v\""
+
+	for i, _ := range sorter {
+		valueF := fmt.Sprintf(value, location[i], sorter[i])
+
+		if i != len(sorter)-1 {
+			valueF = valueF + ",\n"
+		}
+		values = values + valueF
+	}
+
+	sorterMap = fmt.Sprintf(sorterMap, warehouse, values)
+
+	return sorterMap
 }
 
 func generateEndpointJson(username, password, firstname, lastname, phone, email string) string {

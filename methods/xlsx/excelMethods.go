@@ -28,7 +28,7 @@ func readExcelFile() {
 	}
 }
 
-func ExpeditionLayout(excelFileName string) (string, error) {
+func ExpeditionLayout(excelFileName string) (string, error, []*xlsx.Row, string) {
 	log.Debugln("Creation Expedition Layout sql file")
 	var err error
 	fQuery := ""
@@ -36,7 +36,7 @@ func ExpeditionLayout(excelFileName string) (string, error) {
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
 		log.Errorf("Error reading expedition layout, Error: %v", err)
-		return "", err
+		return "", err, nil, ""
 	}
 
 	layout := xlFile.Sheets[0]
@@ -67,7 +67,7 @@ func ExpeditionLayout(excelFileName string) (string, error) {
 	}
 
 	log.Debugln("Finish generating file")
-	return fQuery, err
+	return fQuery, err, xlFile.Sheets[0].Rows, xlFile.Sheets[0].Rows[1].Cells[0].String()
 }
 
 func PickingLayout(excelFileName string) (string, error) {

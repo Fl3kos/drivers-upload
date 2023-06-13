@@ -168,3 +168,10 @@ func CreationFilePickingSql(route, extension string) string {
 
 	return fileName
 }
+
+func CreationSorterMap() string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesSorterMap, "sorterMap", common.GetDate(), "json")
+	logs.Debugf("creation sorter map in file: %v", fileName)
+
+	return fileName
+}
