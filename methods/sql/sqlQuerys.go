@@ -117,8 +117,9 @@ func GenerateExpeditionLayoutSql(warehouseCode, typeE, locationZone, area, posit
 	return fQuery
 }
 
-func GeneratePickingLayoutSql() string {
-	query := ""
+func GeneratePickingLayoutSql(warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location string) string {
+	query := "INSERT INTO wms.location_picking ( warehouse_code,type,location_format,template,corridor,module,shelf,gap,location_zone,picking_zone,weight,height,width,length,capacity_fee,restocking_fee,picking_sequence,putaway_sequence,direction,blocked,active,rotation,cycle_count,location_template,location) VALUES ('%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::character varying,'%v'::real,'%v'::real,'%v'::real,'%v'::real,'%v'::real,'%v'::real,'%v'::integer,'%v'::integer,'%v'::character varying,'%v'::boolean,'%v'::boolean,'%v'::character varying,'%v'::boolean,'%v'::character varying,'%v'::character varying) ON CONFLICT ON CONSTRAINT location_picking_pkey DO UPDATE SET warehouse_code = EXCLUDED.warehouse_code,type = EXCLUDED.type,location_format = EXCLUDED.location_format,template = EXCLUDED.template,corridor = EXCLUDED.corridor,module = EXCLUDED.module,shelf = EXCLUDED.shelf,gap = EXCLUDED.gap,location_zone = EXCLUDED.location_zone,picking_zone = EXCLUDED.picking_zone,weight = EXCLUDED.weight,height = EXCLUDED.height,width = EXCLUDED.width,length = EXCLUDED.length,capacity_fee = EXCLUDED.capacity_fee,restocking_fee = EXCLUDED.restocking_fee,picking_sequence = EXCLUDED.picking_sequence,putaway_sequence = EXCLUDED.putaway_sequence,direction = EXCLUDED.direction,blocked = EXCLUDED.blocked,active = EXCLUDED.active,rotation = EXCLUDED.rotation,cycle_count = EXCLUDED.cycle_count,location_template = EXCLUDED.location_template,location = EXCLUDED.location;"
+	fQuery := fmt.Sprintf(query, warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location)
 
-	return query
+	return fQuery
 }
