@@ -154,3 +154,24 @@ func ReadUserListFile() string {
 	logs.Debugf("Read UserList file %v", file)
 	return file
 }
+
+func CreationFileExpeditionSql(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesExpedition, route, common.GetDate(), extension)
+	logs.Debugf("Read creation file %v", fileName)
+
+	return fileName
+}
+
+func CreationFilePickingSql(route, extension string) string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesPicking, route, common.GetDate(), extension)
+	logs.Debugf("Read creation file %v", fileName)
+
+	return fileName
+}
+
+func CreationSorterMap() string {
+	fileName := fmt.Sprintf("%v/%v/%v-%v.%v", consts.FilesRoute, consts.FilesSorterMap, "sorterMap", common.GetDate(), "json")
+	logs.Debugf("creation sorter map in file: %v", fileName)
+
+	return fileName
+}
