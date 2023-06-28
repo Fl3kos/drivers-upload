@@ -25,7 +25,7 @@ func main() {
 	shop := shopCodes[0]
 
 	for {
-		fmt.Printf("Are you secured to publish users with warehouse code %v? (y/n) ", shop)
+		fmt.Printf("Are you secured to assign roles to users with warehouse code %v? (y/n) ", shop)
 		var answer string
 		fmt.Scanln(&answer)
 
