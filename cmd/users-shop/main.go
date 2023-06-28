@@ -28,6 +28,21 @@ func main() {
 
 	phone := getPhones.GetAllPhones()[0]
 
+	for {
+		fmt.Printf("Are you secured to publish users with warehouse code %v and phone %v? (y/n) ", shop, phone)
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer == "y" {
+			break
+		}
+
+		if answer == "n" {
+			fmt.Printf("The shop code or phone not the expected")
+			log.Fatalf("The shop code or phone not the expected")
+		}
+	}
+
 	pkr := generateUsers(list.Pkr, string(users.PKR), shop, phone)
 	crd := generateUsers(list.Crd, string(users.CRD), shop, phone)
 	adm := generateUsers(list.Adm, string(users.ADM), shop, phone)
@@ -59,34 +74,54 @@ func main() {
 
 func generateSql(users []users.User, shopCode, role string) string {
 	var usernames []string
+	var appPickingRole string
+	var consoleRole string
+	var roleCode string
+	appPickingEnv := "WMSPIC"
+	consoleEnv := "ECOMUI"
+
+	finalSql := ""
+
 	for _, user := range users {
 		usernames = append(usernames, user.Username)
 	}
-	finalSql := ""
-	role1 := ""
-	role2 := ""
-	environoment1 := "WMSPIC"
-	environoment2 := "ECOMUI"
+
 	switch role {
 	case "PKR":
-		role1 = "ROLE_WMSPIC_PICKER"
-		role2 = "ROLE_ECOMUI_WMS_PICKER"
+		appPickingRole = "ROLE_WMSPIC_PICKER"
+		consoleRole = "ROLE_ECOMUI_WMS_PICKER"
+		roleCode = ""
 		break
 	case "CRD":
-		role1 = "ROLE_WMSPIC_COORDINATOR"
-		role2 = "ROLE_ECOMUI_WMS_COORDINATOR"
+		appPickingRole = "ROLE_WMSPIC_COORDINATOR"
+		consoleRole = "ROLE_ECOMUI_WMS_COORDINATOR"
+		roleCode = ""
 		break
 	case "ADM":
-		role1 = "ROLE_WMSPIC_ADMIN"
-		role2 = "ROLE_ECOMUI_WMS_ADMIN"
+		appPickingRole = "ROLE_WMSPIC_ADMIN"
+		consoleRole = "ROLE_ECOMUI_WMS_ADMIN"
+		roleCode = ""
 		break
 	default:
 		log.Errorln("User dont identify")
 	}
-	finalSql = finalSql + "\n\n" + sql.GenerateAclInsert(usernames, role1)
-	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role2)
-	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment1)
-	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment2)
+
+	//upload users to acl appPicking with role and store code
+	userAcl := json.GenerateAclJson(appPickingEnv, shopCode, roleCode)
+	for _, user := range usernames {
+		http.AclEndpointCall(userAcl, user, "")
+	}
+
+	//upload users to acl console with role and store code
+	userAcl = json.GenerateAclJson(consoleEnv, shopCode, roleCode)
+	for _, user := range usernames {
+		http.AclEndpointCall(userAcl, user, "")
+	}
+
+	finalSql = finalSql + "\n\n" + sql.GenerateAclInsert(usernames, appPickingRole)
+	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, consoleRole)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, appPickingEnv)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, consoleEnv)
 
 	return finalSql
 }

@@ -137,6 +137,14 @@ func ReadFileRoute(route, extension string) string {
 	return fileName
 }
 
+func ReadToken(filename string) string {
+	fileName := fmt.Sprintf("%v/%v", consts.ReadFileRoute, filename)
+
+	logs.Debugf("Read token file %v", fileName)
+
+	return fileName
+}
+
 func ReadSqliteFile(fileName string) string {
 	file := fmt.Sprintf("%v.db", fileName)
 	logs.Debugf("Read creation file %v", file)

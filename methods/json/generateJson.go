@@ -150,6 +150,52 @@ func generateSorterMap(sorter, location []string, warehouse string) string {
 	return sorterMap
 }
 
+func GenerateAclJson(aplicationCode, storeCode, roleCode string) string {
+	logs.Debugln("Generating ACL Json")
+
+	json :=
+		`{
+			{
+				"userType": "EMPLOYEE",
+				"rolesForApplications": [
+					{
+						"applicationCode": "%v",
+						"roleCodes": [
+							%v
+						]
+					}
+				],
+				"segmentationsForApplications": [
+					{
+						"applicationCode": "%v",
+						"segmentation": [
+							{
+								"type": "AND",
+								"content": [
+									{
+										"dimension": "storeCode",
+										"values": [
+											"%v"
+										]
+									},
+									{
+										"dimension": "country",
+										"values": [
+											"ES"
+										]
+									}
+								]
+							}
+						]
+					}
+				]
+			}`
+
+	json = fmt.Sprintf(json, aplicationCode, roleCode, aplicationCode, storeCode)
+
+	return json
+}
+
 func generateEndpointJson(username, password, firstname, lastname, phone, email string) string {
 	logs.Debugln("Generating ACL JSON to", username)
 

@@ -56,13 +56,14 @@ create_files(){
     touch ./filesToRead/names.txt
     touch ./filesToRead/phoneNumbers.txt
     touch ./filesToRead/shops.txt
+    touch ./filesToRead/token.txt
 }
 
 create_user_list_file(){
     touch ./filesToRead/userList.json
     echo "{
-        \"PKR\": 10,
-        \"CRD\": 5,
+        \"PKR\": 5,
+        \"CRD\": 3,
         \"ADM\": 1
 }" >> ./filesToRead/userList.json
 }
@@ -90,6 +91,15 @@ build_project(){
     cd ../create-shops
     go build
     rm create-shops
+    cd ../layouts
+    go build
+    rm layouts
+    cd ../acl-users
+    go build
+    rm acl-users
+    cd ../users-shop
+    go build
+    rm users-shop
     cd ../..
 
 }
@@ -113,6 +123,10 @@ run_users_list(){
     rm ./logs/logs.log
     go run ./cmd/users-shop/main.go
 }
+
+run_acl_users(){
+    rm ./logs/logs.log
+    go run ./cmd/acl-users/main.go
 
 clear_project(){
     rm ./files/*/*
@@ -174,6 +188,9 @@ case $param in
         ;;
     "l" | "layouts" | "-l")
         run_layouts
+        ;;
+    "a" | "acl" | "-a")
+        run_acl_users
         ;;
     "t" | "test" | "-t")
         go clean -testcache
