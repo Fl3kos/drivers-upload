@@ -127,6 +127,7 @@ run_users_list(){
 run_acl_users(){
     rm ./logs/logs.log
     go run ./cmd/acl-users/main.go
+}
 
 clear_project(){
     rm ./files/*/*
