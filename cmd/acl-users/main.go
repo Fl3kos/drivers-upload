@@ -66,7 +66,6 @@ func main() {
 }
 
 func publishToAcl(users []string, shopCode, role string) error {
-	var usernames []string
 	var appPickingRole string
 	var consoleRole string
 	appPickingEnv := "WMSPIC"
@@ -89,17 +88,17 @@ func publishToAcl(users []string, shopCode, role string) error {
 		log.Errorln("User dont identify")
 	}
 
-	token := files.ReadFile(files.ReadToken(consts.TokenFile))
+	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
 
 	//upload users to acl appPicking with role and store code
 	userAcl := json.GenerateAclJson(appPickingEnv, shopCode, appPickingRole)
-	for _, user := range usernames {
+	for _, user := range users {
 		http.AclEndpointCall(userAcl, user, token)
 	}
 
 	//upload users to acl console with role and store code
 	userAcl = json.GenerateAclJson(consoleEnv, shopCode, consoleRole)
-	for _, user := range usernames {
+	for _, user := range users {
 		http.AclEndpointCall(userAcl, user, token)
 	}
 

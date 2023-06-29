@@ -155,41 +155,40 @@ func GenerateAclJson(aplicationCode, storeCode, roleCode string) string {
 
 	json :=
 		`{
-			{
-				"userType": "EMPLOYEE",
-				"rolesForApplications": [
-					{
-						"applicationCode": "%v",
-						"roleCodes": [
-							%v
-						]
-					}
-				],
-				"segmentationsForApplications": [
-					{
-						"applicationCode": "%v",
-						"segmentation": [
-							{
-								"type": "AND",
-								"content": [
-									{
-										"dimension": "storeCode",
-										"values": [
-											"%v"
-										]
-									},
-									{
-										"dimension": "country",
-										"values": [
-											"ES"
-										]
-									}
-								]
-							}
-						]
-					}
+			"userType": "ECOMMERCE_USER",
+			"rolesForApplications": [
+			  {
+				"applicationCode": "%v",
+				"roleCodes": [
+				  %v
 				]
-			}`
+			  }
+			],
+			"segmentationsForApplications": [
+			  {
+				"applicationCode": "%v",
+				"segmentation": [
+				  {
+					"type": "AND",
+					"content": [
+					  {
+						"dimension": "storeCode",
+						"values": [
+						  "%v"
+						]
+					  },
+					  {
+						"dimension": "country",
+						"values": [
+						  "ES"
+						]
+					  }
+					]
+				  }
+				]
+			  }
+			]
+		  }`
 
 	json = fmt.Sprintf(json, aplicationCode, roleCode, aplicationCode, storeCode)
 

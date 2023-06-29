@@ -36,15 +36,15 @@ func AclEndpointCall(usersJson, username, token string) {
 	logs.Debugln("URL to PUT:", url)
 	var jsonStr = []byte(usersJson)
 
-	req, err := http.NewRequest("PUT", consts.AclEndpointUrl, bytes.NewBuffer(jsonStr))
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(jsonStr))
 
+	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("authority", "com.pro.api.dgrp.io")
 	req.Header.Set("accept", "application/json, text/plain")
-	req.Header.Set("authorization", token)
+	req.Header.Set("Authorization", token)
 	req.Header.Set("Accept-Encoding", "gzip, deflate, br")
 	req.Header.Set("Connection", "keep-alive")
 	req.Header.Set("client_id", "dKSBbUAiriDZzZoVC9pLqstZHsCD0tJfx6GycX3Ox9FIG4cm")
-	req.Header.Set("content-type", "application/json")
 	req.Header.Set("origin", "https://acl-web.com.pro.webs.dgrp.io")
 	req.Header.Set("referer", "https://acl-web.com.pro.webs.dgrp.io")
 	req.Header.Set("x-diagroup-application-id", "ACL")
