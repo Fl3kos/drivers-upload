@@ -1,6 +1,7 @@
 package main
 
 import (
+	"drivers-create/consts"
 	files "drivers-create/methods/file"
 	"drivers-create/methods/gets/getPhones"
 	"drivers-create/methods/gets/getShops"
@@ -28,15 +29,26 @@ func main() {
 
 	phone := getPhones.GetAllPhones()[0]
 
+	for {
+		fmt.Printf("Are you secured to publish users with warehouse code %v and phone %v? (y/n) ", shop, phone)
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer == "y" {
+			break
+		}
+
+		if answer == "n" {
+			fmt.Printf("The shop code or phone not the expected")
+			log.Fatalf("The shop code or phone not the expected")
+		}
+	}
+
 	pkr := generateUsers(list.Pkr, string(users.PKR), shop, phone)
 	crd := generateUsers(list.Crd, string(users.CRD), shop, phone)
 	adm := generateUsers(list.Adm, string(users.ADM), shop, phone)
 
 	finalJson := json.GenerateUsersJson(pkr, crd, adm)
-	sqlPkr := generateSql(pkr, shop, string(users.PKR))
-	sqlCrd := generateSql(crd, shop, string(users.CRD))
-	sqlAdm := generateSql(adm, shop, string(users.ADM))
-	finalSql := sqlPkr + sqlCrd + sqlAdm
 
 	err := files.GenerateFile(finalJson, files.CreationFileUserList())
 
@@ -45,48 +57,97 @@ func main() {
 		fmt.Println("Error generating files, check the logs /logs/logs.log")
 	}
 
-	err = files.GenerateFile(finalSql, files.CreationFileRouteAclSql("ACL", "sql"))
+	http.AuthEndpointCall(finalJson)
 
+	sqlPkr := generateSql(pkr, shop, string(users.PKR))
+	sqlCrd := generateSql(crd, shop, string(users.CRD))
+	sqlAdm := generateSql(adm, shop, string(users.ADM))
+	finalSql := sqlPkr + sqlCrd + sqlAdm
+
+	err = files.GenerateFile(finalSql, files.CreationFileRouteAclSql("ACL", "sql"))
 	if err != nil {
 		log.Errorf("Error generating file: %v", err)
 		fmt.Println("Error generating files, check the logs /logs/logs.log")
 	}
-
-	http.AuthEndpointCall(finalJson)
 
 	fmt.Println("Finish")
 }
 
 func generateSql(users []users.User, shopCode, role string) string {
 	var usernames []string
+	var appPickingRole string
+	var consoleRole string
+	var rolePickingCode string
+	var roleConsoleCode string
+	appPickingEnv := "WMSPIC"
+	consoleEnv := "ECOMUI"
+
+	finalSql := ""
+
 	for _, user := range users {
 		usernames = append(usernames, user.Username)
 	}
-	finalSql := ""
-	role1 := ""
-	role2 := ""
-	environoment1 := "WMSPIC"
-	environoment2 := "ECOMUI"
+
 	switch role {
 	case "PKR":
-		role1 = "ROLE_WMSPIC_PICKER"
-		role2 = "ROLE_ECOMUI_WMS_PICKER"
+		appPickingRole = "ROLE_WMSPIC_PICKER"
+		consoleRole = "ROLE_ECOMUI_WMS_PICKER"
+		rolePickingCode = "42"
+		roleConsoleCode = "46"
 		break
 	case "CRD":
-		role1 = "ROLE_WMSPIC_COORDINATOR"
-		role2 = "ROLE_ECOMUI_WMS_COORDINATOR"
+		appPickingRole = "ROLE_WMSPIC_COORDINATOR"
+		consoleRole = "ROLE_ECOMUI_WMS_COORDINATOR"
+		rolePickingCode = "43"
+		roleConsoleCode = "47"
 		break
 	case "ADM":
-		role1 = "ROLE_WMSPIC_ADMIN"
-		role2 = "ROLE_ECOMUI_WMS_ADMIN"
+		appPickingRole = "ROLE_WMSPIC_ADMIN"
+		consoleRole = "ROLE_ECOMUI_WMS_ADMIN"
+		rolePickingCode = "41"
+		roleConsoleCode = "45"
 		break
 	default:
 		log.Errorln("User dont identify")
 	}
-	finalSql = finalSql + "\n\n" + sql.GenerateAclInsert(usernames, role1)
-	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, role2)
-	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment1)
-	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, environoment2)
+
+	var publish bool = false
+
+	for {
+		fmt.Printf("Are you publish roles to users with warehouse code %v? (y/n) ", shopCode)
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer == "y" {
+			publish = true
+		}
+
+		if answer == "n" {
+			log.Debugln("Roles not publish")
+			publish = false
+		}
+
+		break
+	}
+
+	if publish {
+		//upload users to acl appPicking with role and store code
+		token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
+		userAcl := json.GenerateAclJson(appPickingEnv, shopCode, rolePickingCode)
+		for _, user := range usernames {
+			http.AclEndpointCall(userAcl, user, token)
+		}
+
+		//upload users to acl console with role and store code
+		userAcl = json.GenerateAclJson(consoleEnv, shopCode, roleConsoleCode)
+		for _, user := range usernames {
+			http.AclEndpointCall(userAcl, user, token)
+		}
+	}
+	finalSql = finalSql + "\n\n" + sql.GenerateAclInsert(usernames, appPickingRole)
+	finalSql = finalSql + "\n" + sql.GenerateAclInsert(usernames, consoleRole)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, appPickingEnv)
+	finalSql = finalSql + "\n" + sql.GenerateAclRoleInsert(usernames, shopCode, consoleEnv)
 
 	return finalSql
 }
@@ -120,7 +181,7 @@ func generateUsers(cuantity int, userType, shopNumber, phoneNumber string) []use
 			user.Firstname = "COORDINADOR"
 			break
 		case "ADM":
-			user.Firstname = "ADMINISTRADOR"
+			user.Firstname = "SOPORTE"
 			break
 		default:
 			log.Errorln("User dont identify")
