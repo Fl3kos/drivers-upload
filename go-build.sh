@@ -20,7 +20,7 @@ create_folders(){
     #create files folder
     create_folder $filesFolder
     create_folder $filesToReadFolder
-    create_folder %filesToReadLayouts
+    create_folder $filesToReadLayouts
     create_folder $logsFolder
 
     create_folder $filesSql
