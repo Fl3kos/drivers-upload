@@ -181,7 +181,7 @@ func generateUsers(cuantity int, userType, shopNumber, phoneNumber string) []use
 			user.Firstname = "COORDINADOR"
 			break
 		case "ADM":
-			user.Firstname = "SOPORTE"
+			user.Firstname = "ADMINISTRADOR"
 			break
 		default:
 			log.Errorln("User dont identify")
