@@ -91,13 +91,13 @@ func publishToAcl(users []string, shopCode, role string) error {
 	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
 
 	//upload users to acl appPicking with role and store code
-	userAcl := json.GenerateAclJson(appPickingEnv, shopCode, appPickingRole)
+	userAcl := json.GenerateAclJson(appPickingEnv, shopCode, appPickingRole, false)
 	for _, user := range users {
 		http.AclEndpointCall(userAcl, user, token)
 	}
 
 	//upload users to acl console with role and store code
-	userAcl = json.GenerateAclJson(consoleEnv, shopCode, consoleRole)
+	userAcl = json.GenerateAclJson(consoleEnv, shopCode, consoleRole, false)
 	for _, user := range users {
 		http.AclEndpointCall(userAcl, user, token)
 	}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"drivers-create/consts"
+	"drivers-create/methods"
 	convert "drivers-create/methods/converts"
 	csv "drivers-create/methods/csv"
 	dniM "drivers-create/methods/dni"
@@ -55,7 +56,7 @@ func main() {
 	// Create SQL files
 	driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
 	relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
-	sqlAcl := sql.GenerateAclInsert(allUsers, "ROLE_APPTMS_DRIVER")
+	sqlAcl := sql.GenerateAclInsert(allUsers, consts.DriverRole)
 	sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 	//insert in sqlite
@@ -67,27 +68,50 @@ func main() {
 
 	// files created
 	err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(jsonAcl, files.CreationFileRouteJson("usersCouchbase", "json"))
-	controlErrors(err)
+	methods.ControlErrors(err)
+
 	err = files.GenerateFile(jsonEndPoint, files.CreationFileRouteAclJson("ACL-EP", "json"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	http.AuthEndpointCall(jsonEndPoint)
 
+	// TODO Create a function to call the endpoint to put role driver
+	var publish bool
+	for {
+		fmt.Printf("Are you publish roles to drivers? (y/n)")
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer == "y" {
+			publish = true
+		}
+
+		if answer == "n" {
+			logs.Debugln("Roles not publish")
+			publish = false
+		}
+
+		break
+	}
+	if publish {
+		publishRoles(allUsers)
+	}
 	fmt.Println("Finish")
 }
 
-func controlErrors(err error) {
-	if err != nil {
-		logs.Errorf("Error generating file: %v", err)
-		fmt.Println("Error generating files, check the logs /logs/lo")
+func publishRoles(drivers []string) {
+	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
+	for _, driver := range drivers {
+		driverJson := json.GenerateAclJson(consts.DriverApp, "", consts.DriverRole, true)
+		http.AclEndpointCall(driverJson, driver, token)
 	}
 }

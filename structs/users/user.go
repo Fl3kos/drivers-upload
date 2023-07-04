@@ -8,3 +8,14 @@ type User struct {
 	Phone     string
 	Username  string
 }
+
+func UserConstruct(email, firstname, lastname, password, phone, username string) User {
+	return User{
+		Email:     email,
+		Firstname: firstname,
+		Lastname:  lastname,
+		Password:  password,
+		Phone:     phone,
+		Username:  username,
+	}
+}
