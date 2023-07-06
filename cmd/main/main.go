@@ -3,6 +3,7 @@ package main
 import (
 	"drivers-create/consts"
 	"drivers-create/methods"
+	"drivers-create/methods/acl"
 	convert "drivers-create/methods/converts"
 	csv "drivers-create/methods/csv"
 	dniM "drivers-create/methods/dni"
@@ -39,10 +40,10 @@ func main() {
 	allNames := getNames.GetAllNames()
 	allPhones := getPhones.GetAllPhones()
 
-	shops := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
-	shops = shops[:len(shops)-1]
+	warehouses := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
+	warehouses = warehouses[:len(warehouses)-1]
 
-	shopCodes, shopNames := getShops.GetShopCodesAndShopNames(shops)
+	shopCodes, shopNames := getShops.GetShopCodesAndShopNames(warehouses)
 
 	csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
@@ -84,34 +85,27 @@ func main() {
 
 	http.AuthEndpointCall(jsonEndPoint)
 
-	// TODO Create a function to call the endpoint to put role driver
-	var publish bool
 	for {
 		fmt.Printf("Are you publish roles to drivers? (y/n)")
 		var answer string
 		fmt.Scanln(&answer)
 
 		if answer == "y" {
-			publish = true
+			acl.PublisDrivershRoles(allUsers)
+			break
 		}
 
 		if answer == "n" {
 			logs.Debugln("Roles not publish")
-			publish = false
+			break
 		}
 
-		break
+
 	}
-	if publish {
-		publishRoles(allUsers)
-	}
+
+	//TODO Create selenium to publish nektria users
+
 	fmt.Println("Finish")
 }
 
-func publishRoles(drivers []string) {
-	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
-	for _, driver := range drivers {
-		driverJson := json.GenerateAclJson(consts.DriverApp, "", consts.DriverRole, true)
-		http.AclEndpointCall(driverJson, driver, token)
-	}
-}
+

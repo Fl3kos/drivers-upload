@@ -43,22 +43,9 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string
 	return json
 }
 
-func GenerateUsersJsonLegacy(pkr, crd, adm []users.AuthUser) string {
+func GenerateUsersJson(aclUsers []users.AclUser) string {
 	finalJson := "{\n\t\"user\" : ["
-	pkrJson := generateUsersJsonLegacy(pkr)
-	crdJson := generateUsersJsonLegacy(crd)
-	admJson := generateUsersJsonLegacy(adm)
-
-	finalJson = finalJson + pkrJson + crdJson + admJson
-
-	finalJson = finalJson[:len(finalJson)-1]
-	finalJson = finalJson + "\n\t]\n}"
-	return finalJson
-}
-
-func GenerateUsersJson(fUsers []users.AclUser) string {
-	finalJson := "{\n\t\"user\" : ["
-	json := generateUsersJson(fUsers)
+	json := generateUsersJson(aclUsers)
 
 	finalJson = finalJson + json
 	finalJson = finalJson[:len(finalJson)-1]
@@ -67,10 +54,10 @@ func GenerateUsersJson(fUsers []users.AclUser) string {
 	return finalJson
 }
 
-func generateUsersJson(fusers []users.AclUser) string {
+func generateUsersJson(aclUsers []users.AclUser) string {
 	finalJson := ""
 
-	for _, fuser := range fusers {
+	for _, fuser := range aclUsers {
 		user := users.UserConstruct(fuser.Email, fuser.Firstname, fuser.Lastname, fuser.Password, fuser.Phone, fuser.Username)
 
 		jsonByte, _ := json.Marshal(user)
@@ -80,17 +67,7 @@ func generateUsersJson(fusers []users.AclUser) string {
 
 	return finalJson
 }
-func generateUsersJsonLegacy(users []users.AuthUser) string {
-	finalJson := ""
 
-	for _, user := range users {
-		jsonByte, _ := json.Marshal(user)
-		jsonTxt := string(jsonByte)
-		finalJson = finalJson + "\n\t\t" + jsonTxt + ","
-	}
-
-	return finalJson
-}
 
 func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
 	logs.Debugln("Generating ACL Json")
