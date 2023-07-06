@@ -85,7 +85,7 @@ func publishToAcl(users []string, shopCode, role string) error {
 		consoleRole = "45"
 		break
 	default:
-		log.Errorln("User dont identify")
+		log.Errorln("AuthUser dont identify")
 	}
 
 	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]

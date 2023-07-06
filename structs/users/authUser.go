@@ -1,6 +1,6 @@
 package users
 
-type User struct {
+type AuthUser struct {
 	Email     string
 	Firstname string
 	Lastname  string
@@ -9,8 +9,8 @@ type User struct {
 	Username  string
 }
 
-func UserConstruct(email, firstname, lastname, password, phone, username string) User {
-	return User{
+func UserConstruct(email, firstname, lastname, password, phone, username string) AuthUser {
+	return AuthUser{
 		Email:     email,
 		Firstname: firstname,
 		Lastname:  lastname,

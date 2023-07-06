@@ -43,7 +43,7 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string
 	return json
 }
 
-func GenerateUsersJsonLegacy(pkr, crd, adm []users.User) string {
+func GenerateUsersJsonLegacy(pkr, crd, adm []users.AuthUser) string {
 	finalJson := "{\n\t\"user\" : ["
 	pkrJson := generateUsersJsonLegacy(pkr)
 	crdJson := generateUsersJsonLegacy(crd)
@@ -56,7 +56,7 @@ func GenerateUsersJsonLegacy(pkr, crd, adm []users.User) string {
 	return finalJson
 }
 
-func GenerateUsersJson(fUsers []users.FUser) string {
+func GenerateUsersJson(fUsers []users.AclUser) string {
 	finalJson := "{\n\t\"user\" : ["
 	json := generateUsersJson(fUsers)
 
@@ -67,7 +67,7 @@ func GenerateUsersJson(fUsers []users.FUser) string {
 	return finalJson
 }
 
-func generateUsersJson(fusers []users.FUser) string {
+func generateUsersJson(fusers []users.AclUser) string {
 	finalJson := ""
 
 	for _, fuser := range fusers {
@@ -80,7 +80,7 @@ func generateUsersJson(fusers []users.FUser) string {
 
 	return finalJson
 }
-func generateUsersJsonLegacy(users []users.User) string {
+func generateUsersJsonLegacy(users []users.AuthUser) string {
 	finalJson := ""
 
 	for _, user := range users {
