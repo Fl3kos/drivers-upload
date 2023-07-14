@@ -71,8 +71,14 @@ func GenerateUsers(list users.UsersList, warehouseCode, phoneNumber string) []us
 }
 
 func PublishAclUsers(users []users.AclUser, warehouseCode string) {
+	log.Debugln("Publish users to ACL")
+
 	var rolePickingCode string
 	var roleConsoleCode string
+
+	token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
+
+	defer log.Debugln("End of call endpoint")
 
 	for _, user := range users {
 		switch user.RoleCode {
@@ -89,19 +95,19 @@ func PublishAclUsers(users []users.AclUser, warehouseCode string) {
 			roleConsoleCode = consts.ConsoleCodeAdm
 			break
 		default:
-			log.Errorln("AuthUser dont identify")
+			log.Fatalln("AuthUser dont identify")
 		}
 
 		//TODO call to return token to cas/token endpoint
 		//upload users to acl appPicking with role and store code
-		token := strings.Split(files.ReadFile(files.ReadToken(consts.TokenFile)), "\n")[0]
 		userAcl := json.GenerateAclJson(consts.AppPickingEnv, warehouseCode, rolePickingCode, false)
-		go http.AclEndpointCall(userAcl, user.Username, token)
+		http.AclEndpointCall(userAcl, user.Username, token)
 
 		//upload users to acl console with role and store code
 		userAcl = json.GenerateAclJson(consts.ConsoleEnv, warehouseCode, roleConsoleCode, false)
-		go http.AclEndpointCall(userAcl, user.Username, token)
+		http.AclEndpointCall(userAcl, user.Username, token)
 	}
+
 
 }
 
