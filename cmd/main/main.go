@@ -2,6 +2,8 @@ package main
 
 import (
 	"drivers-create/consts"
+	"drivers-create/methods"
+	"drivers-create/methods/acl"
 	convert "drivers-create/methods/converts"
 	csv "drivers-create/methods/csv"
 	dniM "drivers-create/methods/dni"
@@ -38,10 +40,10 @@ func main() {
 	allNames := getNames.GetAllNames()
 	allPhones := getPhones.GetAllPhones()
 
-	shops := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
-	shops = shops[:len(shops)-1]
+	warehouses := strings.Split(files.ReadFile(files.ReadFileRoute("shops", "txt")), "\n")
+	warehouses = warehouses[:len(warehouses)-1]
 
-	shopCodes, shopNames := getShops.GetShopCodesAndShopNames(shops)
+	shopCodes, shopNames := getShops.GetShopCodesAndShopNames(warehouses)
 
 	csv.ExportDriversToCsv(allUsers, allNames, allPasswords, shopNames)
 
@@ -55,7 +57,7 @@ func main() {
 	// Create SQL files
 	driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
 	relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
-	sqlAcl := sql.GenerateAclInsert(allUsers, "ROLE_APPTMS_DRIVER")
+	sqlAcl := sql.GenerateAclInsert(allUsers, consts.DriverRole)
 	sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 	//insert in sqlite
@@ -67,27 +69,43 @@ func main() {
 
 	// files created
 	err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(jsonAcl, files.CreationFileRouteJson("usersCouchbase", "json"))
-	controlErrors(err)
+	methods.ControlErrors(err)
+
 	err = files.GenerateFile(jsonEndPoint, files.CreationFileRouteAclJson("ACL-EP", "json"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
-	controlErrors(err)
+	methods.ControlErrors(err)
 
 	http.AuthEndpointCall(jsonEndPoint)
+
+	for {
+		fmt.Printf("Are you publish roles to drivers? (y/n)")
+		var answer string
+		fmt.Scanln(&answer)
+
+		if answer == "y" {
+			acl.PublisDrivershRoles(allUsers)
+			break
+		}
+
+		if answer == "n" {
+			logs.Debugln("Roles not publish")
+			break
+		}
+
+
+	}
+
+	//TODO Create selenium to publish nektria users
 
 	fmt.Println("Finish")
 }
 
-func controlErrors(err error) {
-	if err != nil {
-		logs.Errorf("Error generating file: %v", err)
-		fmt.Println("Error generating files, check the logs /logs/lo")
-	}
-}
+

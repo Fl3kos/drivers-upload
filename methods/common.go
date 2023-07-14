@@ -1,6 +1,8 @@
 package methods
 
 import (
+	logs "drivers-create/methods/log"
+	"fmt"
 	"strconv"
 	"strings"
 	"time"
@@ -34,4 +36,11 @@ func GetDate() string {
 	}
 
 	return toDate
+}
+
+func ControlErrors(err error) {
+	if err != nil {
+		logs.Errorf("Error generating file: %v", err)
+		fmt.Println("Error generating files, check the logs /logs/lo")
+	}
 }

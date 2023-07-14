@@ -43,23 +43,23 @@ func GenerateJson(allNames, allPasswords, allUsers, allPhones, allShops []string
 	return json
 }
 
-func GenerateUsersJson(pkr, crd, adm []users.User) string {
+func GenerateUsersJson(aclUsers []users.AclUser) string {
 	finalJson := "{\n\t\"user\" : ["
-	pkrJson := generateUsersJson(pkr)
-	crdJson := generateUsersJson(crd)
-	admJson := generateUsersJson(adm)
+	json := generateUsersJson(aclUsers)
 
-	finalJson = finalJson + pkrJson + crdJson + admJson
-
+	finalJson = finalJson + json
 	finalJson = finalJson[:len(finalJson)-1]
 	finalJson = finalJson + "\n\t]\n}"
+
 	return finalJson
 }
 
-func generateUsersJson(users []users.User) string {
+func generateUsersJson(aclUsers []users.AclUser) string {
 	finalJson := ""
 
-	for _, user := range users {
+	for _, fuser := range aclUsers {
+		user := users.UserConstruct(fuser.Email, fuser.Firstname, fuser.Lastname, fuser.Password, fuser.Phone, fuser.Username)
+
 		jsonByte, _ := json.Marshal(user)
 		jsonTxt := string(jsonByte)
 		finalJson = finalJson + "\n\t\t" + jsonTxt + ","
@@ -67,6 +67,7 @@ func generateUsersJson(users []users.User) string {
 
 	return finalJson
 }
+
 
 func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
 	logs.Debugln("Generating ACL Json")
@@ -150,8 +151,31 @@ func generateSorterMap(sorter, location []string, warehouse string) string {
 	return sorterMap
 }
 
-func GenerateAclJson(aplicationCode, storeCode, roleCode string) string {
+func GenerateAclJson(aplicationCode, storeCode, roleCode string, isDriver bool) string {
 	logs.Debugln("Generating ACL Json")
+	var segmentation string = ""
+
+	if !isDriver {
+		segmentation = `{
+		"type": "AND",
+		"content": [
+		  {
+			"dimension": "storeCode",
+			"values": [
+			  "%v"
+			]
+		  },
+		  {
+			"dimension": "country",
+			"values": [
+			  "ES"
+			]
+		  }
+		]
+	  }`
+
+		segmentation = fmt.Sprintf(segmentation, storeCode)
+	}
 
 	json :=
 		`{
@@ -167,30 +191,12 @@ func GenerateAclJson(aplicationCode, storeCode, roleCode string) string {
 			"segmentationsForApplications": [
 			  {
 				"applicationCode": "%v",
-				"segmentation": [
-				  {
-					"type": "AND",
-					"content": [
-					  {
-						"dimension": "storeCode",
-						"values": [
-						  "%v"
-						]
-					  },
-					  {
-						"dimension": "country",
-						"values": [
-						  "ES"
-						]
-					  }
-					]
-				  }
-				]
+				"segmentation": [%v]
 			  }
 			]
 		  }`
 
-	json = fmt.Sprintf(json, aplicationCode, roleCode, aplicationCode, storeCode)
+	json = fmt.Sprintf(json, aplicationCode, roleCode, aplicationCode, segmentation)
 
 	return json
 }
