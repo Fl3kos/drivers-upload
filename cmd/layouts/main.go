@@ -2,9 +2,8 @@ package main
 
 import (
 	"drivers-create/methods/file"
-	"drivers-create/methods/json"
 	"drivers-create/methods/log"
-	"drivers-create/methods/xlsx"
+	"drivers-create/methods/layouts"
 
 	//"github.com/tealeg/xlsx"
 	"fmt"
@@ -12,22 +11,35 @@ import (
 
 func main() {
 	log.InitLogger()
-	expeditionQuery, err, excel, warehouse := xlsx.ExpeditionLayout("./filesToRead/layouts/expedition.xlsx")
-	pickingQuery, err := xlsx.PickingLayout("./filesToRead/layouts/picking.xlsx")
-	sorterMap := json.GenerateSorterMap(excel, warehouse)
 
-	err = file.GenerateFile(expeditionQuery, file.CreationFileExpeditionSql("expedition", "sql"))
-	if err != nil {
-		log.Errorf("Error generating expedition sql file, Error: %v", err)
-	}
+	var sorterMap string
+	for {
+		fmt.Printf("Wich layouts are you generate? Picking (p), Expedition (e), All (a)")
+		var answer string
+		fmt.Scanln(&answer)
 
-	err = file.GenerateFile(pickingQuery, file.CreationFilePickingSql("picking", "sql"))
-	if err != nil {
-		log.Errorf("Error generating picking sql file, Error: %v", err)
+		switch answer {
+		case "p":
+			//generate picking layout
+			layouts.GeneratePickingLayout()
+			break
+		case "e":
+			//generate expedition layout
+			sorterMap = layouts.GenerateExpeditionLayout()
+			break
+		case "a":
+			//generate expedition and picking layout
+			layouts.GeneratePickingLayout()
+			sorterMap = layouts.GenerateExpeditionLayout()
+			break
+		default:
+			fmt.Println("Select a validate option")
+
+		}
 	}
 
 	if sorterMap != "" {
-		err = file.GenerateFile(sorterMap, file.CreationSorterMap())
+		err := file.GenerateFile(sorterMap, file.CreationSorterMap())
 		if err != nil {
 			log.Errorf("Error generating picking sql file, Error: %v", err)
 		}
@@ -36,3 +48,4 @@ func main() {
 	fmt.Println("Finish")
 	//fmt.Println("Picking\n" + pickingQuery)
 }
+
