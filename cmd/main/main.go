@@ -17,7 +17,6 @@ import (
 	json "drivers-create/methods/json"
 	logs "drivers-create/methods/log"
 	sql "drivers-create/methods/sql"
-	sqlite "drivers-create/methods/sql/sqlite"
 	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
@@ -55,17 +54,10 @@ func main() {
 	namesT := convert.TransformAllNames(allNames)
 
 	// Create SQL files
-	driversInsert := sql.GenerateSqlLiteInsertDriversTable(allUsers, allDnis, allNames, allPhones)
-	relationsInsert := sql.GenerateSqlLiteInsertRelationTable(allDnis, shopCodes)
 	sqlAcl := sql.GenerateAclInsert(allUsers, consts.DriverRole)
-	sqlLiteInserts := driversInsert + "\n\n" + relationsInsert
 
 	//insert in sqlite
-	err = sqlite.InsertSqlite(sqlLiteInserts, consts.SqliteDatabase)
-	if err != nil {
-		fmt.Println("Error inserting drivers in database. Check the logs")
-		logs.Errorf("Error insert in database. Error: %v", err)
-	}
+
 
 	// files created
 	err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
@@ -78,9 +70,6 @@ func main() {
 	methods.ControlErrors(err)
 
 	err = files.GenerateFile(namesT, files.CreationFileRouteNames("names", "txt"))
-	methods.ControlErrors(err)
-
-	err = files.GenerateFile(sqlLiteInserts, files.CreationFileRouteSql("insertSQLIteQuery", "sql"))
 	methods.ControlErrors(err)
 
 	http.AuthEndpointCall(jsonEndPoint)
