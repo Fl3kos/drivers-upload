@@ -212,7 +212,7 @@ case $param in
         echo "ca: to clear all project"
         echo "cc: to clear the cache"
         echo "q: run the project to create insert sql tables"
-        echo "u: run the users list main to create users to insert in wms warehouse"
+        echo "u: run create users to auth and publish role to acl to wms warehouses"
         echo "l: run the layouts constructor sql file"
         echo "t: run the test"
         echo "p: pull repo, delete and create new folders"
