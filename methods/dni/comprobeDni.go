@@ -1,11 +1,11 @@
 package dni
 
 import (
-	logs "drivers-create/methods/log"
 	"errors"
 	"strconv"
+	logs "support-utils/methods/log"
 
-	common "drivers-create/methods"
+	common "support-utils/methods"
 )
 
 func ComprobeAllDnis(allDnis []string) ([]string, error) {

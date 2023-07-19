@@ -1,9 +1,9 @@
 package xlsx
 
 import (
-	"drivers-create/methods/log"
-	"drivers-create/methods/sql"
 	"fmt"
+	"support-utils/methods/log"
+	"support-utils/methods/sql"
 
 	"github.com/tealeg/xlsx"
 )

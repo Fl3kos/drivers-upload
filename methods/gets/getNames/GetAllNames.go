@@ -1,8 +1,8 @@
 package getNames
 
 import (
-	files "drivers-create/methods/file"
 	"strings"
+	files "support-utils/methods/file"
 )
 
 func GetAllNames() []string {
@@ -18,4 +18,3 @@ func GetAllNames() []string {
 
 	return allNames
 }
-

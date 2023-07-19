@@ -1,8 +1,8 @@
 package getPhones
 
 import (
-	files "drivers-create/methods/file"
 	"strings"
+	files "support-utils/methods/file"
 )
 
 func GetAllPhones() []string {

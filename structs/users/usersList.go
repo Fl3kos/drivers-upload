@@ -1,8 +1,8 @@
 package users
 
 import (
-	"drivers-create/methods/file"
 	"encoding/json"
+	"support-utils/methods/file"
 )
 
 type UsersList struct {

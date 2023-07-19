@@ -1,7 +1,7 @@
 package dniToUser
 
 import (
-	"drivers-create/methods/log"
+	"support-utils/methods/log"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

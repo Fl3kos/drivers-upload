@@ -1,10 +1,10 @@
 package layouts
 
 import (
-	"drivers-create/methods/file"
-	"drivers-create/methods/json"
-	"drivers-create/methods/log"
-	excel "drivers-create/methods/xlsx"
+	"support-utils/methods/file"
+	"support-utils/methods/json"
+	"support-utils/methods/log"
+	excel "support-utils/methods/xlsx"
 )
 
 func GeneratePickingLayout() {
@@ -17,7 +17,7 @@ func GeneratePickingLayout() {
 	}
 }
 
-func GenerateExpeditionLayout()(string) {
+func GenerateExpeditionLayout() string {
 	log.Debugln("Generate SQL file to Expedition Layout")
 	expeditionQuery, err, sorterRow, warehouse := excel.ExpeditionLayout("./filesToRead/layouts/expedition.xlsx")
 

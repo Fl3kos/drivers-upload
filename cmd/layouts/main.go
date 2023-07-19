@@ -1,9 +1,9 @@
 package main
 
 import (
-	"drivers-create/methods/file"
-	"drivers-create/methods/log"
-	"drivers-create/methods/layouts"
+	"support-utils/methods/file"
+	"support-utils/methods/layouts"
+	"support-utils/methods/log"
 
 	//"github.com/tealeg/xlsx"
 	"fmt"
@@ -48,4 +48,3 @@ func main() {
 	fmt.Println("Finish")
 	//fmt.Println("Picking\n" + pickingQuery)
 }
-

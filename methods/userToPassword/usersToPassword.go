@@ -1,8 +1,8 @@
 package userToPassword
 
 import (
-	common "drivers-create/methods"
 	"strings"
+	common "support-utils/methods"
 )
 
 func ConvertAllUsersToPasswords(allUsers []string) []string {

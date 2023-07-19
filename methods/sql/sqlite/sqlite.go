@@ -2,8 +2,8 @@ package sqlite
 
 import (
 	"database/sql"
-	"drivers-create/methods/file"
-	"drivers-create/methods/log"
+	"support-utils/methods/file"
+	"support-utils/methods/log"
 
 	sqlite3 "github.com/mattn/go-sqlite3"
 )

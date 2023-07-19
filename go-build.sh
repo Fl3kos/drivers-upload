@@ -85,21 +85,15 @@ build_project(){
     go build
     cd ..
     go build
-    cd ../cmd/main
+    cd ../cmd/drivers-create
     go build
-    rm main
-    cd ../create-shops
-    go build
-    rm create-shops
+    rm drivers-create
     cd ../layouts
     go build
     rm layouts
     cd ../acl-users
     go build
     rm acl-users
-    cd ../users-shop
-    go build
-    rm users-shop
     cd ../..
 
 }
@@ -124,11 +118,6 @@ run_users_list(){
     go run ./cmd/users-shop/main.go
 }
 
-run_acl_users(){
-    rm ./logs/logs.log
-    go run ./cmd/acl-users/main.go
-}
-
 clear_project(){
     rm ./files/*/*
     rm ./logs/*
@@ -148,11 +137,11 @@ clear_all_project(){
 
 run_test() {
     rm ./logs/logs_test.log
-    go test -timeout 30s -run ^TestComprobeDniAndNie$ drivers-create/methods/dni
-    go test -timeout 30s -run ^TestGenerateJson$ drivers-create/methods/json
-    go test -timeout 30s -run ^TestSql$ drivers-create/methods/sql
-    go test -timeout 30s -run ^TestUsersToPasswords$ drivers-create/methods/userToPassword
-    go test -timeout 30s -run ^TestConvertAllDnisToUsers$ drivers-create/methods/dniToUser
+    go test -timeout 30s -run ^TestComprobeDniAndNie$ support-utils/methods/dni
+    go test -timeout 30s -run ^TestGenerateJson$ support-utils/methods/json
+    go test -timeout 30s -run ^TestSql$ support-utils/methods/sql
+    go test -timeout 30s -run ^TestUsersToPasswords$ support-utils/methods/userToPassword
+    go test -timeout 30s -run ^TestConvertAllDnisToUsers$ support-utils/methods/dniToUser
 }
 
 case $param in
