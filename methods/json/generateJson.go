@@ -2,12 +2,12 @@ package json
 
 import (
 	"crypto/sha256"
-	logs "drivers-create/methods/log"
-	"drivers-create/structs/users"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"strings"
+	logs "support-utils/methods/log"
+	"support-utils/structs/users"
 
 	"github.com/tealeg/xlsx"
 )
@@ -67,7 +67,6 @@ func generateUsersJson(aclUsers []users.AclUser) string {
 
 	return finalJson
 }
-
 
 func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops []string) string {
 	logs.Debugln("Generating ACL Json")

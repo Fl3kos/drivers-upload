@@ -2,10 +2,10 @@ package http
 
 import (
 	"bytes"
-	"drivers-create/consts"
-	logs "drivers-create/methods/log"
 	"fmt"
 	"net/http"
+	"support-utils/consts"
+	logs "support-utils/methods/log"
 )
 
 func AuthEndpointCall(usersJson string) {

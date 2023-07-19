@@ -1,10 +1,10 @@
 package sql
 
 import (
-	"drivers-create/consts"
-	"drivers-create/methods/file"
-	"drivers-create/methods/log"
 	"strings"
+	"support-utils/consts"
+	"support-utils/methods/file"
+	"support-utils/methods/log"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

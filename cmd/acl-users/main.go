@@ -1,14 +1,14 @@
 package main
 
 import (
-	"drivers-create/methods/acl"
-	files "drivers-create/methods/file"
-	"drivers-create/methods/gets/getPhones"
-	"drivers-create/methods/gets/getShops"
-	"drivers-create/methods/http"
-	"drivers-create/methods/json"
-	"drivers-create/methods/log"
-	"drivers-create/structs/users"
+	"support-utils/methods/acl"
+	files "support-utils/methods/file"
+	"support-utils/methods/gets/getPhones"
+	"support-utils/methods/gets/getShops"
+	"support-utils/methods/http"
+	"support-utils/methods/json"
+	"support-utils/methods/log"
+	"support-utils/structs/users"
 
 	"fmt"
 	"strings"

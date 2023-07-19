@@ -1,8 +1,8 @@
 package getDnis
 
 import (
-	files "drivers-create/methods/file"
 	"strings"
+	files "support-utils/methods/file"
 )
 
 func GetAllDnis() []string {

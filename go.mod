@@ -1,4 +1,4 @@
-module drivers-create
+module support-utils
 
 go 1.17
 

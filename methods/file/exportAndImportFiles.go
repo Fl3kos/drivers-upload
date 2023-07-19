@@ -2,12 +2,12 @@ package file
 
 import (
 	"bufio"
-	"drivers-create/consts"
 	"fmt"
 	"os"
+	"support-utils/consts"
 
-	common "drivers-create/methods"
-	logs "drivers-create/methods/log"
+	common "support-utils/methods"
+	logs "support-utils/methods/log"
 )
 
 // generate a sql file, import the sql text

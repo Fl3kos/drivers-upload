@@ -1,14 +1,14 @@
 package acl
 
 import (
-	"drivers-create/consts"
-	files "drivers-create/methods/file"
-	"drivers-create/methods/http"
-	"drivers-create/methods/json"
-	"drivers-create/methods/log"
-	"drivers-create/methods/sql"
-	"drivers-create/structs/users"
 	"strings"
+	"support-utils/consts"
+	files "support-utils/methods/file"
+	"support-utils/methods/http"
+	"support-utils/methods/json"
+	"support-utils/methods/log"
+	"support-utils/methods/sql"
+	"support-utils/structs/users"
 )
 
 func GenerateSql(users []users.AclUser, warehouseCode string) string {
@@ -107,7 +107,6 @@ func PublishAclUsers(users []users.AclUser, warehouseCode string) {
 		userAcl = json.GenerateAclJson(consts.ConsoleEnv, warehouseCode, roleConsoleCode, false)
 		http.AclEndpointCall(userAcl, user.Username, token)
 	}
-
 
 }
 

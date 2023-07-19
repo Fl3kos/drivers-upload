@@ -1,11 +1,11 @@
 package csv
 
 import (
-	files "drivers-create/methods/file"
-	logs "drivers-create/methods/log"
 	"encoding/csv"
 	"fmt"
 	"os"
+	files "support-utils/methods/file"
+	logs "support-utils/methods/log"
 )
 
 type Driver struct {

@@ -1,11 +1,11 @@
 package json_test
 
 import (
-	"drivers-create/consts"
-	"drivers-create/methods/file"
-	"drivers-create/methods/json"
-	"drivers-create/methods/log"
 	"strings"
+	"support-utils/consts"
+	"support-utils/methods/file"
+	"support-utils/methods/json"
+	"support-utils/methods/log"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

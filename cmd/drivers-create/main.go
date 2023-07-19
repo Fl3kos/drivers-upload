@@ -1,25 +1,25 @@
 package main
 
 import (
-	"drivers-create/consts"
-	"drivers-create/methods"
-	"drivers-create/methods/acl"
-	convert "drivers-create/methods/converts"
-	csv "drivers-create/methods/csv"
-	dniM "drivers-create/methods/dni"
-	"drivers-create/methods/dniToUser"
-	files "drivers-create/methods/file"
-	"drivers-create/methods/gets/getDnis"
-	"drivers-create/methods/gets/getNames"
-	"drivers-create/methods/gets/getPhones"
-	"drivers-create/methods/gets/getShops"
-	"drivers-create/methods/http"
-	json "drivers-create/methods/json"
-	logs "drivers-create/methods/log"
-	sql "drivers-create/methods/sql"
-	"drivers-create/methods/userToPassword"
 	"fmt"
 	"strings"
+	"support-utils/consts"
+	"support-utils/methods"
+	"support-utils/methods/acl"
+	convert "support-utils/methods/converts"
+	csv "support-utils/methods/csv"
+	dniM "support-utils/methods/dni"
+	"support-utils/methods/dniToUser"
+	files "support-utils/methods/file"
+	"support-utils/methods/gets/getDnis"
+	"support-utils/methods/gets/getNames"
+	"support-utils/methods/gets/getPhones"
+	"support-utils/methods/gets/getShops"
+	"support-utils/methods/http"
+	json "support-utils/methods/json"
+	logs "support-utils/methods/log"
+	sql "support-utils/methods/sql"
+	"support-utils/methods/userToPassword"
 )
 
 func main() {
@@ -58,7 +58,6 @@ func main() {
 
 	//insert in sqlite
 
-
 	// files created
 	err = files.GenerateFile(sqlAcl, files.CreationFileRouteAclSql("ACL", "sql"))
 	methods.ControlErrors(err)
@@ -89,12 +88,9 @@ func main() {
 			break
 		}
 
-
 	}
 
 	//TODO Create selenium to publish nektria users
 
 	fmt.Println("Finish")
 }
-
-

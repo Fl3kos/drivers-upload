@@ -1,8 +1,8 @@
 package dniToUser
 
 import (
-	mt "drivers-create/methods"
 	"strings"
+	mt "support-utils/methods"
 )
 
 func ConvertAllDnisToUsers(allDnis []string) []string {

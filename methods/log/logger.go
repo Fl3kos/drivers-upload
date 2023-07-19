@@ -1,10 +1,10 @@
 package log
 
 import (
-	"drivers-create/consts"
 	"fmt"
 	"log"
 	"os"
+	"support-utils/consts"
 )
 
 type any = interface{}

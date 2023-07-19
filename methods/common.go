@@ -1,10 +1,10 @@
 package methods
 
 import (
-	logs "drivers-create/methods/log"
 	"fmt"
 	"strconv"
 	"strings"
+	logs "support-utils/methods/log"
 	"time"
 )
 
