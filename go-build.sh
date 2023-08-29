@@ -100,7 +100,7 @@ build_project(){
 
 run_project(){
     rm ./logs/logs.log
-    go run ./cmd/main/main.go
+    go run ./cmd/drivers-create/main.go
 }
 
 run_insert_query(){

@@ -97,6 +97,35 @@ func GenerateEndpointJson(allNames, allPasswords, allUsers, allPhones, allShops 
 	return json
 }
 
+func AuthEndpointJson(allNames, allPasswords, allUsers, allPhones []string, warehouse string) string {
+	logs.Debugln("Generating ACL Json")
+
+	json := "{\n\t\"user\": [\n"
+
+	for i, _ := range allPasswords {
+		firstname, lastname := getFirstNameAndLastName(allNames[i])
+		if len(warehouse) < 5 {
+			for j:= len(warehouse); j < 5; j++ {
+				warehouse = "0"+warehouse
+			}
+
+		}
+		email := fmt.Sprintf("t%ves@stores.diagroup.com", warehouse)
+		value := generateEndpointJson(allUsers[i], allPasswords[i], firstname, lastname, allPhones[i], email)
+
+		if i != len(allPasswords)-1 {
+			value = value + ",\n"
+		}
+
+		json = json + value
+
+	}
+
+	json = json + "\n\t]\n}"
+
+	return json
+}
+
 func GenerateSorterMap(locationAndSorter []*xlsx.Row, warehouseCode string) string {
 	var sorter []string
 	var locations []string

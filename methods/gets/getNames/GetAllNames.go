@@ -3,6 +3,7 @@ package getNames
 import (
 	"strings"
 	files "support-utils/methods/file"
+	"support-utils/structs/handlers"
 )
 
 func GetAllNames() []string {
@@ -17,4 +18,17 @@ func GetAllNames() []string {
 	}
 
 	return allNames
+}
+
+func DriversName(drivers []handlers.Driver)[]string {
+
+	var names []string
+
+	for _, driver := range drivers {
+		name := driver.Name
+
+		names = append(names, name)
+	}
+
+	return names
 }
