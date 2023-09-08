@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	https "support-utils/methods/http"
 	logs "support-utils/methods/log"
+	"support-utils/methods/rest"
 
 	"github.com/gorilla/mux"
 
@@ -47,8 +48,7 @@ func main() {
 	logs.InitLogger()
 	router := mux.NewRouter()
 	router.HandleFunc("/message", https.HandleMessage).Methods(http.MethodPost)
-	router.HandleFunc("/users/{id}", GetUserByID).Methods(http.MethodGet)
-	router.HandleFunc("/driver", https.DriverGet).Methods(http.MethodPost)
-	router.HandleFunc("/drivers/{warehouse}", https.DriverPost).Methods(http.MethodPost)
+	router.HandleFunc("/acl/{warehouse}", rest.AclPost).Methods(http.MethodPut)
+	router.HandleFunc("/drivers/{warehouse}", rest.DriverPost).Methods(http.MethodPost)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

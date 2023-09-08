@@ -8,7 +8,7 @@ import (
 	files "support-utils/methods/file"
 	"support-utils/methods/gets/getNames"
 	"support-utils/methods/gets/getPhones"
-	//"support-utils/methods/http"
+	"support-utils/methods/http"
 	"support-utils/methods/json"
 	logs "support-utils/methods/log"
 	"support-utils/methods/userToPassword"
@@ -52,7 +52,7 @@ func CreateDrivers (drivers []handlers.Driver, warehouse string) ([]responses.Dr
 	err = files.GenerateFile(jsonEndPoint, files.CreationFileRouteAclJson("ACL-EP", "json"))
 	methods.ControlErrors(err)
 
-	//http.AuthEndpointCall(jsonEndPoint)
+	http.AuthEndpointCall(jsonEndPoint)
 	//TODO create nektria driver without endpoint
 
 	return response, dnisIncorrect

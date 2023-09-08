@@ -3,11 +3,12 @@ package http
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/gorilla/mux"
+
 	"net/http"
 	"support-utils/consts"
-	"support-utils/methods/createUsers"
+
 	logs "support-utils/methods/log"
 	"support-utils/structs/handlers"
 	"support-utils/structs/responses"
@@ -36,7 +37,7 @@ func AuthEndpointCall(usersJson string) {
 	}
 }
 
-func AclEndpointCall(usersJson, username, token string) {
+func AclEndpointCall(usersJson, username, token string) error {
 	url := fmt.Sprintf(consts.AclEndpointUrl, username)
 	logs.Debugln("URL to PUT:", url)
 	var jsonStr = []byte(usersJson)
@@ -58,6 +59,7 @@ func AclEndpointCall(usersJson, username, token string) {
 	resp, err := client.Do(req)
 	if err != nil {
 		panic(err)
+		return err
 	}
 	defer resp.Body.Close()
 
@@ -65,8 +67,9 @@ func AclEndpointCall(usersJson, username, token string) {
 	if resp.Status != "204 No Content" {
 		fmt.Println("Error calling endpoint, check logs")
 		logs.Errorln("Error sending the data, check ACL and couchbase, after publish with postman")
-		return
+		return errors.New("Error sending users")
 	}
+	return nil
 }
 
 type Message struct {
@@ -91,40 +94,6 @@ func HandleMessage(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(message.Text))
 }
 
-func DriverPost (w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	warehouseCode := vars["warehouse"]
-	var drivers handlers.Drivers
-
-	err := json.NewDecoder(r.Body).Decode(&drivers)
-	if err != nil {
-		http.Error(w, "Error al decodificar JSON", http.StatusBadRequest)
-
-		return
-	}
-
-	response, incorrectDnis := createUsers.CreateDrivers(drivers.DriverA, warehouseCode)
-	if incorrectDnis != nil {
-		errorLog := fmt.Sprintf("Error con los sientes Dnis: %v", incorrectDnis)
-		http.Error(w, errorLog, http.StatusBadRequest)
-		return
-
-	}
-
-	jsonData, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, "Error al convertir a JSON", http.StatusInternalServerError)
-		return
-	}
-
-	// Establecer la cabecera Content-Type a "application/json"
-	w.Header().Set("Content-Type", "application/json")
-
-	// Escribir la respuesta JSON
-	w.Write(jsonData)
-}
-
-
 func DriverGet(w http.ResponseWriter, r *http.Request) {
 	//vars := mux.Vars(r)
 	// Decodificar los datos JSON recibidos en una estructura Message
@@ -138,9 +107,9 @@ func DriverGet(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(drivers)
 
 	response := responses.DriverResponse{
-		Name:        drivers.DriverA[0].Name,
+		Name:     drivers.DriverA[0].Name,
 		Username: drivers.DriverA[0].PhoneNumber,
-		Password:         "drivers.DriverA[0].Dni",
+		Password: "drivers.DriverA[0].Dni",
 	}
 
 	jsonData, err := json.Marshal(response)
