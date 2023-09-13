@@ -8,6 +8,7 @@ import (
 	"support-utils/methods/json"
 	"support-utils/methods/log"
 	"support-utils/methods/sql"
+	"support-utils/structs/handlers"
 	"support-utils/structs/users"
 )
 
@@ -70,6 +71,28 @@ func GenerateUsers(list users.UsersList, warehouseCode, phoneNumber string) []us
 	return aclUsers
 }
 
+func GenerateUsersApi(warehouseUsers handlers.WarehouseUsers, warehouseCode string) []users.AclUser {
+	var aclUser users.AclUser
+	var aclUsers []users.AclUser
+
+	for i := 1; i <= warehouseUsers.Pkr; i++ {
+		aclUser.CreateUser(i, warehouseCode, "PKR", warehouseUsers.WarehousePhone)
+		aclUsers = append(aclUsers, aclUser)
+	}
+
+	for i := 1; i <= warehouseUsers.Crd; i++ {
+		aclUser.CreateUser(i, warehouseCode, "CRD", warehouseUsers.WarehousePhone)
+		aclUsers = append(aclUsers, aclUser)
+	}
+
+	for i := 1; i <= warehouseUsers.Adm; i++ {
+		aclUser.CreateUser(i, warehouseCode, "ADM", warehouseUsers.WarehousePhone)
+		aclUsers = append(aclUsers, aclUser)
+	}
+
+	return aclUsers
+}
+
 func PublishAclUsers(users []users.AclUser, warehouseCode string) {
 	log.Debugln("Publish users to ACL")
 
@@ -108,6 +131,53 @@ func PublishAclUsers(users []users.AclUser, warehouseCode string) {
 		http.AclEndpointCall(userAcl, user.Username, token)
 	}
 
+}
+
+func PublishAclUsersApi(users []users.AclUser, warehouseCode, token string) error {
+	log.Debugln("Publish users to ACL")
+
+	var err error = nil
+
+	var rolePickingCode string
+	var roleConsoleCode string
+
+	defer log.Debugln("End of call endpoint")
+
+	for _, user := range users {
+		switch user.RoleCode {
+		case "PKR":
+			rolePickingCode = consts.PickingCodePkr
+			roleConsoleCode = consts.ConsoleCodePkr
+			break
+		case "CRD":
+			rolePickingCode = consts.PickingCodeCrd
+			roleConsoleCode = consts.ConsoleCodeCrd
+			break
+		case "ADM":
+			rolePickingCode = consts.PickingCodeAdm
+			roleConsoleCode = consts.ConsoleCodeAdm
+			break
+		default:
+			log.Fatalln("AuthUser dont identify")
+		}
+
+		//TODO call to return token to cas/token endpoint
+
+		//upload users to acl appPicking with role and store code
+		userAcl := json.GenerateAclJson(consts.AppPickingEnv, warehouseCode, rolePickingCode, false)
+		err = http.AclEndpointCall(userAcl, user.Username, token)
+		if err != nil {
+			return err
+		}
+		//upload users to acl console with role and store code
+		userAcl = json.GenerateAclJson(consts.ConsoleEnv, warehouseCode, roleConsoleCode, false)
+		err = http.AclEndpointCall(userAcl, user.Username, token)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func PublisDrivershRoles(drivers []string) {
