@@ -53,7 +53,6 @@ func AclPost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	auth := r.Header.Get("Authorization")
-	fmt.Println(auth)
 
 	err = createUsers.CreateWarehouseUsers(warehouseUsers, warehouseCode, auth)
 	if err != nil {
