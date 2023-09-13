@@ -1,7 +1,6 @@
 package acl
 
 import (
-	"fmt"
 	"strings"
 	"support-utils/consts"
 	files "support-utils/methods/file"
