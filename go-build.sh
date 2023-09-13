@@ -103,6 +103,10 @@ run_project(){
     go run ./cmd/drivers-create/main.go
 }
 
+run_api(){
+    go run ./cmd/api/main.go
+}
+
 run_insert_query(){
     rm ./logs/logs.log
     go run ./cmd/create-shops/main.go
@@ -150,6 +154,9 @@ case $param in
         create_files
         create_user_list_file
             ;;
+    "a" | "api" | "-a")
+        run_api
+        ;;
     "b" | "build" | "-b")
         build_project
         echo "Project compiled"
