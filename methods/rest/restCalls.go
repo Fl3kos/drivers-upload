@@ -17,7 +17,6 @@ func DriverPost(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&drivers)
 	if err != nil {
 		http.Error(w, "Error al decodificar JSON", http.StatusBadRequest)
-
 		return
 	}
 
@@ -53,7 +52,8 @@ func AclPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	auth := w.Header().Get("Authorization")
+	auth := r.Header.Get("Authorization")
+	fmt.Println(auth)
 
 	err = createUsers.CreateWarehouseUsers(warehouseUsers, warehouseCode, auth)
 	if err != nil {

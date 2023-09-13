@@ -1,6 +1,7 @@
 package acl
 
 import (
+	"fmt"
 	"strings"
 	"support-utils/consts"
 	files "support-utils/methods/file"
@@ -165,12 +166,14 @@ func PublishAclUsersApi(users []users.AclUser, warehouseCode, token string) erro
 
 		//upload users to acl appPicking with role and store code
 		userAcl := json.GenerateAclJson(consts.AppPickingEnv, warehouseCode, rolePickingCode, false)
+		fmt.Printf("genearting user %v", user.Username)
 		err = http.AclEndpointCall(userAcl, user.Username, token)
 		if err != nil {
 			return err
 		}
 		//upload users to acl console with role and store code
 		userAcl = json.GenerateAclJson(consts.ConsoleEnv, warehouseCode, roleConsoleCode, false)
+		fmt.Printf("genearting user %v", user.Username)
 		err = http.AclEndpointCall(userAcl, user.Username, token)
 		if err != nil {
 			return err

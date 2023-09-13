@@ -13,6 +13,6 @@ func CreateWarehouseUsers(users handlers.WarehouseUsers, warehouse, authorizatio
 
 	http.AuthEndpointCall(finalJson)
 
-	acl.PublishAclUsersApi(aclUsers, warehouse, authorization)
-	return nil
+	err := acl.PublishAclUsersApi(aclUsers, warehouse, authorization)
+	return err
 }
