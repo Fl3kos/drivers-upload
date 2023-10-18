@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strconv"
 	logs "support-utils/methods/log"
+	"support-utils/structs/handlers"
 
 	common "support-utils/methods"
 )
@@ -35,6 +36,36 @@ func ComprobeAllDnis(allDnis []string) ([]string, error) {
 			}
 		}
 	}
+
+	return incorrectDnis, err
+}
+
+func ComprobeDriversDnis(drivers []handlers.Driver)([]string, error) {
+	logs.Debugln("Comprobe Dnis")
+	var incorrectDnis []string
+	var err error = nil
+	var correctLetter string
+
+	for _, driver := range drivers {
+		dni := driver.Dni
+		var letter = dni[8:9]
+
+		if common.IsNumber(dni[:1]) {
+			logs.Warningln("Comprobing NIE:", dni)
+			correctLetter = calculateTheLetterOfDni(dni)
+		} else {
+			logs.Debugln("Comprobing DNI:", dni)
+			correctLetter = calculateTheLetterOfNie(dni)
+		}
+
+		if letter == correctLetter {
+			logs.Debugf("DNI %v is correct", dni)
+		} else {
+			logs.Errorf("Incorrect DNI %v, the correct letter is %v", dni, correctLetter)
+			err = errors.New("Has one or more DNIs incorrect")
+			incorrectDnis = append(incorrectDnis, dni)
+			}
+		}
 
 	return incorrectDnis, err
 }
