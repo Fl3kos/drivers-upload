@@ -1,0 +1,125 @@
+{
+  "consumes": [
+    "application/json",
+    "application/xml"
+  ],
+  "produces": [
+    "application/json",
+    "application/xml"
+  ],
+  "schemes": [
+    "https"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "API que sirve frases aletorias de los Simpsons. ¿Quieres ver cómo va su desarrollo? https://osmandi.now.sh/post/simpsongo",
+    "title": "SimpsonGo.",
+    "contact": {
+      "url": "https://osmandi.now.sh"
+    },
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
+    "version": "1.0"
+  },
+  "host": "simpsongo.now.sh",
+  "basePath": "/",
+  "paths": {
+    "/driver{warehouseCode}": {
+      "post": {
+        "description": "# Obtiene una frase aleatoria",
+        "operationId": "DriverPost",
+        "responses": {
+          "200": {
+            "description": "DriverResponseArray",
+            "schema": {
+              "$ref": "#/definitions/DriverResponseArray"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Driver": {
+      "description": "# Esta es la estructura usada para responder con frases",
+      "type": "object",
+      "title": "Driver",
+      "properties": {
+        "dni": {
+          "type": "string",
+          "x-go-name": "Dni"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "phoneNumber": {
+          "type": "string",
+          "x-go-name": "PhoneNumber"
+        }
+      },
+      "x-go-package": "support-utils/structs/handlers"
+    },
+    "DriverResponse": {
+      "description": "# Esta es la estructura usada para responder con frases",
+      "type": "object",
+      "title": "DriverResponse",
+      "properties": {
+        "dni": {
+          "type": "string",
+          "x-go-name": "Dni"
+        },
+        "name": {
+          "type": "string",
+          "x-go-name": "Name"
+        },
+        "password": {
+          "type": "string",
+          "x-go-name": "Password"
+        },
+        "phonenumber": {
+          "type": "string",
+          "x-go-name": "Phone"
+        },
+        "username": {
+          "type": "string",
+          "x-go-name": "Username"
+        }
+      },
+      "x-go-package": "support-utils/structs/responses"
+    },
+    "DriverResponseArray": {
+      "description": "# Esta es la estructura usada para responder con frases",
+      "type": "object",
+      "title": "ADriverResponse",
+      "properties": {
+        "drivers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DriverResponse"
+          },
+          "x-go-name": "DResponse"
+        }
+      },
+      "x-go-name": "ADriverResponse",
+      "x-go-package": "support-utils/structs/responses"
+    },
+    "Drivers": {
+      "description": "# Esta es la estructura usada para responder con frases",
+      "type": "object",
+      "title": "Drivers",
+      "properties": {
+        "drivers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Driver"
+          },
+          "x-go-name": "DriverA"
+        }
+      },
+      "x-go-package": "support-utils/structs/handlers"
+    }
+  }
+}

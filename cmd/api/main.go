@@ -1,3 +1,24 @@
+// SimpsonGo.
+//
+// API que sirve frases aletorias de los Simpsons. ¿Quieres ver cómo va su desarrollo? https://osmandi.now.sh/post/simpsongo
+//
+//	Schemes: https
+//	Host: simpsongo.now.sh
+//	BasePath: /
+//	Version: 1.0
+//	License: MIT http://opensource.org/licenses/MIT
+//	Contact: https://osmandi.now.sh
+//
+//
+//	Consumes:
+//	- application/json
+//	- application/xml
+//
+//	Produces:
+//	- application/json
+//	- application/xml
+//
+// swagger:meta
 package main
 
 import (

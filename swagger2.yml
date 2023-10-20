@@ -1,0 +1,135 @@
+openapi: 3.1.0
+info:
+  title: Support Utils
+  version: 1.0.11
+servers:
+  - url: http://127.0.0.1:8080
+tags:
+  - name: drivers
+  - name: users
+paths:
+  /driver{warehouseCode}:
+    post:
+      tags:
+        - drivers
+      summary: Add a new driver to the warehouse
+      description: Add a new driver to the warehouse
+      parameters:
+        - name: warehouseCode
+          in: path
+          description: ID warehouse
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Drivers'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverResponseArray'
+        '404':
+          description: Invalid
+  /acl{warehouseCode}:
+    put:
+      tags:
+        - users
+      summary: Add new users to warehouse
+      description: Add new users to warehouse
+      parameters:
+        - name: warehouseCode
+          in: path
+          description: ID warehouse
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Create a new pet in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AclUsers'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AclResponse'
+        '404':
+          description: Invalid input
+components:
+  schemas:
+    Drivers:
+      type: object
+      properties:
+        drivers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Driver'
+    Driver:
+      type: object
+      properties:
+        name:
+          type: string
+          example: pepe
+        dni:
+          type: string
+          example: 12345678Z
+        phoneNumber:
+          type: string
+          example: '666777888'
+    DriverResponseArray:
+      type: array
+      items:
+        $ref: '#/components/schemas/DriverResponse'
+    DriverResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: pepe
+        dni:
+          type: string
+          example: 12345678Z
+        phonenumber:
+          type: string
+          example: '666777888'
+        username:
+          type: string
+          example: Z2345678
+        password:
+          type: string
+          example:
+    AclUsers:
+      type: object
+      properties:
+        pkr:
+          type: integer
+          example: 5
+        crd:
+          type: integer
+          example: 3
+        adm:
+          type: integer
+          example: 1
+        phone:
+          type: string
+          example: '666777888'
+    AclResponse:
+      type: string
+      example: usuarios dados de alta
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
