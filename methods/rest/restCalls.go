@@ -9,13 +9,12 @@ import (
 	"support-utils/structs/handlers"
 )
 
-// swagger:route POST /driver{warehouseCode} DriverPost
+// swagger:route POST /driver/{warehouseCode} DriverPost
 //
 // # Obtiene una frase aleatoria
 //
-// Parameters: Drivers
 // Responses:
-// - 200: DriverResponseArray
+// - 200: []DriverResponse
 func DriverPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	warehouseCode := vars["warehouse"]
@@ -48,6 +47,12 @@ func DriverPost(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+// swagger:route PUT /acl/{warehouseCode} DriverPost
+//
+// # Obtiene una frase aleatoria
+//
+// Responses:
+// - 200: []WarehouseUsers
 func AclPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	warehouseCode := vars["warehouse"]

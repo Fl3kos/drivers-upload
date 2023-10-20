@@ -2,7 +2,7 @@ package responses
 
 // ADriverResponse
 //
-// # Esta es la estructura usada para responder con frases
+// # Array de drivers de respuesta
 //
 // swagger:model DriverResponseArray
 type ADriverResponse struct {
@@ -11,7 +11,7 @@ type ADriverResponse struct {
 
 // DriverResponse
 //
-// # Esta es la estructura usada para responder con frases
+// # elemento de respuesta de drivers
 //
 // swagger:model DriverResponse
 type DriverResponse struct {

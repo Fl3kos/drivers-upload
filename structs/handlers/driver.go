@@ -2,21 +2,31 @@ package handlers
 
 // Drivers
 //
-// # Esta es la estructura usada para responder con frases
+// # Driver parametros de entrada
 //
-// swagger:model Drivers
-// swagger:parameters Drivers
+// swagger:parameters DriverPost
 type Drivers struct {
+	//in: body
 	DriverA []Driver `json:"drivers"`
 }
 
 // Driver
 //
-// # Esta es la estructura usada para responder con frases
+// # Elementos de un driver
 //
 // swagger:model Driver
 type Driver struct {
 	Name        string `json:"name"`
 	Dni         string `json:"dni"`
 	PhoneNumber string `json:"phoneNumber"`
+}
+
+// WarehouseCode
+//
+// # codigo del warehouse
+//
+// swagger:parameters DriverPost
+type WarehouseCode struct {
+	//in: query
+	warehouseCode string `query:"warehouseCode"`
 }
