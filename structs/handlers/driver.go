@@ -1,12 +1,24 @@
 package handlers
 
-// Drivers
+// DriverSwagger
 //
 // # Driver parametros de entrada
 //
 // swagger:parameters DriverPost
+type DriverSwagger struct {
+	//in: body
+	// required: true
+	DriverA Drivers `json:"drivers"`
+}
+
+// Drivers
+//
+// # Array de Driver para su post en auth
+//
+// swagger:model Drivers
 type Drivers struct {
 	//in: body
+	// required: true
 	DriverA []Driver `json:"drivers"`
 }
 
@@ -16,17 +28,24 @@ type Drivers struct {
 //
 // swagger:model Driver
 type Driver struct {
-	Name        string `json:"name"`
-	Dni         string `json:"dni"`
+	// example: pepe
+	Name string `json:"name"`
+	// example: 12345678Z
+	Dni string `json:"dni"`
+	// example: 666777888
 	PhoneNumber string `json:"phoneNumber"`
 }
 
-// WarehouseCode
+// warehouseCode
 //
-// # codigo del warehouse
+// # Codigo del warehouse
 //
-// swagger:parameters DriverPost
+// swagger:parameters DriverPost AclPost
 type WarehouseCode struct {
-	//in: query
-	warehouseCode string `query:"warehouseCode"`
+	// warehouse code to path
+	//
+	// in: path
+	// required: true
+	// example: 12345
+	WarehouseCode string `path:"warehouseCode"`
 }

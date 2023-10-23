@@ -2,16 +2,16 @@ package responses
 
 // ADriverResponse
 //
-// # Array de drivers de respuesta
+// # Respuesta de los drivers
 //
 // swagger:model DriverResponseArray
 type ADriverResponse struct {
-	DResponse []DriverResponse `json:"drivers"`
+	AResponse []DriverResponse `json:"drivers"`
 }
 
 // DriverResponse
 //
-// # elemento de respuesta de drivers
+// # Respuesta con los elementos de un Driver
 //
 // swagger:model DriverResponse
 type DriverResponse struct {
@@ -20,4 +20,11 @@ type DriverResponse struct {
 	Phone    string `json:"phonenumber"`
 	Username string `json:"username"`
 	Password string `json:"password"`
+}
+
+// DriverErrorResponse
+//
+// swagger:model DriverErrorResponse
+type DriverErrorResponse struct {
+	Response string `json:"response"`
 }

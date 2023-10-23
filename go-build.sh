@@ -107,11 +107,6 @@ run_api(){
     go run ./cmd/api/main.go
 }
 
-run_insert_query(){
-    rm ./logs/logs.log
-    go run ./cmd/create-shops/main.go
-}
-
 run_layouts(){
     rm ./logs/logs.log
     go run ./cmd/layouts/main.go
@@ -119,7 +114,7 @@ run_layouts(){
 
 run_users_list(){
     rm ./logs/logs.log
-    go run ./cmd/users-shop/main.go
+    go run ./cmd/acl-users/main.go
 }
 
 clear_project(){
@@ -155,15 +150,16 @@ case $param in
         create_user_list_file
             ;;
     "a" | "api" | "-a")
-        run_api
-        ;;
+        run_api &
+        swagger serve -F=swagger swagger.yml --port 45001 --no-open
+         ;;
     "b" | "build" | "-b")
+        swagger generate spec -o ./swagger.yml --scan-models
         build_project
         echo "Project compiled"
         echo "/ __| | | |/ __/ __/ _ \/ __/ __|"
         echo "\__ \ |_| | (_| (_|  __/\__ \__ \\"
         echo "|___/\__,_|\___\___\___||___/___/"
-                                   
         ;;
     "r" | "run" | "-r")
         run_project
@@ -186,9 +182,6 @@ case $param in
     "l" | "layouts" | "-l")
         run_layouts
         ;;
-    "a" | "acl" | "-a")
-        run_acl_users
-        ;;
     "t" | "test" | "-t")
         go clean -testcache
         run_test
@@ -202,8 +195,9 @@ case $param in
     "h" | "??" | "help" | "-q" | "--help")
         echo "Help:"
         echo "i: Inicialice the project, when download the project is the fist choice to use"
-        echo "b: build the project after execute"
-        echo "r: run the project to create the files"
+        echo "a: run the api system and swagger"
+        echo "b: compile the project"
+        echo "r: run the project to create the drivers"
         echo "c: to clear files folder"
         echo "ca: to clear all project"
         echo "cc: to clear the cache"
