@@ -1,0 +1,184 @@
+consumes:
+- application/json
+definitions:
+  Driver:
+    description: '# Elementos de un driver'
+    properties:
+      dni:
+        example: 12345678Z
+        type: string
+        x-go-name: Dni
+      name:
+        example: pepe
+        type: string
+        x-go-name: Name
+      phoneNumber:
+        example: "666777888"
+        type: string
+        x-go-name: PhoneNumber
+    title: Driver
+    type: object
+    x-go-package: support-utils/structs/handlers
+  DriverErrorResponse:
+    description: DriverErrorResponse
+    properties:
+      response:
+        type: string
+        x-go-name: Response
+    type: object
+    x-go-package: support-utils/structs/responses
+  DriverResponse:
+    description: '# Respuesta con los elementos de un Driver'
+    properties:
+      dni:
+        type: string
+        x-go-name: Dni
+      name:
+        type: string
+        x-go-name: Name
+      password:
+        type: string
+        x-go-name: Password
+      phonenumber:
+        type: string
+        x-go-name: Phone
+      username:
+        type: string
+        x-go-name: Username
+    title: DriverResponse
+    type: object
+    x-go-package: support-utils/structs/responses
+  DriverResponseArray:
+    description: '# Respuesta de los drivers'
+    properties:
+      drivers:
+        items:
+          $ref: '#/definitions/DriverResponse'
+        type: array
+        x-go-name: AResponse
+    title: ADriverResponse
+    type: object
+    x-go-name: ADriverResponse
+    x-go-package: support-utils/structs/responses
+  Drivers:
+    description: '# Array de Driver para su post en auth'
+    properties:
+      drivers:
+        description: 'in: body'
+        items:
+          $ref: '#/definitions/Driver'
+        type: array
+        x-go-name: DriverA
+    required:
+    - drivers
+    title: Drivers
+    type: object
+    x-go-package: support-utils/structs/handlers
+  WarehouseErrorResponse:
+    description: WarehouseErrorResponse
+    properties:
+      response:
+        type: string
+        x-go-name: Response
+    type: object
+    x-go-package: support-utils/structs/responses
+  WarehouseUsers:
+    description: |-
+      WarehouseUsers
+      Elementos para publiccar un usuario de un warehouse
+    properties:
+      adm:
+        example: 1
+        format: int64
+        type: integer
+        x-go-name: Adm
+      crd:
+        example: 3
+        format: int64
+        type: integer
+        x-go-name: Crd
+      phone:
+        example: "666777888"
+        type: string
+        x-go-name: WarehousePhone
+      pkr:
+        example: 5
+        format: int64
+        type: integer
+        x-go-name: Pkr
+    type: object
+    x-go-package: support-utils/structs/handlers
+  WarehouseUsersResponse:
+    description: WarehouseUsersResponse
+    properties:
+      response:
+        type: string
+        x-go-name: Response
+    type: object
+    x-go-package: support-utils/structs/responses
+info:
+  description: API Con las funcionalidades del equipo de soporte
+  title: Support-utils.
+paths:
+  /acl/{warehouseCode}:
+    put:
+      description: |-
+        # Publica los usuarios de tienda
+        Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+      operationId: AclPost
+      parameters:
+      - description: warehouse code to path
+        example: "12345"
+        in: path
+        name: WarehouseCode
+        required: true
+        type: string
+      - in: body
+        name: users
+        schema:
+          $ref: '#/definitions/WarehouseUsers'
+        x-go-name: Users
+      responses:
+        "200":
+          description: WarehouseUsersResponse
+          schema:
+            $ref: '#/definitions/WarehouseUsersResponse'
+        "404":
+          description: WarehouseErrorResponse
+          schema:
+            $ref: '#/definitions/WarehouseErrorResponse'
+  /driver/{warehouseCode}:
+    post:
+      description: '# Publica los usuarios de transporte'
+      operationId: DriverPost
+      parameters:
+      - in: body
+        name: drivers
+        required: true
+        schema:
+          $ref: '#/definitions/Drivers'
+        x-go-name: DriverA
+      - description: warehouse code to path
+        example: "12345"
+        in: path
+        name: WarehouseCode
+        required: true
+        type: string
+      responses:
+        "200":
+          description: DriverResponse
+          schema:
+            items:
+              $ref: '#/definitions/DriverResponse'
+            type: array
+        "400":
+          description: DriverErrorResponse
+          schema:
+            $ref: '#/definitions/DriverErrorResponse'
+        "500":
+          description: DriverErrorResponse
+          schema:
+            $ref: '#/definitions/DriverErrorResponse'
+produces:
+- application/json
+swagger: "2.0"

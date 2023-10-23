@@ -3,12 +3,21 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
 	"support-utils/methods/createUsers"
 	"support-utils/structs/handlers"
+
+	"github.com/gorilla/mux"
 )
 
+// swagger:route POST /driver/{warehouseCode} DriverPost
+// cle
+// # Publica los usuarios de transporte
+//
+// Responses:
+// - 200: []DriverResponse
+// - 400: DriverErrorResponse
+// - 500: DriverErrorResponse
 func DriverPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	warehouseCode := vars["warehouse"]
@@ -41,6 +50,14 @@ func DriverPost(w http.ResponseWriter, r *http.Request) {
 	w.Write(jsonData)
 }
 
+// swagger:route PUT /acl/{warehouseCode} AclPost
+//
+// # Publica los usuarios de tienda
+// Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+//
+// Responses:
+// - 200: WarehouseUsersResponse
+// - 404: WarehouseErrorResponse
 func AclPost(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	warehouseCode := vars["warehouse"]

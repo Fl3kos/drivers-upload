@@ -12,6 +12,8 @@ To execute the project, the first thing to do is to start the project with the s
 
 The script have 10 options:
 
+a: Run the api system and swagger
+
 i: Inicialice the project, when download the project is the fist choice
 
 b: Build the project before execute

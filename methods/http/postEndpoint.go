@@ -2,7 +2,6 @@ package http
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -10,8 +9,6 @@ import (
 	"support-utils/consts"
 
 	logs "support-utils/methods/log"
-	"support-utils/structs/handlers"
-	"support-utils/structs/responses"
 )
 
 func AuthEndpointCall(usersJson string) {
@@ -70,58 +67,4 @@ func AclEndpointCall(usersJson, username, token string) error {
 		return errors.New("Error sending users")
 	}
 	return nil
-}
-
-type Message struct {
-	Text string `json:"text"`
-}
-
-func HandleMessage(w http.ResponseWriter, r *http.Request) {
-	// Decodificar los datos JSON recibidos en una estructura Message
-	var message Message
-	err := json.NewDecoder(r.Body).Decode(&message)
-	if err != nil {
-		http.Error(w, "Error al decodificar JSON", http.StatusBadRequest)
-		fmt.Println("Error al decodificar JSON", http.StatusBadRequest)
-		return
-	}
-
-	// Realizar alguna acción con los datos recibidos
-	//logger.Debugf("Mensaje recibido:", message.Text)
-
-	// Responder con un mensaje de éxito
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(message.Text))
-}
-
-func DriverGet(w http.ResponseWriter, r *http.Request) {
-	//vars := mux.Vars(r)
-	// Decodificar los datos JSON recibidos en una estructura Message
-	var drivers handlers.Drivers
-	err := json.NewDecoder(r.Body).Decode(&drivers)
-
-	if err != nil {
-		http.Error(w, "Error al decodificar JSON", http.StatusBadRequest)
-		return
-	}
-	fmt.Println(drivers)
-
-	response := responses.DriverResponse{
-		Name:     drivers.DriverA[0].Name,
-		Username: drivers.DriverA[0].PhoneNumber,
-		Password: "drivers.DriverA[0].Dni",
-	}
-
-	jsonData, err := json.Marshal(response)
-	if err != nil {
-		http.Error(w, "Error al convertir a JSON", http.StatusInternalServerError)
-		return
-	}
-
-	// Establecer la cabecera Content-Type a "application/json"
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Content-Type", "application/json")
-
-	// Escribir la respuesta JSON
-	w.Write(jsonData)
 }
