@@ -2,6 +2,7 @@ package xlsx
 
 import (
 	"fmt"
+	"support-utils/consts"
 	"support-utils/methods/log"
 	"support-utils/methods/sql"
 
@@ -59,10 +60,12 @@ func ExpeditionLayout(excelFileName string) (string, error, []*xlsx.Row, string)
 			if len(position) < 2 {
 				position = "0" + position
 			}
+			if warehouseCode != "" {
+				query := sql.GenerateExpeditionLayoutSql(warehouseCode, typeE, locationZone, area, position, templateArea, templatePosition, shippingSecuence, priority, closer_sorter, active, locationTemplate, location)
 
-			query := sql.GenerateExpeditionLayoutSql(warehouseCode, typeE, locationZone, area, position, templateArea, templatePosition, shippingSecuence, priority, closer_sorter, active, locationTemplate, location)
+				fQuery = fQuery + "\n" + query
+			}
 
-			fQuery = fQuery + "\n" + query
 		}
 	}
 
@@ -73,7 +76,7 @@ func ExpeditionLayout(excelFileName string) (string, error, []*xlsx.Row, string)
 func PickingLayout(excelFileName string) (string, error) {
 	var err error
 	fQuery := ""
-
+	warehouseCode := ""
 	xlFile, err := xlsx.OpenFile(excelFileName)
 	if err != nil {
 		log.Errorf("Error reading expedition layout, Error: %v", err)
@@ -121,12 +124,20 @@ func PickingLayout(excelFileName string) (string, error) {
 			if len(gap) < 2 {
 				gap = "0" + gap
 			}
+			if warehouse_code != "" {
+				warehouseCode = warehouse_code
+				query := sql.GeneratePickingLayoutSql(warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location)
 
-			query := sql.GeneratePickingLayoutSql(warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location)
-
-			fQuery = fQuery + "\n" + query
+				fQuery = fQuery + "\n" + query
+			}
 		}
 	}
-
+	fQuery = fQuery + "\n" + addPACLocations(warehouseCode)
 	return fQuery, err
+}
+
+func addPACLocations(warehouseCode string) string {
+	locationQuerys := fmt.Sprintf(consts.PACLocationQuerys, warehouseCode, warehouseCode, warehouseCode, warehouseCode, warehouseCode)
+
+	return locationQuerys
 }

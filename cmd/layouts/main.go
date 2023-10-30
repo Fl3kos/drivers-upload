@@ -14,7 +14,7 @@ func main() {
 
 	var sorterMap string
 	for {
-		fmt.Printf("Wich layouts are you generate? Picking (p), Expedition (e), All (a)")
+		fmt.Printf("Wich layouts are you generate? Picking (p), Expedition (e), All (a): ")
 		var answer string
 		fmt.Scanln(&answer)
 
@@ -36,6 +36,9 @@ func main() {
 			fmt.Println("Select a validate option")
 
 		}
+
+		// FIXME: Exit layout loop
+		break
 	}
 
 	if sorterMap != "" {
