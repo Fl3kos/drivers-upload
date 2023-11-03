@@ -29,5 +29,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/acl/{warehouse}", rest.AclPost).Methods(http.MethodPut)
 	router.HandleFunc("/drivers/{warehouse}", rest.DriverPost).Methods(http.MethodPost)
+	router.HandleFunc("/pickingLayout", rest.ExpeditionPickingPost).Methods(http.MethodPost)
+	router.HandleFunc("/expeditionLayout", rest.ExpeditionExpeditionPost).Methods(http.MethodPost)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

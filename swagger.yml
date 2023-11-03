@@ -149,7 +149,9 @@ paths:
             $ref: '#/definitions/WarehouseErrorResponse'
   /driver/{warehouseCode}:
     post:
-      description: '# Publica los usuarios de transporte'
+      description: |-
+        cle
+        # Publica los usuarios de transporte
       operationId: DriverPost
       parameters:
       - in: body
@@ -179,6 +181,20 @@ paths:
           description: DriverErrorResponse
           schema:
             $ref: '#/definitions/DriverErrorResponse'
+  /expeditionLayout:
+    post:
+      description: |-
+        # Publica los usuarios de tienda
+        Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+        Para ello lo que se hace es subirle un fichero xlsx con el layout
+      operationId: ExpeditionExpeditionPost
+  /pickingLayout:
+    post:
+      description: |-
+        # Publica los usuarios de tienda
+        Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+        Para ello lo que se hace es subirle un fichero xlsx con el layout
+      operationId: ExpeditionPickingPost
 produces:
 - application/json
 swagger: "2.0"

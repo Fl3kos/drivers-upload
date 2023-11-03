@@ -3,8 +3,10 @@ package rest
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/tealeg/xlsx"
 	"net/http"
 	"support-utils/methods/createUsers"
+	excel "support-utils/methods/xlsx"
 	"support-utils/structs/handlers"
 
 	"github.com/gorilla/mux"
@@ -82,4 +84,66 @@ func AclPost(w http.ResponseWriter, r *http.Request) {
 
 	// Escribir la respuesta JSON
 	w.Write([]byte("Usuarios dados de alta"))
+}
+
+// swagger:route POST /pickingLayout ExpeditionPickingPost
+//
+// # Publica los usuarios de tienda
+// Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+// Para ello lo que se hace es subirle un fichero xlsx con el layout
+func ExpeditionPickingPost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(10 << 20) // Tamaño máximo de archivo de 10 MB
+	if err != nil {
+		http.Error(w, "Error al procesar el formulario", http.StatusInternalServerError)
+		return
+	}
+
+	file, _, err := r.FormFile("excelFile")
+	if err != nil {
+		http.Error(w, "No se pudo obtener el archivo", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	xlFile, err := xlsx.OpenReaderAt(file, r.ContentLength)
+	if err != nil {
+		http.Error(w, "Error al abrir el archivo Excel", http.StatusInternalServerError)
+		return
+	}
+	querys, err := excel.UploadPickingLayout(xlFile)
+	// Aquí puedes guardar el archivo en el servidor o realizar otras acciones con él
+	// Por ejemplo, puedes guardarlo en el sistema de archivos del servidor o procesarlo.
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(querys))
+}
+
+// swagger:route POST /expeditionLayout ExpeditionExpeditionPost
+//
+// # Publica los usuarios de tienda
+// Si se piden crear hasta el usuario x sobrescribe los usuarios generados anteriormente
+// Para ello lo que se hace es subirle un fichero xlsx con el layout
+func ExpeditionExpeditionPost(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseMultipartForm(10 << 20) // Tamaño máximo de archivo de 10 MB
+	if err != nil {
+		http.Error(w, "Error al procesar el formulario", http.StatusInternalServerError)
+		return
+	}
+
+	file, _, err := r.FormFile("excelFile")
+	if err != nil {
+		http.Error(w, "No se pudo obtener el archivo", http.StatusBadRequest)
+		return
+	}
+	defer file.Close()
+	xlFile, err := xlsx.OpenReaderAt(file, r.ContentLength)
+	if err != nil {
+		http.Error(w, "Error al abrir el archivo Excel", http.StatusInternalServerError)
+		return
+	}
+	querys, err := excel.UploadExpeditionLayout(xlFile)
+	// Aquí puedes guardar el archivo en el servidor o realizar otras acciones con él
+	// Por ejemplo, puedes guardarlo en el sistema de archivos del servidor o procesarlo.
+
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(querys))
 }
