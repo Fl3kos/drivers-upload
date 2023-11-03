@@ -2,6 +2,7 @@ package xlsx
 
 import (
 	"fmt"
+	"support-utils/consts"
 	"support-utils/methods/log"
 	"support-utils/methods/sql"
 
@@ -171,7 +172,7 @@ func UploadExpeditionLayout(file *xlsx.File) (string, error) {
 func UploadPickingLayout(file *xlsx.File) (string, error) {
 	var err error
 	fQuery := ""
-
+	var warehouseCode string
 	layout := file.Sheets[0]
 	for i, row := range layout.Rows {
 		if i > 0 {
@@ -214,13 +215,21 @@ func UploadPickingLayout(file *xlsx.File) (string, error) {
 				gap = "0" + gap
 			}
 			if warehouse_code != "" {
-				query := sql.GeneratePickingLayoutSql(warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location)
+				warehouseCode = warehouse_code
 
+				query := sql.GeneratePickingLayoutSql(warehouse_code, typeP, location_format, template, corridor, module, shelf, gap, location_zone, picking_zone, weight, height, width, length, capacity_fee, restocking_fee, picking_sequence, putaway_sequence, direction, blocked, active, rotation, cycle_count, location_template, location)
 				fQuery = fQuery + "\n" + query
 			}
 
 		}
 	}
+	fQuery = fQuery + "\n" + addPACLocations(warehouseCode)
 
 	return fQuery, err
+}
+
+func addPACLocations(warehouseCode string) string {
+	locationQuerys := fmt.Sprintf(consts.PACLocationQuerys, warehouseCode, warehouseCode, warehouseCode, warehouseCode, warehouseCode, warehouseCode)
+
+	return locationQuerys
 }
